@@ -19,14 +19,37 @@ Expert System is built on the principles of simplicity, accessibility, and ease 
 With Expert System, Machine Learning is no longer limited to programmers and data scientists. 
 It is open to everyone who wants to harness the power of data and build intelligent systems.
 
-### *Development*:
+### *Development* ✅️❌️
 
-#### 1. Basics
-#### 2. Updation
+![alt-text](./others/ml_pipeline.png)
+
+#### Design
+
+- `home` page should contain a list of Machine Learning models for the user to choose from.
+- When a user chooses a model, they should be redirected to `model` page for that particular ML model. 
+- Each `model` page must contain fields for user to upload the **Train Set** as well as the **Test Set**.
+- Also add fields for additional user inputs based on the model.
+- **Data Visualization**: (Optional) the properties of the data is graphically displayed.
+- **Data Preprocessing**: the dataset should undergo multiple checks and processing.
+- (Optional) Logs regarding the above computations may be displayed.
+- The user faces an error, in case an incompatibility occurs between the data, input and the model. Otherwise, the model is displayed.
+- The trained model is evaluated and the results are displayed to the user according to the model and problem type (classification / regression / clustering).
+
+#### 1. Basics: First Algorithm
+
+- `Home` page contains a link to `Classification`
+- `Classification` contains a link to `LinearRegression`
+- In `LinearRegression`, there are fields to upload the `train set` and `test set`.
+After submitting the form, it would take us to the next page `Results`.
+- This page should display the results obtained after processing the data and building the model.
+The page can contain confusion matrix, f1_score, accuracy, precision, recall etc.
+
+#### 2. Growth 
+
 #### 3. Final Stage
 
 
-### *Technologies*:
+### *Technologies*
 
 1. *Django*: The web interface is built using Django, popular web framework.
 3. *Scikit-learn*: Expert System leverages Scikit-learn, a popular Machine Learning library in Python, to implement the algorithms and models.
