@@ -1,33 +1,12 @@
 body {
   font-family: 'Poppins', sans-serif;
   color: #0c0c0c;
-  background-color: #ffffff;
+  background-color: black;
+  min-height: 100vh;
 }
 
-.layout_padding {
-  padding-top: 90px;
-  padding-bottom: 90px;
-}
-
-.layout_padding2 {
-  padding: 45px 0;
-}
-
-.layout_padding2-top {
-  padding-top: 45px;
-  padding-bottom: 45px;
-}
-
-.layout_padding2-bottom {
-  padding-bottom: 45px;
-}
-
-.layout_padding-top {
-  padding-top: 90px;
-}
-
-.layout_padding-bottom {
-  padding-bottom: 90px;
+.fade-in {
+  display: none;
 }
 
 .heading_container {
@@ -154,7 +133,8 @@ a:focus {
 }
 
 .navbar-brand img {
-  width: 35px;
+  width: 250px;
+  height: 100px;
   margin-right: 5px;
 }
 
@@ -801,6 +781,8 @@ a:focus {
       -ms-flex-pack: center;
           justify-content: center;
   background-color: #fdfeff;
+  position: relative;
+  bottom: 0;
 }
 
 .footer_section p {

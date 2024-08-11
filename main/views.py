@@ -6,7 +6,20 @@ from django.http import JsonResponse
 import numpy as np
 import pandas as pd
 
+
 def index(request):
+    return render(request, 'main/index.html')
+
+def classification(request):
+    return render(request, 'main/classification.html')
+
+def regression(request):
+    return render(request, 'main/regression.html')
+    
+def clustering(request):
+    return render(request, 'main/clustering.html')
+
+def todo(request):
     """
     Render the home page. 
     Let user select a dataset.

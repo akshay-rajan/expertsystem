@@ -1,0 +1,43 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+  <h1>Select Dataset and Variables</h1>
+  <form id="ml-form" method="post" class="form form-group">
+      {% csrf_token %}
+      <label for="dataset">Choose a dataset:</label>
+      <select name="dataset" id="dataset" class="form-control">
+          {% for dataset in datasets %}
+              <option value="{{ dataset }}">{{ dataset }}</option>
+          {% endfor %}
+      </select>
+
+      <div id="variable-selection" style="display:block;">
+          <h2>Select Independent Variables</h2>
+          <div id="independent-vars">
+              <label for="independent-vars">Select Independent Variables:</label>
+              <select name="independent-vars" id="independent-vars" multiple class="form-control">
+                  {% for variable in independent_variables %}
+                      <option value="{{ variable }}">{{ variable }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+
+          <div id="dependent-vars">
+              <label for="dependent-vars">Select Dependent Variable:</label>
+              <select name="dependent-vars" id="dependent-vars" class="form-control">
+                  {% for variable in dependent_variables %}
+                      <option value="{{ variable }}">{{ variable }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Train Model</button>
+      </div>
+  </form>
+
+  <h2>Results</h2>
+  <div id="results"></div>
+{% endblock %}
