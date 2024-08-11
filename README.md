@@ -40,7 +40,7 @@ It is open to everyone who wants to harness the power of data and build intellig
 - `Home` page contains a link to `Classification` ✅️
 - `Classification` contains a link to `LinearRegression` ✅️
 - In `LinearRegression`, there are fields to upload the `train set` and `test set`.
-After submitting the form, it would take us to the next page `Results`.
+- After submitting the form, it would take us to the next page `Results`.
 - This page should display the results obtained after processing the data and building the model.
 The page can contain confusion matrix, f1_score, accuracy, precision, recall etc.
 
@@ -62,6 +62,16 @@ Clone the project:
 ```
 git clone https://github.com/akshay-rajan/expertsystem.git
 ```
+Navigate to the project directory:
+```
+cd expertsystem
+```
+> (Optional) Create a virtual environment to prevent conflicts:
+> ```bash
+> python3 -m venv myenv
+> source myenv/bin/activate # Linux/macOS
+> .\myenv\Scripts\activate # Windows
+> ```
 Install the requirements:
 ```
 pip install -r requirements.txt
