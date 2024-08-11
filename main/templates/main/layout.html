@@ -2,30 +2,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{% block title %}My Site{% endblock %}</title>
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-	<header>
-		<h1>My Site</h1>
-		<nav>
-			<ul>
-				{% comment %} <li><a href="{% url 'home' %}">Home</a></li>
-				<li><a href="{% url 'about' %}">About</a></li>
-				<li><a href="{% url 'contact' %}">Contact</a></li> {% endcomment %}
-			</ul>
-		</nav>
-	</header>
-	<main>
-		{% block content %}
-		<!-- Content goes here -->
-		{% endblock %}
-	</main>
-	<footer>
-		<p>&copy; 2023 My Site</p>
-	</footer>
-</body>
-</html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DeviceDash{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'main/main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/main/css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/fontawesome.min.css' %}">
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <h1> EXPERT <br> SYSTEM </h1>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
+    <div class="container">
+      {% block body %}
+      {% endblock %}
+    </div>
+
+    <footer class="bg-light text-center py-4">
+      <p>&copy; 2024 Expert System: A User Interface for Machine Learning</p>
+    </footer>
+
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'main/js/main.js' %}"></script>
+  </body>
+  </html>
