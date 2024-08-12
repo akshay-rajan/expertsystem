@@ -37,7 +37,9 @@
     </div>
 
     <footer class="bg-light text-center py-4 footer_section">
+      {% block footer %}
       <p>Expert System: A User Interface for Machine Learning</p>
+      {% endblock %}
     </footer>
 
     <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
