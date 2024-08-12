@@ -43,9 +43,10 @@ It is open to everyone who wants to harness the power of data and build intellig
 - After submitting the form, it would take us to the next page `Results`. ✅️
 - This page should display the results obtained after processing the data and building the model. ✅️
 - The page can contain 
+    - Actual vs Predicted values ✅️
     - confusion matrix
     - f1_score 
-    - accuracy 
+    - accuracy ✅️
     - precision
     - recall etc.
 

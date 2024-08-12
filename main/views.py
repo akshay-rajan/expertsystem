@@ -40,17 +40,16 @@ def linear_regression(request):
         # train_set = load_dataset(train_set)
         # test_set = load_dataset(test_set)
         
-        data = {
-            'Size': [1500, 1600, 1700, 1800, 1900],
-            'Price': [300, 320, 340, 360, 380]
-        }
-        df = pd.DataFrame(data)
-        print(df.head())
-                
+        fch = fetch_california_housing()
+        X, y = fch.data, fch.target
+        
         # Features, Target
-        # X, y = df['Size'], df['Price']
-        X = np.array(df['Size']).reshape(-1, 1)
-        y = np.array(df['Price'])
+        data = pd.DataFrame(data=X, columns=fch.feature_names)
+        # Create a new column for the target
+        data["HouseValue"] = y 
+
+        # Features, Target
+        X, y = data.drop("HouseValue", axis=1), data["HouseValue"]
         
         # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -61,20 +60,20 @@ def linear_regression(request):
         
         # ! Model Evaluation
         y_pred = model.predict(X_test)
+        y_pred_modified = [round(i, 3) for i in y_pred]
         
         mse = mean_squared_error(y_test, y_pred)
         rmse = np.sqrt(mse)
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-        b0 = model.intercept_
-        b1 = model.coef_[0]
+        b0 = round(model.intercept_, 3)
+        b1 = round(model.coef_[0], 3)
         line = f"y = {b0} + {b1}x"
-        print(line)
         
         return render(request, 'main/results.html', {
             'actual': y_test,
-            'predicted': y_pred,
+            'predicted': y_pred_modified,
             'metrics': {
                 'mse': mse,
                 'rmse': rmse,
@@ -86,11 +85,12 @@ def linear_regression(request):
         
     
     # Render the Input Form
-    train_set = ["My Train Set"]
-    test_set = ["My Test Set"]
+    train_set = ["California Housing (80%)"]
+    test_set = ["California Housing (20%)"]
+    
     return render(request, 'main/input.html', {
         'train_set': train_set, 
-        'test_set': test_set
+        'test_set': test_set,
     })
 
 def todo(request):
