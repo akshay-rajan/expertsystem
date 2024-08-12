@@ -67,7 +67,11 @@ def linear_regression(request):
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-
+        b0 = model.intercept_
+        b1 = model.coef_[0]
+        line = f"y = {b0} + {b1}x"
+        print(line)
+        
         return render(request, 'main/results.html', {
             'actual': y_test,
             'predicted': y_pred,
@@ -76,6 +80,7 @@ def linear_regression(request):
                 'rmse': rmse,
                 'mae': mae,
                 'r2': r2,
+                'line': line,
             },
         })
         
