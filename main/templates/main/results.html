@@ -7,7 +7,44 @@
 <div class="fade-in">
     <h1 class="display-3">Results</h1>
     <div id="results">
-        
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Actual Values</th>
+                    {% for value in actual %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Predicted Values</th>
+                    {% for value in predicted %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+            </tbody>
+        </table>
+        <div class="evaluation">
+            <h3>Evaluation Metrics</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Mean Absolute Error</th>
+                        <td>{{ metrics.mae }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mean Squared Error</th>
+                        <td>{{ metrics.mse }}</td>
+                    </tr>
+                    <tr>
+                        <th>Root Mean Squared Error</th>
+                        <td>{{ metrics.rmse }}</td>
+                    </tr>
+                    <tr>
+                        <th>R2 Score</th>
+                        <td>{{ metrics.r2 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
