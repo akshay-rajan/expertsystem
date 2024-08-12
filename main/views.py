@@ -80,8 +80,8 @@ def linear_regression(request):
                 'rmse': rmse,
                 'mae': mae,
                 'r2': r2,
-                'line': line,
             },
+            'line': line,
         })
         
     
