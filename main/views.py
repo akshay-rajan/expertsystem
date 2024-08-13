@@ -33,32 +33,20 @@ def linear_regression(request):
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
-        # train_set = request.POST.get('train_set')
-        # test_set = request.POST.get('test_set')
         
-        # Load the datasets
-        # train_set = load_dataset(train_set)
-        # test_set = load_dataset(test_set)
-        
-        # -----------------
         dataset = request.FILES.get('dataset', None)
-        print(dataset)
-        if dataset:
+        
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
             df = pd.read_csv(dataset)
-            print(df.head())
-        # -----------------
+        else:
+            df = pd.read_excel(dataset)
         
-        fch = fetch_california_housing()
-        X, y = fch.data, fch.target
-        
-        # Features, Target
-        data = pd.DataFrame(data=X, columns=fch.feature_names)
-        # Create a new column for the target
-        data["HouseValue"] = y 
+        print(df.head())
+        # Features and Target selection
+        X = df[['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']]
+        y = df['target']
 
-        # Features, Target
-        X, y = data.drop("HouseValue", axis=1), data["HouseValue"]
-        
         # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         

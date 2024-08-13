@@ -94,7 +94,8 @@ ehthumbs.db
 
 # Machine Learning
 # Data files
-*.csv
+others/*.csv
+others/*.xlsx
 *.h5
 *.hdf5
 *.pkl
