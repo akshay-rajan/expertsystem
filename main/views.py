@@ -40,6 +40,14 @@ def linear_regression(request):
         # train_set = load_dataset(train_set)
         # test_set = load_dataset(test_set)
         
+        # -----------------
+        dataset = request.FILES.get('dataset', None)
+        print(dataset)
+        if dataset:
+            df = pd.read_csv(dataset)
+            print(df.head())
+        # -----------------
+        
         fch = fetch_california_housing()
         X, y = fch.data, fch.target
         

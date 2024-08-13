@@ -7,35 +7,8 @@
 <div class="fade-in">
   <h1 class='display-3'>Input Datasets</h1>
   
-  <form id="ml-form" method="post" class="form form-group">
+  <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group">
     {% csrf_token %}
-    {% comment %} ? Temporary Setup {% endcomment %}
-    {% comment %} <div class="form-group">
-      <label for="dataset">Training Dataset:</label>
-      <select name="train_set" id="dataset1" class="form-control">
-          {% for dataset in train_set %}
-              <option value="{{ dataset }}">{{ dataset }}</option>
-          {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="dataset">Testing Dataset:</label>
-      <select name="test_set" id="dataset2" class="form-control">
-          {% for dataset in test_set %}
-              <option value="{{ dataset }}">{{ dataset }}</option>
-          {% endfor %}
-      </select>
-    </div> {% endcomment %}
-    {% comment %} ? For 2 Input Fields {% endcomment %}
-    {% comment %} <div class="form-group">
-      <label for="dataset">Dataset:</label>
-      <input type="file" name="train_set" id="train_set" class="form-control-file"/>
-    </div>
-    <div class="form-group">
-      <label for="dataset">Testing Dataset:</label>
-      <input type="file" name="test_set" id="test_set" class="form-control-file"/>
-    </div> {% endcomment %}
-    {% comment %} ? Single File Input {% endcomment %}
     <div class="form-group">
       <input type="file" name="dataset" id="dataset" class="form-control-file"/>
     </div>
