@@ -89,6 +89,9 @@ def linear_regression(request):
         'test_set': test_set,
     })
 
+def samples(request):
+    return render(request, 'main/samples.html')
+
 # ? Helper Functions
 
 def get_variables(request):
