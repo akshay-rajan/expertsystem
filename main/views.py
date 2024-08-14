@@ -42,7 +42,6 @@ def linear_regression(request):
         else:
             df = pd.read_excel(dataset)
         
-        print(df.head())
         # Features and Target selection
         X = df[['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']]
         y = df['target']
