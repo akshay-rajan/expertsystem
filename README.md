@@ -17,7 +17,7 @@ It is open to everyone who wants to harness the power of data and build intellig
 
 ### *Development* 
 
-![alt-text](./others/ml_pipeline.png)
+![alt-text](./others/flow.svg)
 
 #### Design
 
