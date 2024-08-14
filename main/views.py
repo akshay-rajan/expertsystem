@@ -33,7 +33,7 @@ def linear_regression(request):
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
-        
+        print(request.POST)
         dataset = request.FILES.get('dataset', None)
         
         file_extension = dataset.name.split('.')[-1]
@@ -42,9 +42,14 @@ def linear_regression(request):
         else:
             df = pd.read_excel(dataset)
         
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
+        
+        print(features, target)
+        
         # Features and Target selection
-        X = df[['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']]
-        y = df['target']
+        X = df[features]
+        y = df[target]
 
         # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
