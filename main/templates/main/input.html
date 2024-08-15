@@ -4,145 +4,43 @@
 {% block title %}Input Datasets{% endblock %}
 
 {% block body %}
-<div class="fade-in">
+<div class="fade-in container">
   <h1 class='display-3'>Input Datasets</h1>
-  
-  <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group" onsubmit="return validateForm()">
-    {% csrf_token %}
-    <div class="form-group">
-      <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
-    </div>
-    <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
-    <div class="fade-in">
-    <div class="form-group d-none" id="features-div">
-      <label for="target">Select Features</label>
-      <div class="form-check" id="features">
-        {% comment %} Checkboxes will be here populated by js {% endcomment %}
+  <div class="d-flex">
+    <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
       </div>
-    </div>
-    <div class="form-group d-none" id="target-div">
-      <label for="target">Select Target</label>
-      <select name="target" id="target" class="form-control">
-        {% comment %} Dropdown will be populated here {% endcomment %}
-      </select>
-    </div>
-    <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
-  </form>
+      <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
+      
+      <div class="fade-in">
+        <div class="form-group d-none" id="features-div">
+          <label for="target">Select Features</label>
+          <div class="form-check" id="features">
+            {% comment %} Checkboxes will be here populated by js {% endcomment %}
+          </div>
+        </div>
+        <div class="form-group d-none" id="target-div">
+          <label for="target">Select Target</label>
+          <select name="target" id="target" class="form-control">
+            {% comment %} Dropdown will be populated here {% endcomment %}
+          </select>
+        </div>
+        <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
+      </div>
 
-  <div id="alert" class="alert alert-danger mt-4 d-none"></div>
+    </form>
+    <div id="alert" class="alert alert-danger mt-4 d-none"></div>
+  </div>
+
+  <div class="right justify-content-center d-none" id="canvas-1">
+    <canvas id="myChart" style="width:200px;"></canvas>
+  </div>
+
 </div>
 {% endblock %}
 
 {% block script %}
-<script>
-  function handleFileChange(event) {
-    const file = event.target.files[0];
-    if (file) $('#upload-btn').prop('disabled', false);
-  }
-  function handleFileUpload(event) {
-    event.preventDefault();
-    const fileInput = document.getElementById('dataset');
-    const file = fileInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const content = e.target.result;
-        const columns = extractColumns(content, file.name);
-        // Populate checkboxes
-        populateFeatureCheckboxes(columns);
-        // Populate target dropdown
-        populateTargetDropdown(columns);
-      };
-      if (file.name.endsWith('.csv')) {
-        reader.readAsText(file);
-      } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-        reader.readAsBinaryString(file);
-      }
-      $('#upload-btn').addClass('d-none');
-      $('#build-btn').removeClass('d-none');
-    }
-  }
-
-  function extractColumns(content, fileName) {
-    let columns = [];
-    if (fileName.endsWith('.csv')) {
-      const lines = content.split('\n');
-      if (lines.length > 0) {
-        columns = lines[0].split(',');
-      }
-    } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-      const workbook = XLSX.read(content, { type: 'binary' });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-      const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      if (json.length > 0) {
-        columns = json[0];
-      }
-    }
-    return columns;
-  }
-
-  function populateFeatureCheckboxes(columns) {
-    const featuresParent = document.getElementById('features-div');
-    featuresParent.classList.remove('d-none');
-
-    const featuresDiv = document.getElementById('features');
-    featuresDiv.innerHTML = '';
-    columns.forEach(column => {
-      const div = document.createElement('div');
-      div.classList.add('form-check-inline');
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.classList.add('form-check-input');
-      checkbox.name = 'features';
-      checkbox.value = column;
-      checkbox.id = `feature-${column}`;
-      const label = document.createElement('label');
-      label.className = 'form-check-label';
-      label.htmlFor = `feature-${column}`;
-      label.textContent = column;
-      div.appendChild(checkbox);
-      div.appendChild(label);
-      featuresDiv.appendChild(div);
-    });
-  }
-  function populateTargetDropdown(columns) {
-    const targetParent = document.getElementById('target-div');
-    targetParent.classList.remove('d-none');
-
-    const targetSelect = document.getElementById('target');
-    targetSelect.innerHTML = '';
-
-    // Add default "select" option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Select';
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    targetSelect.appendChild(defaultOption);
-
-    columns.forEach(column => {
-      const option = document.createElement('option');
-      option.value = column;
-      option.textContent = column;
-      targetSelect.appendChild(option);
-    });
-  }
-  function validateForm() {
-    const features = document.querySelectorAll('input[name="features"]:checked');
-    const target = document.getElementById('target').value;
-    const alert = $('#alert');
-    if (features.length === 0) {
-      alert.text('Please select at least one feature.');
-      alert.removeClass('d-none');
-      return false;
-    }
-    if (!target) {
-      alert.text('Please select a target.');
-      alert.removeClass('d-none');
-      return false;
-    }
-    return true;
-  }
-</script>
+<script src={% static "main/js/input.js" %}></script>
 {% endblock %}
