@@ -6,9 +6,9 @@
 {% block body %}
   <div class="fade-in">
     <ul class="list-group p-4">
-      <li class="list-group-item"><a href={% url 'classification' %}>Classification</a></li>
+      {% comment %} <li class="list-group-item"><a href={% url 'classification' %}>Classification</a></li> {% endcomment %}
       <li class="list-group-item"><a href={% url 'regression' %}>Regression</a></li>
-      <li class="list-group-item"><a href={% url 'clustering' %}>Clustering</a></li>
+      {% comment %} <li class="list-group-item"><a href={% url 'clustering' %}>Clustering</a></li> {% endcomment %}
     </ul>
   </div>
 {% endblock %}
