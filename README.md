@@ -68,18 +68,17 @@ Navigate to the project directory:
 ```
 cd expertsystem
 ```
-> (Optional) Create a virtual environment to prevent conflicts:
-> ```bash
-> python3 -m venv myenv
-> source myenv/bin/activate # Linux/macOS
-> .\myenv\Scripts\activate # Windows
-> ```
-Install the requirements:
+Activate the virtual environment:
+```bash
+source myenv/bin/activate # Linux/macOS
+.\myenv\Scripts\activate # Windows
 ```
+Install the requirements:
+```bash
 pip install -r requirements.txt
 ```
 Start the Django server:
-```
+```bash
 python3 manage.py runserver
 ```
 The application is now available at http://127.0.0.1:8000/ .
