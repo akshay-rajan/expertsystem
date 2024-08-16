@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect
-from sklearn.datasets import fetch_california_housing
+from django.shortcuts import render
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from django.http import JsonResponse
 import numpy as np
 import pandas as pd
 
@@ -95,12 +93,3 @@ def samples(request):
 
 # ? Helper Functions
 
-def get_variables(request):
-    dataset_name = request.GET.get('dataset')
-    datasets = {
-        'fetch_california_housing': fetch_california_housing,
-    }
-    dataset_func = datasets[dataset_name]
-    dataset = dataset_func()
-    variables = dataset.feature_names
-    return JsonResponse({'variables': variables.tolist()})
