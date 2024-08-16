@@ -79,7 +79,7 @@ pip install -r requirements.txt
 ```
 Start the Django server:
 ```bash
-python3 manage.py runserver
+python manage.py runserver
 ```
 The application is now available at http://127.0.0.1:8000/ .
 
