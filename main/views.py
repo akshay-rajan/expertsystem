@@ -33,7 +33,6 @@ def linear_regression(request):
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
-        print(request.POST)
         dataset = request.FILES.get('dataset', None)
         
         file_extension = dataset.name.split('.')[-1]
@@ -44,9 +43,7 @@ def linear_regression(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
-        
-        print(features, target)
-        
+                
         # Features and Target selection
         X = df[features]
         y = df[target]
