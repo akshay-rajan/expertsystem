@@ -68,6 +68,10 @@ Navigate to the project directory:
 ```
 cd expertsystem
 ```
+Create a virutal environment:
+```bash
+python -m venv myenv
+```
 Activate the virtual environment:
 ```bash
 source myenv/bin/activate # Linux/macOS
