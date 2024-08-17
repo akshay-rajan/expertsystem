@@ -5,33 +5,35 @@
 
 {% block body %}
 <div class="fade-in container">
-  <h1 class='display-3'>Input Datasets</h1>
-  <div class="d-flex">
-    <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
-      {% csrf_token %}
-      <div class="form-group">
-        <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
-      </div>
-      <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
-      
-      <div class="fade-in">
-        <div class="form-group d-none" id="features-div">
-          <label for="target">Select Features</label>
-          <div class="form-check" id="features">
-            {% comment %} Checkboxes will be here populated by js {% endcomment %}
+  <div>
+    <h1 class='display-3'>Input Datasets</h1>
+    <div>
+      <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+        </div>
+        <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
+        
+        <div class="fade-in">
+          <div class="form-group d-none" id="features-div">
+            <label for="target">Select Features</label>
+            <div class="form-check" id="features">
+              {% comment %} Checkboxes will be here populated by js {% endcomment %}
+            </div>
           </div>
+          <div class="form-group d-none" id="target-div">
+            <label for="target">Select Target</label>
+            <select name="target" id="target" class="form-control">
+              {% comment %} Dropdown will be populated here {% endcomment %}
+            </select>
+          </div>
+          <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
         </div>
-        <div class="form-group d-none" id="target-div">
-          <label for="target">Select Target</label>
-          <select name="target" id="target" class="form-control">
-            {% comment %} Dropdown will be populated here {% endcomment %}
-          </select>
-        </div>
-        <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
-      </div>
-
-    </form>
-    <div id="alert" class="alert alert-danger mt-4 d-none"></div>
+  
+      </form>
+      <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
+    </div>
   </div>
 
   <div class="right justify-content-center" id="canvas-1"></div>  

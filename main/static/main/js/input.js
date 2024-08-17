@@ -166,7 +166,7 @@ function plot(data) {
   d3.select("#canvas-1").selectAll("*").remove();
 
   // Set the dimensions and margins of the graph
-  var margin = {top: 80, right: 25, bottom: 100, left: 100},
+  var margin = {top: 100, right: 25, bottom: 80, left: 100},
       width = 450 - margin.left - margin.right,
       height = 450 - margin.top - margin.bottom;
 
@@ -242,7 +242,7 @@ function plot(data) {
   var mousemove = function(d) {
     tooltip
       .html("Correlation: " + d.value.toFixed(2))
-      .style("left", (d3.mouse(this)[0] + 150) + "px")
+      .style("left", (d3.mouse(this)[0] + 175) + "px")
       .style("top", (d3.mouse(this)[1] + 500) + "px");
   };
   var mouseleave = function(d) {
