@@ -19,6 +19,10 @@ It is open to everyone who wants to harness the power of data and build intellig
 
 ![alt-text](./others/flow.svg)
 
+<div style="border: 1px solid red;padding: 15px;">
+Status: Linear Regression implemented.
+</div>
+
 #### Design
 
 - `home` page should contain a list of Machine Learning models for the user to choose from.
