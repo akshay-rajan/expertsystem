@@ -70,10 +70,10 @@ def linear_regression(request):
             'actual': y_test,
             'predicted': y_pred_modified,
             'metrics': {
-                'mse': mse,
-                'rmse': rmse,
-                'mae': mae,
-                'r2': r2,
+                'mse': round(mse, 2),
+                'rmse': round(rmse, 2),
+                'mae': round(mae, 2),
+                'r2': round(r2, 2),
             },
             'line': line,
         })

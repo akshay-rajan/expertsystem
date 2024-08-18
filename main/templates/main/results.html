@@ -39,19 +39,51 @@
       <tbody>
         <tr>
           <th>Mean Absolute Error</th>
-          <td>{{ metrics.mae }}</td>
+          <td class="
+            {% if metrics.mae < 0.3 %}
+              text-success
+            {% elif metrics.mae < 0.7 %}
+              text-warning
+            {% else %}
+              text-danger
+            {% endif %}
+            ">{{ metrics.mae }}</td>
         </tr>
         <tr>
           <th>Mean Squared Error</th>
-          <td>{{ metrics.mse }}</td>
+          <td class="
+            {% if metrics.mse < 0.2 %}
+              text-success
+            {% elif metrics.mse < 0.5 %}
+              text-warning
+            {% else %}
+              text-danger
+            {% endif %}
+            ">{{ metrics.mse }}</td>
         </tr>
         <tr>
           <th>Root Mean Squared Error</th>
-          <td>{{ metrics.rmse }}</td>
+          <td class="
+            {% if metrics.rmse < 0.3 %}
+              text-success
+            {% elif metrics.rmse < 0.7 %}
+              text-warning
+            {% else %}
+              text-danger
+            {% endif %}
+            ">{{ metrics.rmse }}</td>
         </tr>
         <tr>
-          <th>R2 Score</th>
-          <td>{{ metrics.r2 }}</td>
+          <th>R<sup>2</sup> Score</th>
+          <td class="
+            {% if metrics.r2 > 0.75 %}
+              text-success
+            {% elif metrics.r2 > 0.5 %}
+              text-warning
+            {% else %}
+              text-danger
+            {% endif %}
+            ">{{ metrics.r2 }}</td>
         </tr>
       </tbody>
     </table>
