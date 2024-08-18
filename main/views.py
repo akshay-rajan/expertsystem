@@ -12,7 +12,7 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
 def index(request):
-    return render(request, 'main/index.html')
+    return render(request, 'main/temp.html')
 
 # ? Types of Machine Learning Algorithms
 

@@ -1,11 +1,121 @@
-{% extends "main/layout.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expert System</title>
 
-{% block title %}Temporary Page{% endblock %}
+  <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
 
-{% block body %}
-<div>
-  <h2>For Testing</h2>
-  <div id="something-odd"></div>
-</div>
-{% endblock %}
+  <link rel="icon" href="{% static 'main/img/favicon.png' %}">
+</head>
+<body class="fade-in">
+  <div class="first d-flex justify-content-center align-items-center" id="home">
+    <div class="text-align-center">
+      <h1 class="display-1 text-white font-weight-bold">
+        EXPERT SYSTEM
+      </h1>
+      <span class="d-flex justify-content-center text-uppercase text-white">
+        Build an entire Machine Learning Pipeline in minutes.
+      </span>
+      <div class="d-flex justify-content-center">
+        <a href="#get-started" class="btn btn-primary btn-lg text-white mt-4">
+          Get Started!
+        </a>
+      </div>
+    </div>
+  </div>  
+  <div class="second d-flex p-4 justify-content-between" id="get-started">
+    <div class="card border-info m-3 fade-in-card" style="">
+      <div class="card-header">Learn</div>
+      <div class="card-body text-info">
+        <h5 class="card-title">Info card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#">
+          <button disabled class="btn btn-info btn-block">
+            Coming soon...
+          </button>
+        </a>
+      </div>
+    </div>
+    <div class="card border-info m-3 fade-in-card" style="">
+      <div class="card-header bg-info text-white">Build</div>
+      <div class="card-body text-info">
+        <h5 class="card-title">Info card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="">
+          <button class="btn btn-info btn-block">
+            Go!
+          </button>
+        </a>
+      </div>
+    </div>
+    <div class="card border-info m-3 fade-in-card" style="">
+      <div class="card-header">Advanced</div>
+      <div class="card-body text-info">
+        <h5 class="card-title">Info card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#">
+          <button disabled class="btn btn-info btn-block">
+            Coming soon...
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="third" id="more-details">
+    
+  </div>
+
+  <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'main/js/main.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      $('.fade-in').fadeIn(500);
+    });
+    
+    $(document).ready(function(){
+      $('a[href^="#"]').on('click', function(event) {
+        var target = $(this.getAttribute('href'));
+        if( target.length ) {
+          event.preventDefault();
+          $('html, body').stop().animate({
+            scrollTop: target.offset().top
+          }, 1000);
+        }
+      });
+    });
+    $(document).ready(function() {
+      function isElementInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
+  
+      function checkVisibility() {
+        $('.fade-in-card').each(function() {
+          if (isElementInViewport(this)) {
+            $(this).animate({ opacity: 1 }, 1000);
+          }
+        });
+      }
+  
+      // Initial check
+      checkVisibility();
+  
+      // Check on scroll
+      $(window).on('scroll', function() {
+        checkVisibility();
+      });
+    });
+  </script>
+</body>
+</html>
