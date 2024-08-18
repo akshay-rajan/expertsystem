@@ -161,12 +161,13 @@ function calculateCorrelation(data, x, y) {
   return numerator / denominator;
 }
 
+// ! Heatmap
 function plot(data) {
   // Remove any existing SVG elements
   d3.select("#canvas-1").selectAll("*").remove();
 
   // Set the dimensions and margins of the graph
-  var margin = {top: 100, right: 25, bottom: 80, left: 100},
+  var margin = {top: 80, right: 25, bottom: 80, left: 100},
       width = 450 - margin.left - margin.right,
       height = 450 - margin.top - margin.bottom;
 
@@ -256,17 +257,17 @@ function plot(data) {
   // Add title to graph
   svg.append("text")
     .attr("x", 0)
-    .attr("y", height + margin.bottom / 2) // Position below the heatmap
+    .attr("y", height + margin.bottom / 3) // Position below the heatmap
     .attr("text-anchor", "left")
-    .style("font-size", "22px")
+    .style("font-size", "20px")
     .text("Heatmap");
   
   // Add subtitle to graph
   svg.append("text")
     .attr("x", 0)
-    .attr("y", height + margin.bottom / 2 + 30) // Position below the title
+    .attr("y", height + margin.bottom / 3 + 30) // Position below the title
     .attr("text-anchor", "left")
-    .style("font-size", "14px")
+    .style("font-size", "12px")
     .style("fill", "grey")
     .style("max-width", 400)
     .text("Correlation between each pair of features.");
