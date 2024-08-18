@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         media_root = settings.MEDIA_ROOT
         now = time.time()
-        cutoff = now - 30 # 5 minutes ago
+        cutoff = now - (5 * 60)
 
         for filename in os.listdir(media_root):
             file_path = os.path.join(media_root, filename)
