@@ -1,9 +1,14 @@
+import os
+import uuid
+import pickle
+import numpy as np
+import pandas as pd
+from django.conf import settings
 from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-import numpy as np
-import pandas as pd
 
 
 def index(request):
@@ -26,7 +31,7 @@ def linear_regression(request):
     """
     Enable user to input training and testing sets
     Build a Linear Regression model
-    Display the results
+    Display the results and allow the user to download the model
     """    
     # On submission of the datasets
     if request.method == 'POST':
@@ -66,6 +71,16 @@ def linear_regression(request):
         b1 = round(model.coef_[0], 3)
         line = f"y = {b0} + {b1}x"
         
+        # Serialize the model
+        model_filename = f"linear_regression_{uuid.uuid4().hex[:6]}.pkl"
+        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+        
+        with open(model_path, 'wb') as file:
+            pickle.dump(model, file)
+        
+        # Provide a download link
+        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        
         return render(request, 'main/results.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
@@ -76,6 +91,7 @@ def linear_regression(request):
                 'r2': round(r2, 2),
             },
             'line': line,
+            'download': download_link,
         })
         
     
