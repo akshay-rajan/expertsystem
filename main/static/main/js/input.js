@@ -188,7 +188,7 @@ function plot(data) {
   .domain(myGroups)
   .padding(0.05);
   svg.append("g")
-  .style("font-size", 15)
+  .style("font-size", 12)
   .attr("transform", "translate(0,0)") // Adjusted to start from the top
   .call(d3.axisTop(x).tickSize(0)) // Changed to axisTop
   .selectAll("text")
@@ -207,7 +207,7 @@ function plot(data) {
   .domain(myVars)
   .padding(0.05);
   svg.append("g")
-  .style("font-size", 15)
+  .style("font-size", 12)
   .call(d3.axisLeft(y).tickSize(0))
   .selectAll("text")
     .style("text-anchor", "end")
@@ -220,35 +220,9 @@ function plot(data) {
 
   // Build color scale
   var myColor = d3.scaleSequential()
-    .interpolator(d3.interpolateInferno)
+    .interpolator(d3.interpolateGnBu)
     .domain([-1, 1]);
 
-  // Create a tooltip
-  var tooltip = d3.select("#canvas-1")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px");
-
-  // Three functions that change the tooltip when user hovers / moves / leaves a cell
-  var mouseover = function(d) {
-    tooltip.style("opacity", 1);
-    d3.select(this).style("stroke", "black").style("opacity", 1);
-  };
-  var mousemove = function(d) {
-    tooltip
-      .html("Correlation: " + d.value.toFixed(2))
-      .style("left", (d3.mouse(this)[0] + 175) + "px")
-      .style("top", (d3.mouse(this)[1] + 500) + "px");
-  };
-  var mouseleave = function(d) {
-    tooltip.style("opacity", 0);
-    d3.select(this).style("stroke", "none").style("opacity", 0.8);
-  };
 
   // Add the squares
   svg.selectAll()
@@ -265,9 +239,19 @@ function plot(data) {
       .style("stroke-width", 4)
       .style("stroke", "none")
       .style("opacity", 0.8)
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave);
+  
+  // Add text to the squares
+  svg.selectAll()
+  .data(data, function(d) { return d.group + ':' + d.variable; })
+  .enter()
+  .append("text")
+    .attr("x", function(d) { return x(d.group) + x.bandwidth() / 2; })
+    .attr("y", function(d) { return y(d.variable) + y.bandwidth() / 2; })
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .style("fill", "black") // Adjust text color based on background color for better visibility
+    .style("font-size", "10px")
+    .text(function(d) { return d.value.toFixed(2); });
 
   // Add title to graph
   svg.append("text")
