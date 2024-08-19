@@ -55,7 +55,13 @@ a button:hover {
   padding: 0;
   margin: 0;
 }
-#more-details {
+.start-card {
+  min-width: 30vw;
+}
+.start-card > div > img {
+  margin: 5 5 5 5;
+}
+#select-category {
   width: 100vw;
   height: 80vh;
   background-color: var(--secondary-color)!important;

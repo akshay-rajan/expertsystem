@@ -28,46 +28,47 @@
       </div>
     </div>
   </div>  
-  <div class="second d-flex p-4 justify-content-between" id="get-started">
-    <div class="card border-info m-3 fade-in-card" style="">
-      <div class="card-header">Learn</div>
-      <div class="card-body text-info">
-        <h5 class="card-title">Info card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#">
-          <button disabled class="btn btn-info btn-block">
-            Coming soon...
-          </button>
-        </a>
+  <div class="second d-flex p-4" id="get-started">
+
+    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Introduction to Machine Learning</h5>
+        <p class="card-text">Learn Machine Learning and how to use Expert System.</p>
+        <button disabled class="btn btn-info btn-block">
+          Coming soon...
+        </button>
       </div>
     </div>
-    <div class="card border-info m-3 fade-in-card" style="">
-      <div class="card-header bg-info text-white">Build</div>
-      <div class="card-body text-info">
-        <h5 class="card-title">Info card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="">
-          <button class="btn btn-info btn-block">
-            Go!
-          </button>
-        </a>
-      </div>
-    </div>
-    <div class="card border-info m-3 fade-in-card" style="">
-      <div class="card-header">Advanced</div>
-      <div class="card-body text-info">
-        <h5 class="card-title">Info card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#">
-          <button disabled class="btn btn-info btn-block">
-            Coming soon...
-          </button>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="third" id="more-details">
     
+    <div class="card border-info m-3 fade-in-card start-card" style="">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Start</h5>
+        <p class="card-text">Pick an algorithm and start building ML Models.</p>
+        <a href="#select-category" class="btn btn-info btn-block">Go!</a>
+      </div>
+    </div>
+
+    <div class="card border-info m-3 fade-in-card start-card" style="">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Advanced Features</h5>
+        <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
+        <button disabled class="btn btn-info btn-block">
+          Coming soon...
+        </button>
+      </div>
+    </div>
+    
+  </div>
+  <div class="third container" id="select-category">
   </div>
 
   <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
@@ -87,33 +88,6 @@
             scrollTop: target.offset().top
           }, 1000);
         }
-      });
-    });
-    $(document).ready(function() {
-      function isElementInViewport(el) {
-        var rect = el.getBoundingClientRect();
-        return (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-      }
-  
-      function checkVisibility() {
-        $('.fade-in-card').each(function() {
-          if (isElementInViewport(this)) {
-            $(this).animate({ opacity: 1 }, 1000);
-          }
-        });
-      }
-  
-      // Initial check
-      checkVisibility();
-  
-      // Check on scroll
-      $(window).on('scroll', function() {
-        checkVisibility();
       });
     });
   </script>
