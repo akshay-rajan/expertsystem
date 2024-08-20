@@ -1,6 +1,6 @@
 :root {
   --primary-color: #ffffff;
-  --secondary-color: #12bcd3;
+  --secondary-color: #5dc6e6;
   --dark-color: #1a2e35;
 }
 
@@ -14,6 +14,10 @@ body {
   min-height: 70vh;
 }
 
+.title {
+  color: var(--secondary-color)!important;
+}
+
 .fade-in, .fade-in-2 {
   display: none;
 }
@@ -23,6 +27,7 @@ body {
   box-shadow: none;
   -webkit-box-shadow: none!important;
 }
+
 
 /* ! Home */
 #home {
