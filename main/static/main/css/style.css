@@ -10,6 +10,10 @@ body {
   min-height: 100vh;
 }
 
+.page {
+  min-height: 70vh;
+}
+
 .fade-in, .fade-in-2 {
   display: none;
 }
