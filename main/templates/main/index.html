@@ -1,14 +1,125 @@
-{% extends "main/layout.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expert System</title>
 
-{% block title %}Home{% endblock %}
+  <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
 
-{% block body %}
-  <div class="fade-in">
-    <ul class="list-group p-4">
-      {% comment %} <li class="list-group-item"><a href={% url 'classification' %}>Classification</a></li> {% endcomment %}
-      <li class="list-group-item"><a href={% url 'regression' %}>Regression</a></li>
-      {% comment %} <li class="list-group-item"><a href={% url 'clustering' %}>Clustering</a></li> {% endcomment %}
-    </ul>
+  <link rel="icon" href="{% static 'main/img/favicon.svg' %}">
+</head>
+<body>
+  <div class="first d-flex justify-content-center align-items-center" id="home">
+    <div class="text-align-center">
+      <h1 class="display-1 text-white font-weight-bold fade-in">
+        EXPERT SYSTEM
+      </h1>
+      <span class="d-flex justify-content-center text-uppercase text-white">
+        <div class="fade-in-2">
+          Build an entire Machine Learning Pipeline in minutes.
+        </div>
+      </span>
+      <div class="d-flex justify-content-center">
+        <a href="#get-started" class="btn btn-lg text-white mt-4">
+          Get Started!
+        </a>
+      </div>
+    </div>
+  </div>  
+  <div class="second d-flex p-4" id="get-started">
+
+    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between w-100">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Introduction</h5>
+        <p class="card-text">Learn the basics of Machine Learning and how to use Expert System.</p>
+        <button disabled class="btn btn-info btn-block">
+          Coming soon!
+        </button>
+      </div>
+    </div>
+    
+    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Start</h5>
+        <p class="card-text">Pick an algorithm and start building ML Models.</p>
+        <a href="#select-category" class="btn btn-info btn-block">Go!</a>
+      </div>
+    </div>
+
+    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
+        <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
+      </div>
+      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+        <h5 class="card-title">Advanced Features</h5>
+        <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
+        <button disabled class="btn btn-info btn-block">
+          Coming soon!
+        </button>
+      </div>
+    </div>
+    
   </div>
-{% endblock %}
+  <div class="third d-flex" id="select-category">
+
+    <div class="left w-50 d-flex align-items-center">
+      <div class="d-flex flex-column p-2">
+        <h2 class="display-2 text-white m-4 mb-0">SELECT CATEGORY</h2>
+        <div class="display-4 text-gray m-3 ml-4 mt-0">
+          OF THE MACHINE LEARNING ALGORITHM.
+        </div>
+      </div>
+    </div>
+
+    <div class="right w-50 bg-light d-flex justify-content-center align-items-center">
+
+      <div class="d-block w-100">
+        <ul class="list-group">
+          <li class="list-group-item p-4 m-3 disabled">Classification</li>
+          <a href={% url 'regression' %} class="">
+            <li class="list-group-item p-4 m-3">
+              Regression
+            </li>
+          </a>
+          <li class="list-group-item p-4 m-3 disabled">Clustering</li>
+        </ul>
+        <div class="text-info m-4">ⓘ Linear Regression is the only model currently available!</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'main/js/main.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      $('.fade-in').fadeIn(500);
+      $('.fade-in-2').fadeIn(1000);
+    });
+    
+    $(document).ready(function(){
+      $('a[href^="#"]').on('click', function(event) {
+        var target = $(this.getAttribute('href'));
+        if( target.length ) {
+          event.preventDefault();
+          $('html, body').stop().animate({
+            scrollTop: target.offset().top
+          }, 1000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 
@@ -9,3 +11,6 @@ urlpatterns = [
     path('linear_regression/', views.linear_regression, name='linear_regression'),
     path('samples', views.samples, name='samples'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

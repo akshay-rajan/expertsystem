@@ -4,10 +4,10 @@
 {% block title %}Regression{% endblock %}
 
 {% block body %}
-<div class="fade-in p-2">
-  <h1 class='display-3'>Regression</h1>
+<div class="fade-in p-2 page">
+  <h1 class='display-3 m-2 title'>Regression</h1>
   
-  <ul class="list-group">
+  <ul class="list-group m-4">
     <li class="list-group-item"><a href={% url 'linear_regression' %}>Linear Regression</a></li>
     {% comment %} <li class="list-group-item"><a href="#">Polynomial Regression</a></li> {% endcomment %}
     {% comment %} <li class="list-group-item"><a href="#">Decision Trees</a></li> {% endcomment %}
@@ -15,4 +15,7 @@
     {% comment %} <li class="list-group-item"><a href="#">Support Vector Machines</a></li> {% endcomment %}
   </ul>
 </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

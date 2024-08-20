@@ -5,7 +5,7 @@
 
 {% block body %}
 <div class="fade-in">
-  <h1 class="display-3">Results</h1>
+  <h1 class="display-3 title">Results</h1>
   <div id="results">
     <div class="line d-flex justify-content-center">
       <h2 class="display-5 p-3 font-weight-bold">
@@ -14,15 +14,78 @@
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
       <tbody>
         <tr>
+            <th>Mean Absolute Error</th>
+            <td class="
+            {% if metrics.mae < 0.3 %}
+              table-success
+            {% elif metrics.mae < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mae }}</td>
+          </tr>
+          <tr>  
+            <th>Mean Squared Error</th>
+            <td class="
+            {% if metrics.mse < 0.2 %}
+              table-success
+            {% elif metrics.mse < 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mse }}</td>
+          </tr>
+          <tr>
+            <th>Root Mean Squared Error</th>
+            <td class="
+            {% if metrics.rmse < 0.3 %}
+              table-success
+            {% elif metrics.rmse < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.rmse }}</td>
+          </tr>
+          <tr>
+            <th>R<sup>2</sup> Score</th>
+            <td class="
+            {% if metrics.r2 > 0.75 %}
+              table-success
+            {% elif metrics.r2 > 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.r2 }}</td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{{ download }}" class="link">
+        <button class="btn btn-info btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <tbody>
+        <thead class="thead">
             <th>Actual Values</th>
             {% for value in actual %}
               <td>{{ value }}</td>
             {% endfor %}
-        </tr>
+        </thead>
         <tr>
           <th>Predicted Values</th>
           {% for value in predicted %}
@@ -33,29 +96,6 @@
     </table>
   </div>
 
-  <div class="evaluation">
-    <h3>Evaluation Metrics</h3>
-    <table class="table">
-      <tbody>
-        <tr>
-          <th>Mean Absolute Error</th>
-          <td>{{ metrics.mae }}</td>
-        </tr>
-        <tr>
-          <th>Mean Squared Error</th>
-          <td>{{ metrics.mse }}</td>
-        </tr>
-        <tr>
-          <th>Root Mean Squared Error</th>
-          <td>{{ metrics.rmse }}</td>
-        </tr>
-        <tr>
-          <th>R2 Score</th>
-          <td>{{ metrics.r2 }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
 {% endblock %}
 

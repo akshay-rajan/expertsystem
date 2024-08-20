@@ -4,43 +4,67 @@
 {% block title %}Input Datasets{% endblock %}
 
 {% block body %}
-<div class="fade-in container">
-  <h1 class='display-3'>Input Datasets</h1>
-  <div class="d-flex">
-    <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
-      {% csrf_token %}
-      <div class="form-group">
-        <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
-      </div>
-      <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
-      
-      <div class="fade-in">
-        <div class="form-group d-none" id="features-div">
-          <label for="target">Select Features</label>
-          <div class="form-check" id="features">
-            {% comment %} Checkboxes will be here populated by js {% endcomment %}
+<div class="fade-in page">
+  <div class="container d-flex">
+    <div>
+      <h1 class='display-3 title'>Input Datasets</h1>
+      <div>
+        <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
           </div>
-        </div>
-        <div class="form-group d-none" id="target-div">
-          <label for="target">Select Target</label>
-          <select name="target" id="target" class="form-control">
-            {% comment %} Dropdown will be populated here {% endcomment %}
-          </select>
-        </div>
-        <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
+          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
+            Next
+          </button>
+          
+          <div class="fade-in">
+            <div class="form-group d-none" id="features-div">
+              <label for="target">Select Features</label>
+              <div class="form-check" id="features">
+                {% comment %} Checkboxes will be here populated by js {% endcomment %}
+              </div>
+            </div>
+            <div class="form-group d-none" id="target-div">
+              <label for="target">Select Target</label>
+              <select name="target" id="target" class="form-control">
+                {% comment %} Dropdown will be populated here {% endcomment %}
+              </select>
+            </div>
+            <button type="submit" id="build-btn" class="btn btn-primary d-none">
+              <div class="d-none" id="build-btn-div1">
+                Build
+              </div>
+              <div class="spinner-grow text-light" id="build-btn-div2" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </button>
+          </div>
+    
+        </form>
+        <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
       </div>
+    </div>
+  
+    <div class="d-flex">
+      <div class="right justify-content-center" id="canvas-1"></div>  
+    </div>
 
-    </form>
-    <div id="alert" class="alert alert-danger mt-4 d-none"></div>
   </div>
 
-  <div class="right justify-content-center d-none" id="canvas-1">
-    <canvas id="myChart" style="width:200px;"></canvas>
+  <div class="container d-flex">
+    <div class="d-flex">
+      <div class="left justify-content-center" id="canvas-2" style=""></div>  
+    </div>
   </div>
-
 </div>
 {% endblock %}
 
 {% block script %}
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src={% static "main/js/input.js" %}></script>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}
