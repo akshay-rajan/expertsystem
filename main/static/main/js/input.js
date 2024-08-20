@@ -8,6 +8,10 @@ function handleFileUpload(event) {
   const fileInput = document.getElementById('dataset');
   const file = fileInput.files[0];
   if (file) {
+    
+    $('#upload-btn').addClass('d-none');
+    $('#build-btn').removeClass('d-none');
+
     const reader = new FileReader();
     reader.onload = function(e) {
       const content = e.target.result;
@@ -19,17 +23,20 @@ function handleFileUpload(event) {
       // Parse data and plot heatmap
       const { data, correlationMatrix } = parseData(content, file.name);
       plotHeatMap(correlationMatrix);
-      // Plot correlogram
-      plotCorrelogram(data, correlationMatrix);
     };
     if (file.name.endsWith('.csv')) {
       reader.readAsText(file);
     } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
       reader.readAsBinaryString(file);
     }
-    $('#upload-btn').addClass('d-none');
-    $('#build-btn').removeClass('d-none');
   }
+}
+
+// Activate the build button after the heatmap is plotted
+function activateBuildButton() {
+  console.log('Activating build button');
+  $('#build-btn-div1').removeClass('d-none');
+  $('#build-btn-div2').addClass('d-none');
 }
 
 function extractColumns(content, fileName) {
@@ -273,6 +280,8 @@ function plotHeatMap(data) {
     .style("fill", "grey")
     .style("max-width", 400)
     .text("Correlation between each pair of features.");
+
+    activateBuildButton();
 }
 
 // ! Scatter Plot

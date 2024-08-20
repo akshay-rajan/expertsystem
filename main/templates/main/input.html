@@ -14,7 +14,9 @@
           <div class="form-group">
             <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
           </div>
-          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">Next</button>
+          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
+            Next
+          </button>
           
           <div class="fade-in">
             <div class="form-group d-none" id="features-div">
@@ -29,7 +31,14 @@
                 {% comment %} Dropdown will be populated here {% endcomment %}
               </select>
             </div>
-            <button type="submit" id="build-btn" class="btn btn-primary d-none">Build</button>
+            <button type="submit" id="build-btn" class="btn btn-primary d-none">
+              <div class="d-none" id="build-btn-div1">
+                Build
+              </div>
+              <div class="spinner-grow text-light" id="build-btn-div2" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </button>
           </div>
     
         </form>
