@@ -12,17 +12,19 @@
 
   <link rel="icon" href="{% static 'main/img/favicon.png' %}">
 </head>
-<body class="fade-in">
+<body>
   <div class="first d-flex justify-content-center align-items-center" id="home">
     <div class="text-align-center">
-      <h1 class="display-1 text-white font-weight-bold">
+      <h1 class="display-1 text-white font-weight-bold fade-in">
         EXPERT SYSTEM
       </h1>
       <span class="d-flex justify-content-center text-uppercase text-white">
-        Build an entire Machine Learning Pipeline in minutes.
+        <div class="fade-in-2">
+          Build an entire Machine Learning Pipeline in minutes.
+        </div>
       </span>
       <div class="d-flex justify-content-center">
-        <a href="#get-started" class="btn btn-primary btn-lg text-white mt-4">
+        <a href="#get-started" class="btn btn-lg text-white mt-4">
           Get Started!
         </a>
       </div>
@@ -30,7 +32,7 @@
   </div>  
   <div class="second d-flex p-4" id="get-started">
 
-    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between">
+    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between w-100">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
       </div>
@@ -43,7 +45,7 @@
       </div>
     </div>
     
-    <div class="card border-info m-3 fade-in-card start-card" style="">
+    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
       </div>
@@ -54,7 +56,7 @@
       </div>
     </div>
 
-    <div class="card border-info m-3 fade-in-card start-card" style="">
+    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
       </div>
@@ -104,6 +106,7 @@
   <script>
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
+      $('.fade-in-2').fadeIn(1000);
     });
     
     $(document).ready(function(){
