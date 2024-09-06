@@ -34,7 +34,6 @@ function handleFileUpload(event) {
 
 // Activate the build button after the heatmap is plotted
 function activateBuildButton() {
-  console.log('Activating build button');
   $('#build-btn-div1').removeClass('d-none');
   $('#build-btn-div2').addClass('d-none');
 }
@@ -100,8 +99,12 @@ function populateTargetDropdown(columns) {
 
   columns.forEach(column => {
     const option = document.createElement('option');
-    option.value = column;
-    option.textContent = column;
+    option.value = column
+      .replace(/\n/g, '')
+      .replace(/\r/g, '');
+    option.textContent = column
+      .replace(/\n/g, '')
+      .replace(/\r/g, '');
     targetSelect.appendChild(option);
   });
 }
