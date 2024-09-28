@@ -40,12 +40,12 @@ def linear_regression(request):
         
         file_extension = dataset.name.split('.')[-1]
         if file_extension == 'csv':
-            df = pd.read_csv(dataset)
+            df = pd.read_csv(dataset, )
         else:
             df = pd.read_excel(dataset)
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
                 
         # Features and Target selection
         X = df[features]
