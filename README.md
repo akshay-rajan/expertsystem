@@ -139,6 +139,7 @@ The application is now available at http://127.0.0.1:8000/ .
 ---
 
 > **Akshay R**,
+>**Deepu Joseph**,
 >*Semester 3, Masters in Computer Applications*,
 >*College of Enginnering, Trivandrum*
 >(*2023-2025*)
