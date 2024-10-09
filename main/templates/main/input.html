@@ -31,6 +31,19 @@
                 {% comment %} Dropdown will be populated here {% endcomment %}
               </select>
             </div>
+            
+            {% if hyperparameters %}
+            <div class="hyperparameters">
+              {% for key, param in hyperparameters.items %}
+                <div>
+                    {% comment %} <label for="{{ param.name }}">{{ param.name|capfirst }}:</label> {% endcomment %}
+                    <label for="{{ param.name }}">{{ param.name }}:</label>
+                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}">
+                </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
             <button type="submit" id="build-btn" class="btn btn-primary d-none">
               <div class="d-none" id="build-btn-div1">
                 Build

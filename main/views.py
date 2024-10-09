@@ -124,7 +124,8 @@ def knn(request):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         # ! Model Building
-        model = KNeighborsClassifier(n_neighbors=3)
+        n_neighbors = int(request.POST.get('n_neighbors'))
+        model = KNeighborsClassifier(n_neighbors=n_neighbors)
         model.fit(X_train, y_train)
         
         # ! Model Evaluation
@@ -156,7 +157,15 @@ def knn(request):
             },
             'download': download_link,
         })
-    return render(request, 'main/input.html')
+    
+    return render(request, 'main/input.html', {
+        'hyperparameters': {
+            1: {
+                'name': 'n_neighbors',
+                'type': 'number',
+            },
+        }
+    })
     
 def samples(request):
     return render(request, 'main/samples.html')
