@@ -109,3 +109,29 @@ def samples(request):
 
 # ? Helper Functions
 
+# Preprocessing part ->Deepu
+
+def preprocessing(request):
+
+    context = {}  # Initialize context dictionary
+
+    if request.method == 'POST' and request.FILES.get('file'):
+        uploaded_file = request.FILES['file']
+        try:
+            # Read the uploaded CSV file into a Pandas DataFrame
+            data = pd.read_csv(uploaded_file)
+
+            # Calculate the number of missing values in each column
+            missing_values = data.isnull().sum()
+
+            # Create an HTML preview of the first 5 rows
+            data_preview = data.head().to_html(classes='data-preview', index=False)
+            
+            # Add data to context for rendering
+            context['data_preview'] = data_preview
+            context['missing_values'] = missing_values.to_dict()
+
+        except Exception as e:
+            context['error'] = f"Error processing file: {e}"
+
+    return render(request, 'main/preprocessing.html', context)

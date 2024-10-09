@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Preview Dataset</title>
+
+    <!-- Load Static Files -->
+    {% load static %}
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'preprocessing/style2.css' %}">
+</head>
+<body class="container py-4">
+    <h2 class="text-center my-4">Upload Your Dataset and View Missing Values</h2>
+    
+    <!-- File Upload Form -->
+    <div class="d-flex justify-content-center">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="file" id="file" name="file" accept=".csv" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+
+    <!-- Conditionally Render the Data Preview Table if Available -->
+    {% if data_preview %}
+    <h3 class="text-center my-4">Data Preview</h3>
+    <div class="table-responsive">
+        <!-- Using Bootstrap table classes for better styling -->
+        <table class="table table-bordered table-hover table-striped mx-auto">
+            {{ data_preview|safe }}
+        </table>
+    </div>
+
+    <!-- Display Missing Value Summary -->
+    <h3 class="text-center my-4">Missing Values Summary</h3>
+    <div class="table-responsive d-flex justify-content-center">
+        <table class="table table-bordered table-hover table-striped w-50">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Column</th>
+                    <th scope="col">Missing Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for column, missing in missing_values.items %}
+                    <tr class="{% if missing > 0 %}table-danger{% else %}table-success{% endif %}">
+                        <td>{{ column }}</td>
+                        <td>{{ missing }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Bootstrap JavaScript and dependencies (optional but recommended) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

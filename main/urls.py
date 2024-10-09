@@ -10,6 +10,8 @@ urlpatterns = [
     path('clustering/', views.clustering, name='clustering'),
     path('linear_regression/', views.linear_regression, name='linear_regression'),
     path('samples', views.samples, name='samples'),
+    path('preprocessing', views.preprocessing, name='preprocessing'),
+
 ]
 
 if settings.DEBUG:
