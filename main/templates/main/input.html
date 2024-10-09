@@ -33,9 +33,9 @@
             </div>
             
             {% if hyperparameters %}
-            <div class="hyperparameters">
+            <div class="hyperparameters d-none" id="hyperparameter-div">
               {% for key, param in hyperparameters.items %}
-                <div>
+                <div class="form-group" id="{{ param.name }}-div">
                     {% comment %} <label for="{{ param.name }}">{{ param.name|capfirst }}:</label> {% endcomment %}
                     <label for="{{ param.name }}">{{ param.name }}:</label>
                     <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}">

@@ -10,6 +10,7 @@ function handleFileUpload(event) {
   if (file) {
     
     $('#upload-btn').addClass('d-none');
+    $('#hyperparameter-div').removeClass('d-none');
     $('#build-btn').removeClass('d-none');
 
     const reader = new FileReader();
