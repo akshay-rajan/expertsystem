@@ -10,7 +10,8 @@ from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, mean_squared_error, r2_score, mean_absolute_error, accuracy_score
+from sklearn.metrics import classification_report, mean_squared_error, r2_score, mean_absolute_error
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 def index(request):
@@ -129,6 +130,9 @@ def knn(request):
         # ! Model Evaluation
         y_pred = model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred, average='weighted')
+        recall = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
         
         target_names = [str(x) for x in df[target].unique().tolist()] # Not the field names, since data is encoded
         report = classification_report(y_test, y_pred, target_names=target_names)
@@ -146,7 +150,9 @@ def knn(request):
             'predicted': y_pred,
             'metrics': {
                 'accuracy': round(accuracy, 2),
-                'report': report,
+                'precision': round(precision, 2),
+                'recall': round(recall, 2),
+                'f1': round(f1, 2),
             },
             'download': download_link,
         })
