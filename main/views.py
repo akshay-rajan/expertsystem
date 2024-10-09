@@ -6,9 +6,11 @@ import pandas as pd
 from django.conf import settings
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, mean_squared_error, r2_score, mean_absolute_error, accuracy_score
 
 
 def index(request):
@@ -99,11 +101,55 @@ def linear_regression(request):
     return render(request, 'main/input.html')
     
 def knn(request):
-    """Build Linear Regression Model"""
+    """Build KNN model and evaluate it"""
     
     if request.method == "POST":
-        return render(request, 'main/knn.html')
-    
+        dataset = request.FILES.get('dataset', None)
+        
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+                
+        # Features and Target selection
+        X = df[features]
+        y = df[target]
+
+        # Split data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # ! Model Building
+        model = KNeighborsClassifier(n_neighbors=3)
+        model.fit(X_train, y_train)
+        
+        # ! Model Evaluation
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        
+        target_names = [str(x) for x in df[target].unique().tolist()] # Not the field names, since data is encoded
+        report = classification_report(y_test, y_pred, target_names=target_names)
+        
+        model_filename = f"knn_{uuid.uuid4().hex[:6]}.pkl"
+        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+        
+        with open(model_path, 'wb') as file:
+            pickle.dump(model, file)
+        
+        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        
+        return render(request, 'main/knn.html', {
+            'actual': y_test,
+            'predicted': y_pred,
+            'metrics': {
+                'accuracy': round(accuracy, 2),
+                'report': report,
+            },
+            'download': download_link,
+        })
     return render(request, 'main/input.html')
     
 def samples(request):

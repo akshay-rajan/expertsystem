@@ -1,1 +1,74 @@
 {% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <h1 class="display-3 title">Results</h1>
+  <div id="results">
+    <div class="line d-flex justify-content-center">
+      <h2 class="display-5 p-3 font-weight-bold">
+        {{ line }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th>Accuracy</th>
+          <td class="
+            {% if metrics.accuracy < 0.3 %}
+              table-danger
+              {% elif metrics.accuracy < 0.7 %}
+              table-warning
+              {% else %}
+              table-success
+            {% endif %}
+            ">{{ metrics.accuracy }}</td>
+        </tr>
+        {% comment %} <tr>
+          <th>Precision</th>
+          <td>{{ metrics.precision }}</td>
+        </tr> {% endcomment %}
+      </tbody>
+    </table>
+    <div>
+      {{ metrics.report }}
+    </div>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{{ download }}" class="link">
+        <button class="btn btn-info btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <tbody>
+        <thead class="thead">
+            <th>Actual Values</th>
+            {% for value in actual %}
+              <td>{{ value }}</td>
+            {% endfor %}
+        </thead>
+        <tr>
+          <th>Predicted Values</th>
+          {% for value in predicted %}
+            <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
