@@ -17,7 +17,7 @@ It is open to everyone who wants to harness the power of data and build intellig
 
 ### *Development* 
 
-![alt-text](./others/flow.svg)
+![alt-text](./others/es_flow.png)
 
 <div style="border: 1px solid red;padding: 15px;">
 Status: Linear Regression implemented.
