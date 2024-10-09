@@ -85,7 +85,11 @@
 
       <div class="d-block w-100">
         <ul class="list-group">
-          <li class="list-group-item p-4 m-3 disabled">Classification</li>
+          <a href={% url 'classification' %} class="">
+            <li class="list-group-item p-4 m-3">
+              Classification
+            </li>
+          </a>
           <a href={% url 'regression' %} class="">
             <li class="list-group-item p-4 m-3">
               Regression

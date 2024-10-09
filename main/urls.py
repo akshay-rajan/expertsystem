@@ -9,6 +9,7 @@ urlpatterns = [
     path('regression/', views.regression, name='regression'),
     path('clustering/', views.clustering, name='clustering'),
     path('linear_regression/', views.linear_regression, name='linear_regression'),
+    path('knn/', views.knn, name='knn'),
     path('samples', views.samples, name='samples'),
 ]
 

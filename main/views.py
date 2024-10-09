@@ -32,7 +32,7 @@ def linear_regression(request):
     Enable user to input training and testing sets
     Build a Linear Regression model
     Display the results and allow the user to download the model
-    """    
+    """
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
@@ -81,7 +81,7 @@ def linear_regression(request):
         # Provide a download link
         download_link = os.path.join(settings.MEDIA_URL, model_filename)
         
-        return render(request, 'main/results.html', {
+        return render(request, 'main/linear_regression.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
             'metrics': {
@@ -96,14 +96,16 @@ def linear_regression(request):
         
     
     # Render the Input Form
-    train_set = ["California Housing (80%)"]
-    test_set = ["California Housing (20%)"]
+    return render(request, 'main/input.html')
     
-    return render(request, 'main/input.html', {
-        'train_set': train_set, 
-        'test_set': test_set,
-    })
-
+def knn(request):
+    """Build Linear Regression Model"""
+    
+    if request.method == "POST":
+        return render(request, 'main/knn.html')
+    
+    return render(request, 'main/input.html')
+    
 def samples(request):
     return render(request, 'main/samples.html')
 
