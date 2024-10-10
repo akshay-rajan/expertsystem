@@ -4,15 +4,13 @@
 {% block title %}Clustering{% endblock %}
 
 {% block body %}
-<div class="fade-in">
-  <h1 class='display-3'>Clustering</h1>
+<div class="fade-in p-2 page">
+  <h1 class='display-3 m-2 title'>Clustering</h1>
   
-  <h3 class='display-5 flex-column p-4'>Select Clustering Algorithm</h3>
-
-  <ul class="list-group">
-    <li class="list-group-item"><a href="#">K-Means</a></li>
-    <li class="list-group-item"><a href="#">Hierarchical Clustering</a></li>
-    <li class="list-group-item"><a href="#">DBSCN</a></li>
+  <ul class="list-group m-4">
+    <li class="list-group-item"><a href={% url 'kmeans' %}>K-Means</a></li>
+    {% comment %} <li class="list-group-item"><a href="#">Hierarchical Clustering</a></li> {% endcomment %}
+    {% comment %} <li class="list-group-item"><a href="#">DBSCN</a></li> {% endcomment %}
   </ul>
 </div>
 {% endblock %}

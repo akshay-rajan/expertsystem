@@ -116,27 +116,20 @@ def knn(request):
         features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
         target = request.POST.get('target').replace('\n', '').replace('\r', '')
                 
-        # Features and Target selection
         X = df[features]
         y = df[target]
 
-        # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        # ! Model Building
         n_neighbors = int(request.POST.get('n_neighbors'))
         model = KNeighborsClassifier(n_neighbors=n_neighbors)
         model.fit(X_train, y_train)
         
-        # ! Model Evaluation
         y_pred = model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred, average='weighted')
         recall = recall_score(y_test, y_pred, average='weighted')
         f1 = f1_score(y_test, y_pred, average='weighted')
-        
-        target_names = [str(x) for x in df[target].unique().tolist()] # Not the field names, since data is encoded
-        report = classification_report(y_test, y_pred, target_names=target_names)
         
         model_filename = f"knn_{uuid.uuid4().hex[:6]}.pkl"
         model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
@@ -167,8 +160,23 @@ def knn(request):
         }
     })
     
+def kmeans(request):
+    """K-Means Clustering"""
+    
+    if request.method == "POST":
+        pass
+    
+    return render(request, 'main/input.html', {
+        'hyperparameters': {
+            1: {
+                'name': 'n_clusters',
+                'type': 'number',
+            }
+        }
+    })
+    
+    
 def samples(request):
     return render(request, 'main/samples.html')
 
-# ? Helper Functions
 
