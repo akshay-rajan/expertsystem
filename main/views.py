@@ -6,6 +6,7 @@ import pandas as pd
 from django.conf import settings
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+from sklearn.cluster import KMeans
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -164,9 +165,41 @@ def kmeans(request):
     """K-Means Clustering"""
     
     if request.method == "POST":
-        pass
+        dataset = request.FILES.get('dataset', None)
+        
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+                
+        X = df[features]
+
+        model = KMeans(n_clusters=3)
+        model.fit(X)
+        
+        labels = model.labels_
+        centroids = model.cluster_centers_
+        inertia = model.inertia_
+        
+        model_filename = f"knn_{uuid.uuid4().hex[:6]}.pkl"
+        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+        
+        with open(model_path, 'wb') as file:
+            pickle.dump(model, file)
+        
+        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        
+        return render(request, 'main/knn.html', {
+            'labels': labels,
+            'centroids': centroids,
+            'inertia': inertia,
+            'download': download_link,
+        })
     
-    return render(request, 'main/input.html', {
+    return render(request, 'main/input_clustering.html', {
         'hyperparameters': {
             1: {
                 'name': 'n_clusters',
