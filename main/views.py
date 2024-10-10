@@ -184,7 +184,7 @@ def kmeans(request):
         centroids = model.cluster_centers_
         inertia = model.inertia_
         
-        model_filename = f"knn_{uuid.uuid4().hex[:6]}.pkl"
+        model_filename = f"kmeans_{uuid.uuid4().hex[:6]}.pkl"
         model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
         
         with open(model_path, 'wb') as file:
@@ -192,7 +192,7 @@ def kmeans(request):
         
         download_link = os.path.join(settings.MEDIA_URL, model_filename)
         
-        return render(request, 'main/knn.html', {
+        return render(request, 'main/kmeans.html', {
             'labels': labels,
             'centroids': centroids,
             'inertia': inertia,

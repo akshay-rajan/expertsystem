@@ -1,0 +1,39 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <h1 class="display-3 title">Results</h1>
+  
+  <div class="evaluation">
+    {% comment %} <h3 class="m-2">Evaluation Metrics</h3> {% endcomment %}
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th>Labels</th>
+          <td>{{ labels }}</td>
+        </tr>
+        <tr>
+          <th>Centroids</th>
+          <td>{{ centroids }}</td>
+        </tr>
+        <tr>
+          <th>Inertia</th>
+          <td>{{ inertia }}</td>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{{ download }}" class="link">
+        <button class="btn btn-info btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
