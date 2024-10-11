@@ -89,6 +89,11 @@ body {
   text-transform: uppercase;
 }
 
+/* ! Input form */
+.loader {
+  height: 70vh;
+}
+
 /*header section*/
 .hero_area {
   height: calc(100vh - 30px);

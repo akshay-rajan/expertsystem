@@ -100,7 +100,14 @@ function validateForm() {
       return false;
     }
   }
+  displayLoader();
   return true;
+}
+
+// Display loading spinner on form submission
+function displayLoader() {
+  $('.page').addClass('d-none');
+  $('.loader').addClass('d-flex');
 }
 
 function parseData(content, fileName) {
