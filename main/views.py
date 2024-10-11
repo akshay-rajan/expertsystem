@@ -166,6 +166,7 @@ def kmeans(request):
     
     if request.method == "POST":
         dataset = request.FILES.get('dataset', None)
+        n_clusters = int(request.POST.get('n_clusters'))
         
         file_extension = dataset.name.split('.')[-1]
         if file_extension == 'csv':
@@ -177,7 +178,7 @@ def kmeans(request):
                 
         X = df[features]
 
-        model = KMeans(n_clusters=3)
+        model = KMeans(n_clusters=n_clusters)
         model.fit(X)
         
         labels = model.labels_
@@ -193,6 +194,7 @@ def kmeans(request):
         download_link = os.path.join(settings.MEDIA_URL, model_filename)
         
         return render(request, 'main/kmeans.html', {
+            'k': 3,
             'labels': labels,
             'centroids': centroids,
             'inertia': inertia,
