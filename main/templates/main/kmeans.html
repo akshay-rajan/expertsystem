@@ -7,29 +7,67 @@
 <div class="fade-in">
   <h1 class="display-3 title">Results</h1>
   
-  <div class="evaluation">
+  <div id="results">
+    <div class="line d-flex justify-content-center">
+      <h2 class="display-5 p-3 font-weight-bold">
+        Number of Clusters = {{ k }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="centroids p-2 flex-grow-1">
+      <h2 class="header m-2 p-2">Centroids</h2>
+      <ol class="list-group">
+        {% for centroid in centroids %}
+          <li class="list-group-item list-group-item-action">
+            {{ centroid }}
+          </li>
+        {% endfor %}
+      </ol>
+
+      <table class="table mt-4 table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th>Inertia</th>
+            <td>{{ inertia }}</td>
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="plot justify-content-end">
+      <img src="{{ plot }}" class="img-fluid" alt="Plot">
+    </div>
+  </div>
+
+  <div class="evaluation mt-2">
     {% comment %} <h3 class="m-2">Evaluation Metrics</h3> {% endcomment %}
-    <table class="table table-bordered table-hover">
+    {% comment %} <table class="table table-bordered table-hover">
       <tbody>
-        <tr>
-          <th>Labels</th>
-          <td>{{ labels }}</td>
-        </tr>
-        <tr>
-          <th>Centroids</th>
-          <td>{{ centroids }}</td>
-        </tr>
         <tr>
           <th>Inertia</th>
           <td>{{ inertia }}</td>
       </tbody>
-    </table>
+    </table> {% endcomment %}
     <div class="d-flex justify-content-end mt-4 mb-4">
       <a href="{{ download }}" class="link">
         <button class="btn btn-info btn-block">
           Download Trained Model
         </button>
       </a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-info">
+        <tbody>
+          <tr class="thead">
+              <th>Labels</th>
+              {% for label in labels %}
+                <td>{{ label }}</td>
+              {% endfor %}
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

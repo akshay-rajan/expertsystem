@@ -6,6 +6,7 @@ import pandas as pd
 from django.conf import settings
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
@@ -178,12 +179,25 @@ def kmeans(request):
                 
         X = df[features]
 
-        model = KMeans(n_clusters=n_clusters)
+        model = KMeans(n_clusters=n_clusters, random_state=42)
         model.fit(X)
         
         labels = model.labels_
         centroids = model.cluster_centers_
-        inertia = model.inertia_
+        centroids_list = [list(map(lambda x: round(x, 2), centroid)) for centroid in centroids.tolist()]
+        inertia = round(model.inertia_, 2)
+        
+        # Save the plot to a file
+        X = df[features].values
+        plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k')
+        plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
+        
+        plot_filename = f"kmeans_plot_{uuid.uuid4().hex[:6]}.png"
+        plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
+        plt.savefig(plot_path)
+        plt.close()
+        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
+
         
         model_filename = f"kmeans_{uuid.uuid4().hex[:6]}.pkl"
         model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
@@ -194,10 +208,11 @@ def kmeans(request):
         download_link = os.path.join(settings.MEDIA_URL, model_filename)
         
         return render(request, 'main/kmeans.html', {
-            'k': 3,
+            'k': n_clusters,
             'labels': labels,
-            'centroids': centroids,
+            'centroids': centroids_list,
             'inertia': inertia,
+            'plot': plot_url,
             'download': download_link,
         })
     

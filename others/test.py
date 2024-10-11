@@ -1,16 +1,25 @@
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
 
-# Step 1: Load the dataset
-data = pd.read_csv('./main/static/main/files/customers.csv')
+# Generating sample data
+X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
 
-print(data.head())
-# Step 2: Encode the 'Gender' column
-label_encoder = LabelEncoder()
-data['Gender'] = label_encoder.fit_transform(data['Gender'])
+# Applying KMeans clustering
+k = 4  # Number of clusters
+kmeans = KMeans(n_clusters=k, random_state=42)
+kmeans.fit(X)
 
-# Display the first few rows of the dataset to verify encoding
-print(data.head())
+# Getting the cluster labels and centroids
+cluster_labels = kmeans.labels_
+centroids = kmeans.cluster_centers_
 
-# Optional: Save the encoded dataset to a new CSV file
-data.to_csv('customers.csv', index=False)
+print(cluster_labels)
+print(centroids)
+
+# Visualizing the clustered data
+plt.scatter(X[:, 0], X[:, 1], c=cluster_labels, cmap='viridis', marker='o', edgecolor='k')
+plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
+plt.title("K-means Clustering with scikit-learn")
+plt.show()
