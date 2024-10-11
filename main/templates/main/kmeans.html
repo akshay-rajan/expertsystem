@@ -67,7 +67,7 @@
 
     <div class="table-responsive">
       <table class="table table-bordered table-info">
-        <tbody>
+        <thead class="thead">
           <tr class="thead">
             <th>Point</th>
             {% for val in X %}
@@ -76,6 +76,8 @@
               {% endfor %}
             {% endfor %}
           </tr>
+        </thead>
+        <tbody>
           <tr>
               <th>Label</th>
               {% for label in labels %}

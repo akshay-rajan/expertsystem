@@ -79,13 +79,13 @@
 
   <div class="table-responsive">
     <table class="table table-bordered table-info">
+      <thead class="thead">
+          <th>Actual Values</th>
+          {% for value in actual %}
+            <td>{{ value }}</td>
+          {% endfor %}
+      </thead>
       <tbody>
-        <thead class="thead">
-            <th>Actual Values</th>
-            {% for value in actual %}
-              <td>{{ value }}</td>
-            {% endfor %}
-        </thead>
         <tr>
           <th>Predicted Values</th>
           {% for value in predicted %}
