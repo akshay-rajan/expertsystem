@@ -83,15 +83,9 @@ function populateFeatureCheckboxes(columns) {
 
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
-  const target = document.getElementById('target').value;
   const alert = $('#alert');
   if (features.length === 0) {
     alert.text('Please select at least one feature.');
-    alert.removeClass('d-none');
-    return false;
-  }
-  if (!target) {
-    alert.text('Please select a target.');
     alert.removeClass('d-none');
     return false;
   }

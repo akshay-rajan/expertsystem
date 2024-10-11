@@ -26,11 +26,27 @@
         {% endfor %}
       </ol>
 
-      <table class="table mt-4 table-bordered table-hover">
+      <h3 class="m-2 mt-4">Evaluation Metrics</h3>
+      <table class="table mt-3 table-bordered table-hover">
         <tbody>
           <tr>
-            <th>Inertia</th>
-            <td>{{ inertia }}</td>
+            <th>Inertia (Within-Cluster Sum of Squares)</th>
+            <td>{{ metrics.inertia }}</td>
+          </tr>
+          <tr>
+            <th>Silhouette Score</th>
+            <td class="
+              {% if metrics.silhouette_score > 0.6 %}
+                table-success
+              {% elif metrics.silhouette_score > 0.2 %}
+                table-warning
+              {% else %}
+                table-danger
+              {% endif %}
+            ">
+              {{ metrics.silhouette_score }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -40,15 +56,7 @@
     </div>
   </div>
 
-  <div class="evaluation mt-2">
-    {% comment %} <h3 class="m-2">Evaluation Metrics</h3> {% endcomment %}
-    {% comment %} <table class="table table-bordered table-hover">
-      <tbody>
-        <tr>
-          <th>Inertia</th>
-          <td>{{ inertia }}</td>
-      </tbody>
-    </table> {% endcomment %}
+  <div class="mt-2">
     <div class="d-flex justify-content-end mt-4 mb-4">
       <a href="{{ download }}" class="link">
         <button class="btn btn-info btn-block">
@@ -61,9 +69,17 @@
       <table class="table table-bordered table-info">
         <tbody>
           <tr class="thead">
-              <th>Labels</th>
+            <th>Point</th>
+            {% for val in X %}
+              {% for i in val %}
+                <td>{{ i }}</td>
+              {% endfor %}
+            {% endfor %}
+          </tr>
+          <tr>
+              <th>Label</th>
               {% for label in labels %}
-                <td>{{ label }}</td>
+                <td colspan="{{ feature_count }}" class="text-center">{{ label }}</td>
               {% endfor %}
           </tr>
         </tbody>

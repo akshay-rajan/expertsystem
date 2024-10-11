@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, mean_squared_error, r2_score, mean_absolute_error
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import silhouette_score
 
 
 def index(request):
@@ -186,18 +187,24 @@ def kmeans(request):
         centroids = model.cluster_centers_
         centroids_list = [list(map(lambda x: round(x, 2), centroid)) for centroid in centroids.tolist()]
         inertia = round(model.inertia_, 2)
+        silhouette = round(silhouette_score(X, labels), 2)
         
-        # Save the plot to a file
-        X = df[features].values
-        plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k')
-        plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
+        X_data = df[features].values
         
-        plot_filename = f"kmeans_plot_{uuid.uuid4().hex[:6]}.png"
-        plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
-        plt.savefig(plot_path)
-        plt.close()
-        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
-
+        # ? Plotting the Clusters (Temporary)
+        plot_url = None
+        if (len(features) >= 2):      
+            plt.scatter(X_data[:, 0], X_data[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k')
+            plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
+            plt.xlabel(X.columns[0])
+            plt.ylabel(X.columns[1])
+            plt.title('K-Means Clustering')
+        
+            plot_filename = f"kmeans_plot_{uuid.uuid4().hex[:6]}.png"
+            plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
+            plt.savefig(plot_path)
+            plt.close()
+            plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
         
         model_filename = f"kmeans_{uuid.uuid4().hex[:6]}.pkl"
         model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
@@ -209,9 +216,14 @@ def kmeans(request):
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
+            'X': X_data,
+            'feature_count': len(features),
             'labels': labels,
             'centroids': centroids_list,
-            'inertia': inertia,
+            'metrics': {
+                'inertia': inertia,
+                'silhouette_score': silhouette,
+            },
             'plot': plot_url,
             'download': download_link,
         })
