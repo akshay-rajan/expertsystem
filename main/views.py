@@ -6,7 +6,6 @@ import pandas as pd
 from django.conf import settings
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
@@ -16,6 +15,9 @@ from sklearn.metrics import classification_report, mean_squared_error, r2_score,
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import silhouette_score
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 def index(request):
     return render(request, 'main/index.html')
