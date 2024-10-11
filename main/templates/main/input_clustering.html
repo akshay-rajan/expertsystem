@@ -31,7 +31,7 @@
               {% for key, param in hyperparameters.items %}
                 <div class="form-group" id="{{ param.name }}-div">
                     <label for="{{ param.name }}">{{ param.name }}:</label>
-                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}">
+                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter">
                 </div>
               {% endfor %}
             </div>
