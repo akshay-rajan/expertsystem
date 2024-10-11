@@ -113,16 +113,28 @@ function populateTargetDropdown(columns) {
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
   const target = document.getElementById('target').value;
+  const hyperparameters = $('.hyperparameter');
   const alert = $('#alert');
+  // Check if at least one feature is selected
   if (features.length === 0) {
     alert.text('Please select at least one feature.');
     alert.removeClass('d-none');
     return false;
   }
+  // Check if a target is selected
   if (!target) {
     alert.text('Please select a target.');
     alert.removeClass('d-none');
     return false;
+  }
+  // Validate each hyperparameter if present
+  for (let i = 0; i < hyperparameters.length; i++) {
+    const value = hyperparameters[i].value;
+    if (isNaN(value) || value <= 0) {
+      alert.text(`Please enter a valid value for ${hyperparameters[i].name}.`);
+      alert.removeClass('d-none');
+      return false;
+    }
   }
   return true;
 }
