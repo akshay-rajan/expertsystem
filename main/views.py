@@ -11,6 +11,7 @@ from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.metrics import classification_report, mean_squared_error, r2_score, mean_absolute_error
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import silhouette_score
@@ -164,6 +165,70 @@ def knn(request):
             },
         }
     })
+
+def decision_tree(request):
+    """Decision Tree Classifier"""
+    
+    if request.method == "POST":
+        dataset = request.FILES.get('dataset', None)
+        
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+                
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = DecisionTreeClassifier(random_state=42)
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred, average='weighted')
+        recall = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
+        
+        tree_rules = export_text(model, feature_names=features)
+        print(tree_rules)
+        
+        model_filename = f"decision_tree_{uuid.uuid4().hex[:6]}.pkl"
+        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+        
+        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        
+        with open(model_path, 'wb') as file:
+            pickle.dump(model, file)
+            
+        plt.figure(figsize=(20,10))
+        class_names_str = [str(cls) for cls in model.classes_]
+        plot_tree(model, feature_names=features, class_names=class_names_str, filled=True)
+        
+        plot_filename = f"decision_tree_plot_{uuid.uuid4().hex[:6]}.png"
+        plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
+        plt.savefig(plot_path)
+        plt.close()
+        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)        
+        
+        return render(request, 'main/decision_tree.html', {
+            'actual': y_test,
+            'predicted': y_pred,
+            'metrics': {
+                'accuracy': round(accuracy, 2),
+                'precision': round(precision, 2),
+                'recall': round(recall, 2),
+                'f1': round(f1, 2),
+            },
+            'download': download_link,
+            'plot': plot_url,
+        })
+    
+    return render(request, 'main/input.html')
+
     
 def kmeans(request):
     """K-Means Clustering"""
