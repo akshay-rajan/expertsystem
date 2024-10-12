@@ -6,35 +6,10 @@
 {% block body %}
 <div class="fade-in p-2">
   <h1 class='display-4'>Download Sample Datasets</h1>
-  <div class="card">
-    <div class="card-body d-inline-flex justify-content-between">
-      <a href="{% static 'main/files/fetch_california_housing.xlsx' %}" download>California Housing</a>
-      <div class="font-weight-bold">XLSX</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body d-inline-flex justify-content-between">
-      <a href="{% static 'main/files/fetch_california_housing.csv' %}" download>California Housing</a>
-      <div class="font-weight-bold">CSV</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body d-inline-flex justify-content-between">
-      <a href="{% static 'main/files/numerical_data.xlsx' %}" download>Numerical Data</a>
-      <div class="font-weight-bold">XLSX</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body d-inline-flex justify-content-between">
-      <a href="{% static 'main/files/iris.csv' %}" download>Iris</a>
-      <div class="font-weight-bold">CSV</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body d-inline-flex justify-content-between">
-      <a href="{% static 'main/files/mall_customers.csv' %}" download>Mall Customers</a>
-      <div class="font-weight-bold">CSV</div>
-    </div>
+  <div id="dataset-container" class="d-flex justify-content-center flex-wrap">
+    {% comment %} Download links are populated here by samples.js {% endcomment %}
   </div>
 </div>
+
+<script src="{% static 'main/js/samples.js' %}"></script>
 {% endblock %}
