@@ -76,25 +76,52 @@
       </a>
     </div>
   </div>
+  
+  <div class="prediction m-4">
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Predict
+            </button>
+          </h5>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <div class="form-group row">
+              <label for="input" class="col-sm-2 col-form-label">Input</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="input" name="input" placeholder="Enter input">
+                <button class="btn btn-info btn-block mt-2" onClick="makePrediction()">Predict</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="table-responsive">
     <table class="table table-bordered table-info">
       <thead class="thead">
-          <th>Actual Values</th>
-          {% for value in actual %}
-            <td>{{ value }}</td>
-          {% endfor %}
+        <th>Actual Values</th>
+        {% for value in actual %}
+        <td>{{ value }}</td>
+        {% endfor %}
       </thead>
       <tbody>
         <tr>
           <th>Predicted Values</th>
           {% for value in predicted %}
-            <td>{{ value }}</td>
+          <td>{{ value }}</td>
           {% endfor %}
         </tr>
       </tbody>
     </table>
   </div>
+  
 
 </div>
 {% endblock %}

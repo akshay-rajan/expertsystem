@@ -14,6 +14,7 @@ urlpatterns = [
     path('random_forest/', views.random_forest, name='random_forest'),
     path('kmeans/', views.kmeans, name='kmeans'),
     path('samples', views.samples, name='samples'),
+    path('predict', views.predict, name='predict'),
 ]
 
 if settings.DEBUG:

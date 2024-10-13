@@ -1,10 +1,13 @@
 import os
+import json
 import uuid
 import pickle
 import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -373,4 +376,25 @@ def kmeans(request):
 def samples(request):
     return render(request, 'main/samples.html')
 
-
+@csrf_exempt
+def predict(request):
+    if request.method == "POST":
+        try:
+            # Load the model from the .pkl file
+            model_path = 'path/to/your/model.pkl'
+            with open(model_path, 'rb') as file:
+                model = pickle.load(file)
+            
+            # Parse the input data from the request
+            data = json.loads(request.body)
+            input_data = np.array(data['input']).reshape(1, -1)  # Adjust shape as needed
+            
+            # Make predictions
+            predictions = model.predict(input_data)
+            
+            # Return the predictions as a JSON response
+            return JsonResponse({'predictions': predictions.tolist()})
+        
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
