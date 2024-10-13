@@ -10,9 +10,8 @@ function handleFileUpload(event) {
   if (file) {
     
     $('#upload-btn').addClass('d-none');
-    $('#hyperparameter-div').removeClass('d-none');
     $('#build-btn').removeClass('d-none');
-
+    
     const reader = new FileReader();
     reader.onload = function(e) {
       const content = e.target.result;
@@ -21,6 +20,8 @@ function handleFileUpload(event) {
       populateFeatureCheckboxes(columns);
       // Populate target dropdown
       populateTargetDropdown(columns);
+      // Enable hyperparameter input
+      $('#hyperparameter-div').removeClass('d-none');
       // Parse data and plot heatmap
       const { data, correlationMatrix } = parseData(content, file.name);
       plotHeatMap(correlationMatrix);
