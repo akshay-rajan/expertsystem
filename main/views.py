@@ -28,13 +28,32 @@ def index(request):
 # ? Types of Machine Learning Algorithms
 
 def classification(request):
-    return render(request, 'main/classification.html')
-
+    return render(request, 'main/algorithms.html', {
+        'type': 'Classification',
+        'algorithms': [
+            {'name': 'K-Nearest Neighbors', 'url': 'knn',},
+            {'name': 'Decision Tree', 'url': 'decision_tree',},
+            {'name': 'Random Forest', 'url': 'random_forest',},
+        ]
+    })
+    
 def regression(request):
-    return render(request, 'main/regression.html')
+    return render(request, 'main/algorithms.html', {
+        'type': 'Regression',
+        'algorithms': [
+            {'name': 'Linear Regression', 'url': 'linear_regression',},
+            {'name': 'Lasso Regression', 'url': 'lasso',},
+            {'name': 'Ridge Regression', 'url': 'ridge',},
+        ]
+    })
     
 def clustering(request):
-    return render(request, 'main/clustering.html')
+    return render(request, 'main/algorithms.html', {
+        'type': 'Clustering',
+        'algorithms': [
+            {'name': 'K-Means', 'url': 'kmeans',},
+        ]
+    })
 
 # ? Implement Algorithms
 

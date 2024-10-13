@@ -1,0 +1,16 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}{{ type }}{% endblock %}
+
+{% block body %}
+<div class="fade-in p-2 page">
+  <h1 class='display-3 m-2 title'>{{ type }}</h1>
+  
+  <ul class="list-group m-4">
+    {% for algorithm in algorithms %}
+      <li class="list-group-item"><a href="{% url algorithm.url %}">{{ algorithm.name }}</a></li>
+    {% endfor %}
+  </ul>
+</div> 
+{% endblock %}
