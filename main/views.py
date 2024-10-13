@@ -210,7 +210,7 @@ def ridge(request):
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-        model_filename = f"lasso_{uuid.uuid4().hex[:6]}.pkl"
+        model_filename = f"ridge_{uuid.uuid4().hex[:6]}.pkl"
         model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
         with open(model_path, 'wb') as file:
             pickle.dump(model, file)        
@@ -536,6 +536,7 @@ def predict(request):
 
 # ? Utility Functions
 def construct_line(intercept, coefficients, X, target):
+    """Given the coefficients and intercept, construct the line equation as a string"""
     equation = f"{target} = {intercept:.2f}"
     for feature, coef in zip(X.columns, coefficients):
         if round(coef, 2) == 0: 
