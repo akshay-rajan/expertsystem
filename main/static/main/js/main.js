@@ -1,3 +1,4 @@
+// ! Make prediction using the saved model
 async function makePrediction(event) {
   event.preventDefault(); 
 
@@ -6,8 +7,6 @@ async function makePrediction(event) {
   // Show loading spinner
   predictionResult.innerHTML = `<div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>`;
   
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
   const formData = new FormData(event.target);
   const inputData = formData.get('input').split(',').map(Number);
   const modelPath = formData.get('model_path');
@@ -27,11 +26,10 @@ async function makePrediction(event) {
     }
 
     const data = await response.json();
-    
     predictionResult.classList.add('alert-success');
     predictionResult.innerHTML = "Target: " + data.predictions;
   } catch (error) {
     predictionResult.classList.add('alert-danger');
-    predictionResult.innerHTML = "Error: " + error.message;
+    predictionResult.innerHTML = error.message;
   }
 }

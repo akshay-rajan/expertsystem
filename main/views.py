@@ -395,8 +395,9 @@ def predict(request):
                 return JsonResponse({'error': f'Input data must have {expected_shape} features'}, status=400)
             
             predictions = model.predict(input_data)
+            print(predictions)
         
-            return JsonResponse({'predictions': predictions.tolist()})
+            return JsonResponse({'predictions': [round(i, 4) for i in predictions.tolist()]})
         
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
