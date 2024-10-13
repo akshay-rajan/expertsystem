@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -166,6 +166,70 @@ def lasso(request):
             'line': equation,
         })
         
+    return render(request, 'main/input.html', {
+        'hyperparameters': {
+            1: {
+                'name': 'alpha',
+                'type': 'text',
+            }
+        }
+    })
+    
+def ridge(request):
+    """IMplement Ridge Regression"""
+    
+    if request.method == 'POST':
+        dataset = request.FILES.get('dataset', None)
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        alpha = float(request.POST.get('alpha'))
+                
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = Ridge(alpha=alpha)
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        y_pred_modified = [round(i, 3) for i in y_pred]
+        
+        coeff = pd.Series(model.coef_, index=features)
+
+        intercept = model.intercept_
+        coefficients = model.coef_
+        equation = construct_line(intercept, coefficients, X, target)
+        
+        mse = mean_squared_error(y_test, y_pred)
+        rmse = root_mean_squared_error(y_test, y_pred)
+        mae = mean_absolute_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        
+        model_filename = f"lasso_{uuid.uuid4().hex[:6]}.pkl"
+        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+        with open(model_path, 'wb') as file:
+            pickle.dump(model, file)        
+        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        
+        return render(request, 'main/ridge.html', {
+            'coefficients': coeff,
+            'actual': y_test,
+            'predicted': y_pred_modified,
+            'metrics': {
+                'mse': round(mse, 2),
+                'rmse': round(rmse, 2),
+                'mae': round(mae, 2),
+                'r2': round(r2, 2),
+            },
+            'download': download_link,
+            'line': equation,
+        })
+    
     return render(request, 'main/input.html', {
         'hyperparameters': {
             1: {
