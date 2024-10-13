@@ -378,21 +378,24 @@ def samples(request):
 
 @csrf_exempt
 def predict(request):
+    """Open an endpoint to predict using a saved model"""
     if request.method == "POST":
         try:
-            # Load the model from the .pkl file
-            model_path = 'path/to/your/model.pkl'
+            data = json.loads(request.body)
+            
+            input_data = np.array(data['input']).reshape(1, -1)
+            model_path = data['model_path'][1:] # Remove leading '/'
+            
             with open(model_path, 'rb') as file:
                 model = pickle.load(file)
             
-            # Parse the input data from the request
-            data = json.loads(request.body)
-            input_data = np.array(data['input']).reshape(1, -1)  # Adjust shape as needed
+            # Validate input data            
+            expected_shape = model.n_features_in_
+            if input_data.shape[1] != expected_shape:
+                return JsonResponse({'error': f'Input data must have {expected_shape} features'}, status=400)
             
-            # Make predictions
             predictions = model.predict(input_data)
-            
-            # Return the predictions as a JSON response
+        
             return JsonResponse({'predictions': predictions.tolist()})
         
         except Exception as e:
