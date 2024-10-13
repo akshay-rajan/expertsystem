@@ -176,7 +176,7 @@ def lasso(request):
     })
     
 def ridge(request):
-    """IMplement Ridge Regression"""
+    """Implement Ridge Regression"""
     
     if request.method == 'POST':
         dataset = request.FILES.get('dataset', None)
