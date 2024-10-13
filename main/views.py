@@ -240,10 +240,7 @@ def knn(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred, average='weighted')
-        recall = recall_score(y_test, y_pred, average='weighted')
-        f1 = f1_score(y_test, y_pred, average='weighted')
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'knn')
         
@@ -290,10 +287,7 @@ def decision_tree(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred, average='weighted')
-        recall = recall_score(y_test, y_pred, average='weighted')
-        f1 = f1_score(y_test, y_pred, average='weighted')
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'decision_tree')
             
@@ -343,10 +337,7 @@ def random_forest(request):
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
         
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred, average='weighted')
-        recall = recall_score(y_test, y_pred, average='weighted')
-        f1 = f1_score(y_test, y_pred, average='weighted')
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'random_forest')
 
@@ -518,3 +509,10 @@ def regression_evaluation(y_test, y_pred):
     r2 = r2_score(y_test, y_pred)
     return mse, rmse, mae, r2
 
+def classification_evaluation(y_test, y_pred):
+    """Perform evaluations of a classification model"""
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average='weighted')
+    recall = recall_score(y_test, y_pred, average='weighted')
+    f1 = f1_score(y_test, y_pred, average='weighted')
+    return accuracy, precision, recall, f1
