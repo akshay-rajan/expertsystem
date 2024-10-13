@@ -78,9 +78,11 @@ def linear_regression(request):
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-        b0 = round(model.intercept_, 3)
-        b1 = round(model.coef_[0], 3)
-        line = f"y = {b0} + {b1}x"
+        # ! Find the line equation
+        intercept = model.intercept_
+        coefficients = model.coef_
+
+        equation = construct_line(intercept, coefficients, X, target)
         
         # Serialize the model
         model_filename = f"linear_regression_{uuid.uuid4().hex[:6]}.pkl"
@@ -101,7 +103,7 @@ def linear_regression(request):
                 'mae': round(mae, 2),
                 'r2': round(r2, 2),
             },
-            'line': line,
+            'line': equation,
             'download': download_link,
         })
         
@@ -462,3 +464,14 @@ def predict(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def construct_line(intercept, coefficients, X, target):
+    equation = f"{target} = {intercept:.2f}"
+    for feature, coef in zip(X.columns, coefficients):
+        if round(coef, 2) == 0: 
+            continue
+        if coef > 0:
+            equation += f" + ({coef:.2f} * {feature})"
+        else:
+            equation += f" - ({abs(coef):.2f} * {feature})"
+    return equation
