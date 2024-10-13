@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 def index(request):
     return render(request, 'main/index.html')
 
-# ? Types of Machine Learning Algorithms
+# ? Types of Algorithms
 
 def classification(request):
     return render(request, 'main/algorithms.html', {
@@ -466,9 +466,44 @@ def kmeans(request):
         }
     })
     
-    
+# ? Other Views
+
 def samples(request):
-    return render(request, 'main/samples.html')
+    datasets = [
+        {
+        "name": "California Housing",
+        "file": "fetch_california_housing.xlsx",
+        "type": "XLSX",
+        "for": "Regression"
+        },
+        {
+        "name": "California Housing",
+        "file": "fetch_california_housing.csv",
+        "type": "CSV",
+        "for": "Regression"
+        },
+        {
+        "name": "Numerical Data",
+        "file": "numerical_data.xlsx",
+        "type": "XLSX",
+        "for": "Regression"
+        },
+        {
+        "name": "Iris",
+        "file": "iris.csv",
+        "type": "CSV",
+        "for": "Classification"
+        },
+        {
+        "name": "Mall Customers",
+        "file": "mall_customers.csv",
+        "type": "CSV",
+        "for": "Clustering"
+        }
+    ]
+    return render(request, 'main/samples.html', {
+        'datasets': datasets,
+    })
 
 # ? API Endpoints
 @csrf_exempt
@@ -499,6 +534,7 @@ def predict(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 # ? Utility Functions
+
 def construct_line(intercept, coefficients, X, target):
     """Given the coefficients and intercept, construct the line equation as a string"""
     equation = f"{target} = {intercept:.2f}"
