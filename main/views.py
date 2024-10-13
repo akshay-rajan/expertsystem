@@ -84,15 +84,8 @@ def linear_regression(request):
 
         equation = construct_line(intercept, coefficients, X, target)
         
-        # Serialize the model
-        model_filename = f"linear_regression_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)
-        
-        # Provide a download link
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        # Serialize the model and return the download link
+        download_link = serialize(model, 'linear_regression')
         
         return render(request, 'main/linear_regression.html', {
             'actual': y_test,
@@ -146,11 +139,7 @@ def lasso(request):
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-        model_filename = f"lasso_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)        
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        download_link = serialize(model, 'lasso')
         
         return render(request, 'main/lasso.html', {
             'coefficients': coeff,
@@ -210,11 +199,7 @@ def ridge(request):
         mae = mean_absolute_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
         
-        model_filename = f"ridge_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)        
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        download_link = serialize(model, 'ridge')
         
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
@@ -269,13 +254,7 @@ def knn(request):
         recall = recall_score(y_test, y_pred, average='weighted')
         f1 = f1_score(y_test, y_pred, average='weighted')
         
-        model_filename = f"knn_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)
-        
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        download_link = serialize(model, 'knn')
         
         return render(request, 'main/knn.html', {
             'actual': y_test,
@@ -325,13 +304,7 @@ def decision_tree(request):
         recall = recall_score(y_test, y_pred, average='weighted')
         f1 = f1_score(y_test, y_pred, average='weighted')
         
-        model_filename = f"decision_tree_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
-        
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)
+        download_link = serialize(model, 'decision_tree')
             
         plt.figure(figsize=(20,10))
         class_names_str = [str(cls) for cls in model.classes_]
@@ -384,11 +357,7 @@ def random_forest(request):
         recall = recall_score(y_test, y_pred, average='weighted')
         f1 = f1_score(y_test, y_pred, average='weighted')
         
-        model_filename = f"random_forest_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)
+        download_link = serialize(model, 'random_forest')
 
         # Plot Feature Importances
         importances = model.feature_importances_
@@ -471,13 +440,7 @@ def kmeans(request):
             plt.close()
             plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
         
-        model_filename = f"kmeans_{uuid.uuid4().hex[:6]}.pkl"
-        model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-        
-        with open(model_path, 'wb') as file:
-            pickle.dump(model, file)
-        
-        download_link = os.path.join(settings.MEDIA_URL, model_filename)
+        download_link = serialize(model, 'kmeans')
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
@@ -546,3 +509,13 @@ def construct_line(intercept, coefficients, X, target):
         else:
             equation += f" - ({abs(coef):.2f} * {feature})"
     return equation
+
+def serialize(model, algorithm):
+    """Serialize the model and save it to a .pkl file, return the path"""
+    model_filename = f"{algorithm}_{uuid.uuid4().hex[:6]}.pkl"
+    model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
+    with open(model_path, 'wb') as file:
+        pickle.dump(model, file)
+    download_link = os.path.join(settings.MEDIA_URL, model_filename)
+    return download_link
+
