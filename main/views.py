@@ -73,10 +73,7 @@ def linear_regression(request):
         y_pred = model.predict(X_test)
         y_pred_modified = [round(i, 3) for i in y_pred]
         
-        mse = mean_squared_error(y_test, y_pred)
-        rmse = root_mean_squared_error(y_test, y_pred)
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
+        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
         
         # ! Find the line equation
         intercept = model.intercept_
@@ -134,10 +131,7 @@ def lasso(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        mse = mean_squared_error(y_test, y_pred)
-        rmse = root_mean_squared_error(y_test, y_pred)
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
+        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'lasso')
         
@@ -194,10 +188,7 @@ def ridge(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        mse = mean_squared_error(y_test, y_pred)
-        rmse = root_mean_squared_error(y_test, y_pred)
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
+        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'ridge')
         
@@ -518,4 +509,12 @@ def serialize(model, algorithm):
         pickle.dump(model, file)
     download_link = os.path.join(settings.MEDIA_URL, model_filename)
     return download_link
+
+def regression_evaluation(y_test, y_pred):
+    """Perform evaluations of a regression model"""
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = root_mean_squared_error(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    return mse, rmse, mae, r2
 
