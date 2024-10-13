@@ -136,7 +136,10 @@ def lasso(request):
         y_pred_modified = [round(i, 3) for i in y_pred]
         
         coeff = pd.Series(model.coef_, index=features)
-        num_selected_features = len(coeff[coeff != 0])
+
+        intercept = model.intercept_
+        coefficients = model.coef_
+        equation = construct_line(intercept, coefficients, X, target)
         
         mse = mean_squared_error(y_test, y_pred)
         rmse = root_mean_squared_error(y_test, y_pred)
@@ -160,6 +163,7 @@ def lasso(request):
                 'r2': round(r2, 2),
             },
             'download': download_link,
+            'line': equation,
         })
         
     return render(request, 'main/input.html', {
@@ -438,6 +442,7 @@ def kmeans(request):
 def samples(request):
     return render(request, 'main/samples.html')
 
+# ? API Endpoints
 @csrf_exempt
 def predict(request):
     """Open an endpoint to predict using a saved model"""
@@ -465,6 +470,7 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+# ? Utility Functions
 def construct_line(intercept, coefficients, X, target):
     equation = f"{target} = {intercept:.2f}"
     for feature, coef in zip(X.columns, coefficients):
