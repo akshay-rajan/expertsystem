@@ -11,7 +11,7 @@ urlpatterns = [
     path('linear_regression/', views.linear_regression, name='linear_regression'),
     path('samples', views.samples, name='samples'),
     path('preprocessing', views.preprocessing, name='preprocessing'),
-    path('download_csv/', views.download_csv, name='download_csv'),
+    # path('download_csv/', views.download_csv, name='download_csv'),
 
 ]
 

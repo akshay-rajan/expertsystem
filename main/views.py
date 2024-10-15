@@ -122,9 +122,7 @@ def preprocessing(request):
             # Reading the uploaded file
             data = pd.read_csv(uploaded_file)
             
-            # Creating a preview of the raw data
-            raw_data_preview = data.head().to_html(classes='data-preview', index=False)
-            context['raw_data_preview'] = raw_data_preview
+            
 
             # Processing options
             missing_value_strategy = request.POST.get('missing_value_strategy')
@@ -142,9 +140,9 @@ def preprocessing(request):
                     data.dropna(inplace=True)
 
                 # Feature Selection
-                if selected_columns:
-                    columns = [col.strip() for col in selected_columns.split(',')]
-                    data = data[columns]
+                # if selected_columns:
+                #     columns = [col.strip() for col in selected_columns.split(',')]
+                #     data = data[columns]
 
                 # Feature Encoding
                 if encoding_strategy == 'onehot':
@@ -162,8 +160,8 @@ def preprocessing(request):
                     scaler = MinMaxScaler()
                     data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
 
-                # Creating a preview of the processed data
-                data_preview = data.head().to_html(classes='data-preview', index=False)
+                # preview of the processed data
+                data_preview = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
                 context['data_preview'] = data_preview
 
                 # Store the processed data in the session
@@ -174,12 +172,12 @@ def preprocessing(request):
 
     return render(request, 'main/preprocessing.html', context)
 
-def download_csv(request):
-    processed_data_csv = request.session.get('processed_data')
+# def download_csv(request):
+#     processed_data_csv = request.session.get('processed_data')
 
-    if processed_data_csv:
-        response = HttpResponse(processed_data_csv, content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=processed_data.csv'
-        return response
-    else:
-        return HttpResponse("No data to download")
+#     if processed_data_csv:
+#         response = HttpResponse(processed_data_csv, content_type='text/csv')
+#         response['Content-Disposition'] = 'attachment; filename=processed_data.csv'
+#         return response
+#     else:
+#         return HttpResponse("No data to download")

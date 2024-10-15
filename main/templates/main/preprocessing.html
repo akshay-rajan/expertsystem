@@ -14,20 +14,22 @@
             <div class="mb-3">
                 <label for="missing_value_strategy">Missing Value Strategy:</label>
                 <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
-                    <option value="none">None</option>
+                    <option value="None">None</option>
                     <option value="mean">Fill with Mean</option>
                     <option value="median">Fill with Median</option>
                     <option value="drop">Remove Rows</option>
                 </select>
             </div>
-            <div class="mb-3">
+
+            <!-- <div class="mb-3">
                 <label for="feature_selection">Select Columns:</label>
                 <input type="text" id="feature_selection" name="feature_selection" class="form-control" placeholder="Enter column names separated by commas">
-            </div>
+            </div> -->
+
             <div class="mb-3">
                 <label for="encoding_strategy">Encoding Strategy:</label>
                 <select id="encoding_strategy" name="encoding_strategy" class="form-control">
-                    <option value="none">None</option>
+                    <option value="None">None</option>
                     <option value="onehot">One-Hot Encoding</option>
                     <option value="label">Label Encoding</option>
                 </select>
@@ -35,7 +37,7 @@
             <div class="mb-3">
                 <label for="scaling_strategy">Scaling Strategy:</label>
                 <select id="scaling_strategy" name="scaling_strategy" class="form-control">
-                    <option value="none">None</option>
+                    <option value="None">None</option>
                     <option value="standard">Standardization</option>
                     <option value="normalize">Normalization</option>
                 </select>
@@ -44,15 +46,28 @@
         </form>
     </div>
     <!-- Conditionally Render the Raw Data Preview Table if Available -->
-    <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;"></div>
+    {% if data_preview %}
+    <h3 class="text-center my-4">Processed Data Preview</h3>
+    
+    <div class="table-responsive" style="overflow:auto; height:500px; width:100%;">
+        {{ data_preview|safe }}
+    </div>
+{% else %}
+    <h3 class="text-center my-4" id="heading"></h3>
+    
+    <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
+        <!-- javascript will render data here as table -->
+    </div>
+{% endif %}
 {% endblock %}
 {% block script %}
 <script>
     
-    
+ 
     document.getElementById('file').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
+            document.getElementById('heading').innerHTML=" Data Preview "
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
