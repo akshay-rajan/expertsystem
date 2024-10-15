@@ -9,7 +9,8 @@ from django.core.files.storage import FileSystemStorage
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from django.http import HttpResponse
 
 def index(request):
     return render(request, 'main/index.html')
@@ -110,28 +111,75 @@ def samples(request):
 # ? Helper Functions
 
 # Preprocessing part ->Deepu
+render
 
 def preprocessing(request):
-
-    context = {}  # Initialize context dictionary
+    context = {}
 
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         try:
-            # Read the uploaded CSV file into a Pandas DataFrame
+            # Reading the uploaded file
             data = pd.read_csv(uploaded_file)
-
-            # Calculate the number of missing values in each column
-            missing_values = data.isnull().sum()
-
-            # Create an HTML preview of the first 5 rows
-            data_preview = data.head().to_html(classes='data-preview', index=False)
             
-            # Add data to context for rendering
-            context['data_preview'] = data_preview
-            context['missing_values'] = missing_values.to_dict()
+            # Creating a preview of the raw data
+            raw_data_preview = data.head().to_html(classes='data-preview', index=False)
+            context['raw_data_preview'] = raw_data_preview
+
+            # Processing options
+            missing_value_strategy = request.POST.get('missing_value_strategy')
+            selected_columns = request.POST.get('feature_selection')
+            encoding_strategy = request.POST.get('encoding_strategy')
+            scaling_strategy = request.POST.get('scaling_strategy')
+
+            if missing_value_strategy or selected_columns or encoding_strategy or scaling_strategy:
+                # Handling Missing Values
+                if missing_value_strategy == 'mean':
+                    data.fillna(data.mean(), inplace=True)
+                elif missing_value_strategy == 'median':
+                    data.fillna(data.median(), inplace=True)
+                elif missing_value_strategy == 'drop':
+                    data.dropna(inplace=True)
+
+                # Feature Selection
+                if selected_columns:
+                    columns = [col.strip() for col in selected_columns.split(',')]
+                    data = data[columns]
+
+                # Feature Encoding
+                if encoding_strategy == 'onehot':
+                    data = pd.get_dummies(data)
+                elif encoding_strategy == 'label':
+                    le = LabelEncoder()
+                    for column in data.select_dtypes(include=['object']).columns:
+                        data[column] = le.fit_transform(data[column])
+
+                # Feature Scaling
+                if scaling_strategy == 'standard':
+                    scaler = StandardScaler()
+                    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+                elif scaling_strategy == 'normalize':
+                    scaler = MinMaxScaler()
+                    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+
+                # Creating a preview of the processed data
+                data_preview = data.head().to_html(classes='data-preview', index=False)
+                context['data_preview'] = data_preview
+
+                # Store the processed data in the session
+                request.session['processed_data'] = data.to_csv(index=False)
 
         except Exception as e:
             context['error'] = f"Error processing file: {e}"
 
     return render(request, 'main/preprocessing.html', context)
+
+def download_csv(request):
+    processed_data_csv = request.session.get('processed_data')
+
+    if processed_data_csv:
+        response = HttpResponse(processed_data_csv, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=processed_data.csv'
+        return response
+    else:
+        return HttpResponse("No data to download")

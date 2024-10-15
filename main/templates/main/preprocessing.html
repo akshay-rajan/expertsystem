@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload and Preview Dataset</title>
-
-    <!-- Load Static Files -->
-    {% load static %}
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'preprocessing/style2.css' %}">
-</head>
-<body class="container py-4">
-    <h2 class="text-center my-4">Upload Your Dataset and View Missing Values</h2>
-    
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Preprocessing{% endblock %}
+{% block body %}
+    <h2 class="text-center my-4">Upload Your Dataset and Apply Preprocessing</h2>
     <!-- File Upload Form -->
     <div class="d-flex justify-content-center">
         <form method="POST" enctype="multipart/form-data">
@@ -24,43 +10,75 @@
             <div class="mb-3">
                 <input type="file" id="file" name="file" accept=".csv" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <!-- Preprocessing Options -->
+            <div class="mb-3">
+                <label for="missing_value_strategy">Missing Value Strategy:</label>
+                <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
+                    <option value="none">None</option>
+                    <option value="mean">Fill with Mean</option>
+                    <option value="median">Fill with Median</option>
+                    <option value="drop">Remove Rows</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="feature_selection">Select Columns:</label>
+                <input type="text" id="feature_selection" name="feature_selection" class="form-control" placeholder="Enter column names separated by commas">
+            </div>
+            <div class="mb-3">
+                <label for="encoding_strategy">Encoding Strategy:</label>
+                <select id="encoding_strategy" name="encoding_strategy" class="form-control">
+                    <option value="none">None</option>
+                    <option value="onehot">One-Hot Encoding</option>
+                    <option value="label">Label Encoding</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="scaling_strategy">Scaling Strategy:</label>
+                <select id="scaling_strategy" name="scaling_strategy" class="form-control">
+                    <option value="none">None</option>
+                    <option value="standard">Standardization</option>
+                    <option value="normalize">Normalization</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload and Process</button>
         </form>
     </div>
-
-    <!-- Conditionally Render the Data Preview Table if Available -->
-    {% if data_preview %}
-    <h3 class="text-center my-4">Data Preview</h3>
-    <div class="table-responsive">
-        <!-- Using Bootstrap table classes for better styling -->
-        <table class="table table-bordered table-hover table-striped mx-auto">
-            {{ data_preview|safe }}
-        </table>
-    </div>
-
-    <!-- Display Missing Value Summary -->
-    <h3 class="text-center my-4">Missing Values Summary</h3>
-    <div class="table-responsive d-flex justify-content-center">
-        <table class="table table-bordered table-hover table-striped w-50">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Column</th>
-                    <th scope="col">Missing Values</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for column, missing in missing_values.items %}
-                    <tr class="{% if missing > 0 %}table-danger{% else %}table-success{% endif %}">
-                        <td>{{ column }}</td>
-                        <td>{{ missing }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
-
-    <!-- Bootstrap JavaScript and dependencies (optional but recommended) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Conditionally Render the Raw Data Preview Table if Available -->
+    <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;"></div>
+{% endblock %}
+{% block script %}
+<script>
+    
+    
+    document.getElementById('file').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const rows = text.split('\n');
+                let table = '<table class="table table-bordered table-hover table-striped">';
+                rows.forEach((row, index) => {
+                    const cells = row.split(',');
+                    let rowClass = '';
+                    if (cells.some(cell => cell.trim() === '')) {
+                        rowClass = 'bg-danger';
+                    }
+                    table += `<tr class="${rowClass}">`;
+                    cells.forEach(cell => {
+                        if (index === 0) {
+                            table += `<th>${cell}</th>`;
+                        } else {
+                            table += `<td>${cell}</td>`;
+                        }
+                    });
+                    table += '</tr>';
+                });
+                table += '</table>';
+                document.getElementById('csv-preview-container').innerHTML = table;
+            };
+            reader.readAsText(file);
+        }
+    });
+</script>
+{% endblock %}
