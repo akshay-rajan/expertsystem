@@ -413,11 +413,14 @@ def naive_bayes(request):
         
         download_link = serialize(model, 'naive_bayes')
         
+        mean_per_class = [[round(float(j), 4) for j in i] for i in model.theta_]
+        
         return render(request, 'main/naive_bayes.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
             'features': features,
             'target': target,
+            'results': dict(zip(model.classes_, mean_per_class)),
             'metrics': {
                 'accuracy': round(accuracy, 2),
                 'precision': round(precision, 2),

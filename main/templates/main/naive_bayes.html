@@ -6,14 +6,7 @@
 {% block body %}
 <div class="fade-in">
   <h1 class="display-3 title">Results</h1>
-  <div id="results">
-    <div class="line d-flex justify-content-center">
-      <h2 class="display-5 p-3 font-weight-bold">
-        {{ line }}
-      </h2>
-    </div>
-  </div>
-
+  
   <div class="evaluation">
     <h3 class="m-2">Evaluation Metrics</h3>
     <table class="table table-bordered table-hover">
@@ -75,6 +68,28 @@
         </button>
       </a>
     </div>
+  </div>
+
+  <div id="results">
+    <h3 class="m-2">Classes and Means of Features</h3>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+          <th>Class</th>
+          {% for feature in features %}
+            <th>{{ feature }}</th>
+          {% endfor %}
+      </thead>
+      <tbody>
+        {% for key, value in results.items %}
+          <tr>
+            <td>{{ key }}</td>
+            {% for val in value %}
+              <td>{{ val }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 
   <div class="prediction mt-4 mb-4">
