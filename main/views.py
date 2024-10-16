@@ -274,6 +274,8 @@ def knn(request):
         return render(request, 'main/knn.html', {
             'actual': y_test,
             'predicted': y_pred,
+            'features': features,
+            'target': target,
             'metrics': {
                 'accuracy': round(accuracy, 2),
                 'precision': round(precision, 2),
@@ -331,6 +333,8 @@ def decision_tree(request):
         return render(request, 'main/decision_tree.html', {
             'actual': y_test,
             'predicted': y_pred,
+            'features': features,
+            'target': target,
             'metrics': {
                 'accuracy': round(accuracy, 2),
                 'precision': round(precision, 2),
@@ -387,6 +391,8 @@ def random_forest(request):
         return render(request, 'main/random_forest.html', {
             'actual': y_test,
             'predicted': y_pred,
+            'features': features,
+            'target': target,
             'metrics': {
                 'accuracy': round(accuracy, 2),
                 'precision': round(precision, 2),
@@ -454,6 +460,8 @@ def kmeans(request):
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
             'X': X_data,
+            'features': features,
+            'target': "Cluster",
             'feature_count': len(features),
             'labels': labels,
             'centroids': centroids_list,

@@ -97,20 +97,32 @@
             <div class="card-body">
               <div class="form-group">
                 <form onsubmit="return makePrediction(event)">
+                  <table class="d-flex justify-content-center w-100">
+                    <tbody class="w-100">
+                      {% for feature in features %}
+                      <tr class="d-flex">
+                        <td class="w-25">
+                          <label for="{{ feature }}">{{ feature }}:</label>
+                        </td>
+                        <td class="w-50">
+                          <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
                   <input type="hidden" name="model_path" value={{ download }}>
-                  <div class="m-2">
-                    <input type="text" class="form-control" id="input" name="input" placeholder="Enter the features separated by commas">
-                  </div>
-    
+                  <input type="hidden" name="target" value={{ target }}>
                   <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
                     <button class="btn btn-info m-2">Predict</button>
                   </div>
                   <div id="prediction-result" class="alert alert-success d-none m-2"></div>
                 </form>
-  
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
