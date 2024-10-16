@@ -14,6 +14,7 @@ urlpatterns = [
     path('regression/decision_tree', views.decision_tree_regression, name='decision_tree_regression'),
     path('regression/random_forest', views.random_forest_regression, name='random_forest_regression'),
     path('classification/knn/', views.knn, name='knn'),
+    path('classification/naive_bayes/', views.naive_bayes, name='naive_bayes'),
     path('classification/decision_tree/', views.decision_tree, name='decision_tree'),
     path('classification/random_forest/', views.random_forest, name='random_forest'),
     path('clustering/kmeans/', views.kmeans, name='kmeans'),

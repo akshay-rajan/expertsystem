@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -27,8 +28,6 @@ from .utils import construct_line, serialize, regression_evaluation, classificat
 def index(request):
     return render(request, 'main/index.html')
 
-# ? Types of Algorithms
-
 def classification(request):
     return render(request, 'main/algorithms.html', {
         'type': 'Classification',
@@ -36,6 +35,7 @@ def classification(request):
             {'name': 'K-Nearest Neighbors', 'url': 'knn',},
             {'name': 'Decision Tree', 'url': 'decision_tree',},
             {'name': 'Random Forest', 'url': 'random_forest',},
+            {'name': 'Naive Bayes', 'url': 'naive_bayes',},
         ]
     })
     
@@ -58,8 +58,6 @@ def clustering(request):
             {'name': 'K-Means', 'url': 'kmeans',},
         ]
     })
-
-# ? Implement Algorithms
 
 def linear_regression(request):
     """
@@ -389,6 +387,48 @@ def knn(request):
         }
     })
 
+def naive_bayes(request):
+    """Gaussian Naive Bayes Classifier"""
+    
+    if request.method == "POST":
+        dataset = request.FILES.get('dataset', None)
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+                
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = GaussianNB()
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        y_pred_modified = [round(i, 3) for i in y_pred]
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        
+        download_link = serialize(model, 'naive_bayes')
+        
+        return render(request, 'main/naive_bayes.html', {
+            'actual': y_test,
+            'predicted': y_pred_modified,
+            'features': features,
+            'target': target,
+            'metrics': {
+                'accuracy': round(accuracy, 2),
+                'precision': round(precision, 2),
+                'recall': round(recall, 2),
+                'f1': round(f1, 2),
+            },
+            'download': download_link,
+        })
+    
+    return render(request, 'main/input.html')
+
 def decision_tree(request):
     """Decision Tree Classifier"""
     
@@ -506,7 +546,7 @@ def random_forest(request):
             },
         }
     })
-    
+       
 def kmeans(request):
     """K-Means Clustering"""
     
