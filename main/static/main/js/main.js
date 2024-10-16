@@ -7,14 +7,19 @@ async function makePrediction(event) {
   // Show loading spinner
   predictionResult.innerHTML = `<div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>`;
   
+  // Read input values from the form and convert them to JSON 
   const formData = new FormData(event.target);
-  const inputData = formData.get('input').split(',').map(Number);
-  // const inputData = {};
-  // formData.forEach((value, key) => {
-  //     inputData[key] = Number(value);
-  // });
+  let inputData = {};
+  formData.forEach((value, key) => {
+    if (key === 'model_path' || key == 'target') return;
+    inputData[key] = Number(value);
+  });
   const modelPath = formData.get('model_path');
+  const target = formData.get('target');
 
+  inputData = Object.values(inputData);
+
+  // Make a POST request to '/predict' to make the prediction
   try {
     const response = await fetch('/predict', {
       method: 'POST',
@@ -31,7 +36,7 @@ async function makePrediction(event) {
 
     const data = await response.json();
     predictionResult.classList.add('alert-success');
-    predictionResult.innerHTML = "Target: " + data.predictions;
+    predictionResult.innerHTML = target + ": " + data.predictions;
   } catch (error) {
     predictionResult.classList.add('alert-danger');
     predictionResult.innerHTML = error.message;

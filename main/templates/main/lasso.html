@@ -108,7 +108,7 @@
           </h5>
         </div>
         
-        <div id="predictionForm" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div id="predictionForm" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
             <div class="form-group">
               <form onsubmit="return makePrediction(event)">
@@ -120,7 +120,7 @@
                         <label for="{{ feature }}">{{ feature }}:</label>
                       </td>
                       <td class="w-50">
-                        <input type="text" class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
+                        <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
                       </td>
                     </tr>
                     {% endfor %}
