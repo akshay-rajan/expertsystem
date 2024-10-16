@@ -11,6 +11,7 @@ urlpatterns = [
     path('regression/linear_regression/', views.linear_regression, name='linear_regression'),
     path('regression/lasso', views.lasso, name='lasso'),
     path('regression/ridge', views.ridge, name='ridge'),
+    path('regression/decision_tree', views.decision_tree_regression, name='decision_tree_regression'),
     path('classification/knn/', views.knn, name='knn'),
     path('classification/decision_tree/', views.decision_tree, name='decision_tree'),
     path('classification/random_forest/', views.random_forest, name='random_forest'),

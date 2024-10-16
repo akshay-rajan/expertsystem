@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.tree import DecisionTreeClassifier, plot_tree, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, root_mean_squared_error
@@ -46,6 +46,7 @@ def regression(request):
             {'name': 'Linear Regression', 'url': 'linear_regression',},
             {'name': 'Lasso Regression', 'url': 'lasso',},
             {'name': 'Ridge Regression', 'url': 'ridge',},
+            {'name': 'Decision Tree', 'url': 'decision_tree_regression',},
         ]
     })
     
@@ -242,6 +243,49 @@ def ridge(request):
         }
     })
     
+def decision_tree_regression(request):
+    """Decision Tree Regressor"""
+    
+    if request.method == 'POST':
+        dataset = request.FILES.get('dataset', None)
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = DecisionTreeRegressor(random_state=42)
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        y_pred_modified = [round(i, 3) for i in y_pred]
+        
+        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
+        
+        download_link = serialize(model, 'decision_tree_regression')
+        
+        return render(request, 'main/decision_tree_regression.html', {
+            'actual': y_test,
+            'predicted': y_pred_modified,
+            'features': features,
+            'target': target,
+            'metrics': {
+                'mse': round(mse, 2),
+                'rmse': round(rmse, 2),
+                'mae': round(mae, 2),
+                'r2': round(r2, 2),
+            },
+            'download': download_link,
+        })        
+    
+    return render(request, 'main/input.html')
+    
 def knn(request):
     """Build KNN model and evaluate it"""
     
@@ -328,7 +372,7 @@ def decision_tree(request):
         plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
         plt.savefig(plot_path)
         plt.close()
-        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)        
+        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
         
         return render(request, 'main/decision_tree.html', {
             'actual': y_test,
