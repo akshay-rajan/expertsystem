@@ -487,34 +487,40 @@ def kmeans(request):
 def samples(request):
     datasets = [
         {
-        "name": "California Housing",
-        "file": "fetch_california_housing.xlsx",
-        "type": "XLSX",
-        "for": "Regression"
+            "name": "California Housing",
+            "file": "fetch_california_housing.xlsx",
+            "type": "XLSX",
+            "for": "Regression"
         },
         {
-        "name": "California Housing",
-        "file": "fetch_california_housing.csv",
-        "type": "CSV",
-        "for": "Regression"
+            "name": "California Housing",
+            "file": "fetch_california_housing.csv",
+            "type": "CSV",
+            "for": "Regression"
         },
         {
-        "name": "Numerical Data",
-        "file": "numerical_data.xlsx",
-        "type": "XLSX",
-        "for": "Regression"
+            "name": "Numerical Data",
+            "file": "numerical_data.xlsx",
+            "type": "XLSX",
+            "for": "Regression"
         },
         {
-        "name": "Iris",
-        "file": "iris.csv",
-        "type": "CSV",
-        "for": "Classification"
+            "name": "Iris",
+            "file": "iris.csv",
+            "type": "CSV",
+            "for": "Classification"
         },
         {
-        "name": "Mall Customers",
-        "file": "mall_customers.csv",
-        "type": "CSV",
-        "for": "Clustering"
+            "name": "Mall Customers",
+            "file": "mall_customers.csv",
+            "type": "CSV",
+            "for": "Clustering"
+        },
+        {   
+            "name": "Purchases",
+            "file": "purchases.csv",
+            "type": "CSV",
+            "for": "Preprocessing"
         }
     ]
     return render(request, 'main/samples.html', {
