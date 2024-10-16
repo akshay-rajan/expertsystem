@@ -160,6 +160,8 @@ def lasso(request):
             'coefficients': coeff,
             'actual': y_test,
             'predicted': y_pred_modified,
+            'features': features,
+            'target': target,
             'metrics': {
                 'mse': round(mse, 2),
                 'rmse': round(rmse, 2),

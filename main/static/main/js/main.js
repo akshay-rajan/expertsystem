@@ -9,6 +9,10 @@ async function makePrediction(event) {
   
   const formData = new FormData(event.target);
   const inputData = formData.get('input').split(',').map(Number);
+  // const inputData = {};
+  // formData.forEach((value, key) => {
+  //     inputData[key] = Number(value);
+  // });
   const modelPath = formData.get('model_path');
 
   try {
