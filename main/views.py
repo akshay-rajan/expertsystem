@@ -108,6 +108,8 @@ def linear_regression(request):
         return render(request, 'main/linear_regression.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
+            'features': features,
+            'target': target,
             'metrics': {
                 'mse': round(mse, 2),
                 'rmse': round(rmse, 2),
@@ -219,6 +221,8 @@ def ridge(request):
             'coefficients': coeff,
             'actual': y_test,
             'predicted': y_pred_modified,
+            'features': features,
+            'target': target,
             'metrics': {
                 'mse': round(mse, 2),
                 'rmse': round(rmse, 2),
