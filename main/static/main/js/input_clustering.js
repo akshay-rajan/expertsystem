@@ -95,7 +95,15 @@ function validateForm() {
   // Validate each hyperparameter
   for (let i = 0; i < hyperparameters.length; i++) {
     const value = hyperparameters[i].value;
-    if (isNaN(value) || value <= 0) {
+    // Validate Select dropdown
+    if (hyperparameters[i].tagName.toLowerCase() === 'select') {
+      if (!value) {
+        alert.text(`Please select a value for ${hyperparameters[i].name}.`);
+        alert.removeClass('d-none');
+        return false;
+      }
+    // Validate text input (number)
+    } else if (isNaN(value) || value <= 0) {
       alert.text(`Please enter a valid value for ${hyperparameters[i].name}.`);
       alert.removeClass('d-none');
       return false;
