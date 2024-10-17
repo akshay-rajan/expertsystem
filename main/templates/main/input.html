@@ -42,18 +42,18 @@
               {% for key, param in hyperparameters.items %}
                 {% if param.field == "select" %}
                   <div class="form-group" id="{{ param.name }}-div">
-                      <label for="{{ param.name }}">{{ param.name }}:</label>
-                      <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control dropdown">
-                        <option value="" selected disabled>Select</option>
-                        {% for option in param.options %}
-                          <option value="{{ option }}">{{ option }}</option>
-                        {% endfor %}
-                      </select>
+                    <label for="{{ param.name }}">{{ param.name }}:</label>
+                    <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control dropdown">
+                      <option value="" selected disabled>Select</option>
+                      {% for option in param.options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
                 {% else %}
                   <div class="form-group" id="{{ param.name }}-div">
-                      <label for="{{ param.name }}">{{ param.name }}:</label>
-                      <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter">
+                    <label for="{{ param.name }}">{{ param.name }}:</label>
+                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter">
                   </div>
                 {% endif %}
               {% endfor %}
