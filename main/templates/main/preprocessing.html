@@ -9,10 +9,13 @@
             {% csrf_token %}
 
             <!-- upload dataset here  -->
-            
+            {% if data_exists %}
+
+            {% else %}
             <div class="mb-3">
-                <input type="file" id="file" name="file" accept=".csv" class="form-control">
+                <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
             </div>
+            {% endif %}
 
 
 

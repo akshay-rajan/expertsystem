@@ -115,11 +115,24 @@ def samples(request):
 def preprocessing(request):
     context = {}
 
+    # updated_data = request.session.get('updated_data', None)
+
+    # if updated_data is not None:
+    #     # Data exists in the session, show button to remove it
+    #     context['data_exists'] = True
+    #     context['data_preview'] = pd.DataFrame(updated_data).to_html(classes='table table-bordered table-hover table-striped', index=False)
+    # else:
+    #     context['data_exists'] = False 
+
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         try:
             # Reading the uploaded file
+            
             data = pd.read_csv(uploaded_file)
+
+            # Store the  dataframe in the session
+            # request.session['updated_data'] = data.to_dict()
             
     
            # Processing options
@@ -160,14 +173,16 @@ def preprocessing(request):
                 data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
 
             # preview of the processed data
-            data_preview = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
-            context['data_preview'] = data_preview
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
+            
             
 
             
 
         except Exception as e:
             context['error'] = f"Error processing file: {e}"
-
+    
+    # No data in session, show upload form
     return render(request, 'main/preprocessing.html', context)
+    
 
