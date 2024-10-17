@@ -19,6 +19,7 @@ urlpatterns = [
     path('classification/random_forest/', views.random_forest, name='random_forest'),
     path('classification/svm/', views.svm, name='svm'),
     path('clustering/kmeans/', views.kmeans, name='kmeans'),
+    path('clustering/hierarchical_clustering/', views.hierarchical_clustering, name='hierarchical_clustering'),
     path('samples', views.samples, name='samples'),
     path('predict', views.predict, name='predict'),
 ]

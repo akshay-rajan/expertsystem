@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -17,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_score
+from scipy.cluster.hierarchy import dendrogram, linkage
 
 import matplotlib
 matplotlib.use('Agg')
@@ -57,6 +59,7 @@ def clustering(request):
         'type': 'Clustering',
         'algorithms': [
             {'name': 'K-Means', 'url': 'kmeans',},
+            {'name': 'Hierarchical Clustering', 'url': 'hierarchical_clustering',},
         ]
     })
 
@@ -662,6 +665,70 @@ def kmeans(request):
             'centroids': centroids_list,
             'metrics': {
                 'inertia': inertia,
+                'silhouette_score': silhouette,
+            },
+            'plot': plot_url,
+            'download': download_link,
+        })
+    
+    return render(request, 'main/input_clustering.html', {
+        'hyperparameters': {
+            1: {
+                'name': 'n_clusters',
+                'type': 'number',
+            }
+        }
+    })
+    
+def hierarchical_clustering(request):
+    """Agglomerative Hierarchical Clustering"""
+    
+    if request.method == "POST":
+        dataset = request.FILES.get('dataset', None)
+        n_clusters = int(request.POST.get('n_clusters'))
+        
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        X = df[features]
+
+        model = AgglomerativeClustering(n_clusters=n_clusters)
+        labels = model.fit_predict(X)
+        centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
+        centroids_list = [list(map(lambda x: round(x, 2), centroid)) for centroid in centroids.tolist()]
+        silhouette = round(silhouette_score(X, labels), 2)
+        
+        X_data = df[features].values
+        
+        # ? Plotting the Dendrogram
+        plot_url = None
+        if (len(features) >= 2):      
+            linked = linkage(X_data, 'ward')
+            plt.figure(figsize=(10, 7))
+            dendrogram(linked, orientation='top', labels=df.index, distance_sort='descending', show_leaf_counts=True)
+            plt.title('Hierarchical Clustering Dendrogram')
+        
+            plot_filename = f"hierarchical_clustering_plot_{uuid.uuid4().hex[:6]}.png"
+            plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
+            plt.savefig(plot_path)
+            plt.close()
+            plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
+        
+        download_link = serialize(model, 'hierarchical_clustering')
+        
+        return render(request, 'main/hierarchical_clustering.html', {
+            'k': n_clusters,
+            'X': X_data,
+            'features': features,
+            'target': "Cluster",
+            'feature_count': len(features),
+            'labels': labels,
+            'centroids': centroids_list,
+            'metrics': {
                 'silhouette_score': silhouette,
             },
             'plot': plot_url,

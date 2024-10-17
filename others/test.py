@@ -1,25 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
-from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
 
-# Generating sample data
-X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+# Generate synthetic data
+X, y = make_blobs(n_samples=100, centers=3, random_state=42)
 
-# Applying KMeans clustering
-k = 4  # Number of clusters
-kmeans = KMeans(n_clusters=k, random_state=42)
-kmeans.fit(X)
+# Apply Agglomerative Clustering
+model = AgglomerativeClustering(n_clusters=3)
+model.fit(X)
 
-# Getting the cluster labels and centroids
-cluster_labels = kmeans.labels_
-centroids = kmeans.cluster_centers_
+# Plot the clusters
+plt.scatter(X[:, 0], X[:, 1], c=model.labels_, cmap='rainbow')
+plt.title('Agglomerative Clustering')
+plt.show()
 
-print(cluster_labels)
-print(centroids)
+# Create the linkage matrix for dendrogram
+Z = linkage(X, 'ward')
 
-# Visualizing the clustered data
-plt.scatter(X[:, 0], X[:, 1], c=cluster_labels, cmap='viridis', marker='o', edgecolor='k')
-plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
-plt.title("K-means Clustering with scikit-learn")
+# Plot the dendrogram
+plt.figure(figsize=(10, 7))
+plt.title("Dendrogram")
+dendrogram(Z)
 plt.show()

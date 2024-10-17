@@ -1,0 +1,91 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <h1 class="display-3 title">Results</h1>
+  
+  <div id="results">
+    <div class="line d-flex justify-content-center">
+      <h2 class="display-5 p-3 font-weight-bold">
+        Number of Clusters = {{ k }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="centroids p-2 flex-grow-1">
+      <h2 class="header m-2 p-2">Centroids</h2>
+      <ol class="list-group">
+        {% for centroid in centroids %}
+          <li class="list-group-item list-group-item-action">
+            {{ centroid }}
+          </li>
+        {% endfor %}
+      </ol>
+
+      <h3 class="m-2 mt-4">Evaluation Metrics</h3>
+      <table class="table mt-3 table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th>Silhouette Score</th>
+            <td class="
+              {% if metrics.silhouette_score > 0.6 %}
+                table-success
+              {% elif metrics.silhouette_score > 0.2 %}
+                table-warning
+              {% else %}
+                table-danger
+              {% endif %}
+            ">
+              {{ metrics.silhouette_score }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="plot justify-content-end">
+      <img src="{{ plot }}" class="img-fluid" alt="Plot">
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{{ download }}" class="link">
+        <button class="btn btn-info btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-info">
+        <thead class="thead">
+          <tr class="thead">
+            <th>Point</th>
+            {% for val in X %}
+              {% for i in val %}
+                <td>{{ i }}</td>
+              {% endfor %}
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Label</th>
+            {% for label in labels %}
+              <td colspan="{{ feature_count }}" class="text-center">{{ label }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
