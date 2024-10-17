@@ -7,9 +7,15 @@
     <div class="d-flex justify-content-center">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+
+            <!-- upload dataset here  -->
+            
             <div class="mb-3">
                 <input type="file" id="file" name="file" accept=".csv" class="form-control">
             </div>
+
+
+
             <!-- Preprocessing Options -->
             <div class="mb-3">
                 <label for="missing_value_strategy">Missing Value Strategy:</label>
@@ -21,10 +27,13 @@
                 </select>
             </div>
 
-            <!-- <div class="mb-3">
-                <label for="feature_selection">Select Columns:</label>
-                <input type="text" id="feature_selection" name="feature_selection" class="form-control" placeholder="Enter column names separated by commas">
-            </div> -->
+            <!-- Dynamic Column Selection with Checkboxes -->
+            <div class="mb-3">
+                <label id="colselect"></label>
+                <div id="feature_selection" class="form-check">
+                    <!-- Checkboxes will be populated dynamically -->
+                </div>
+            </div>
 
             <div class="mb-3">
                 <label for="encoding_strategy">Encoding Strategy:</label>
@@ -34,6 +43,7 @@
                     <option value="label">Label Encoding</option>
                 </select>
             </div>
+
             <div class="mb-3">
                 <label for="scaling_strategy">Scaling Strategy:</label>
                 <select id="scaling_strategy" name="scaling_strategy" class="form-control">
@@ -42,9 +52,11 @@
                     <option value="normalize">Normalization</option>
                 </select>
             </div>
+
             <button type="submit" class="btn btn-primary">Upload and Process</button>
         </form>
     </div>
+    
     <!-- Conditionally Render the Raw Data Preview Table if Available -->
     {% if data_preview %}
     <h3 class="text-center my-4">Processed Data Preview</h3>
@@ -52,26 +64,28 @@
     <div class="table-responsive" style="overflow:auto; height:500px; width:100%;">
         {{ data_preview|safe }}
     </div>
-{% else %}
+    {% else %}
     <h3 class="text-center my-4" id="heading"></h3>
     
     <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
-        <!-- javascript will render data here as table -->
+        <!-- JavaScript will render data here as table -->
     </div>
-{% endif %}
+    {% endif %}
 {% endblock %}
+
 {% block script %}
 <script>
-    
- 
     document.getElementById('file').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
-            document.getElementById('heading').innerHTML=" Data Preview "
+            document.getElementById('heading').innerHTML = "Data Preview";
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
                 const rows = text.split('\n');
+                const headers = rows[0].split(','); // Get the headers (first row)
+
+                // Preview CSV in a table
                 let table = '<table class="table table-bordered table-hover table-striped">';
                 rows.forEach((row, index) => {
                     const cells = row.split(',');
@@ -91,6 +105,22 @@
                 });
                 table += '</table>';
                 document.getElementById('csv-preview-container').innerHTML = table;
+
+                // Populate the column selection with checkboxes
+                document.getElementById("colselect").innerHTML = "Select Columns for Missing Value Strategy";
+                const featureSelectionDiv = document.getElementById('feature_selection');
+                featureSelectionDiv.innerHTML = ''; // Clear previous checkboxes
+                headers.forEach(header => {
+                    const checkboxId = `column_${header.trim()}`;
+                    const checkbox = `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="feature_selection" value="${header.trim()}" id="${checkboxId}">
+                            <label class="form-check-label" for="${checkboxId}">
+                                ${header.trim()}
+                            </label>
+                        </div>`;
+                    featureSelectionDiv.innerHTML += checkbox;
+                });
             };
             reader.readAsText(file);
         }

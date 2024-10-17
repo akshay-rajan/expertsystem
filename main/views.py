@@ -111,7 +111,6 @@ def samples(request):
 # ? Helper Functions
 
 # Preprocessing part ->Deepu
-render
 
 def preprocessing(request):
     context = {}
@@ -122,62 +121,53 @@ def preprocessing(request):
             # Reading the uploaded file
             data = pd.read_csv(uploaded_file)
             
-            
-
-            # Processing options
+    
+           # Processing options
             missing_value_strategy = request.POST.get('missing_value_strategy')
-            selected_columns = request.POST.get('feature_selection')
+            selected_columns = request.POST.getlist('feature_selection')
             encoding_strategy = request.POST.get('encoding_strategy')
             scaling_strategy = request.POST.get('scaling_strategy')
 
-            if missing_value_strategy or selected_columns or encoding_strategy or scaling_strategy:
-                # Handling Missing Values
+            
+
+            # Handling Missing Values in selected columns only
+            if missing_value_strategy and selected_columns:
                 if missing_value_strategy == 'mean':
-                    data.fillna(data.mean(), inplace=True)
+                    for col in selected_columns:
+                        if data[col].dtype != 'object':  # Ensure column is numerical
+                            data[col].fillna(data[col].mean(), inplace=True)
                 elif missing_value_strategy == 'median':
-                    data.fillna(data.median(), inplace=True)
+                    for col in selected_columns:
+                        if data[col].dtype != 'object':  # Ensure column is numerical
+                            data[col].fillna(data[col].median(), inplace=True)
                 elif missing_value_strategy == 'drop':
-                    data.dropna(inplace=True)
+                    data.dropna(subset=selected_columns, inplace=True)
 
-                # Feature Selection
-                # if selected_columns:
-                #     columns = [col.strip() for col in selected_columns.split(',')]
-                #     data = data[columns]
+            # Feature Encoding
+            if encoding_strategy == 'onehot':
+                data = pd.get_dummies(data)
+            elif encoding_strategy == 'label':
+                le = LabelEncoder()
+                for column in data.select_dtypes(include=['object']).columns:
+                    data[column] = le.fit_transform(data[column])
 
-                # Feature Encoding
-                if encoding_strategy == 'onehot':
-                    data = pd.get_dummies(data)
-                elif encoding_strategy == 'label':
-                    le = LabelEncoder()
-                    for column in data.select_dtypes(include=['object']).columns:
-                        data[column] = le.fit_transform(data[column])
+            # Feature Scaling
+            if scaling_strategy == 'standard':
+                scaler = StandardScaler()
+                data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+            elif scaling_strategy == 'normalize':
+                scaler = MinMaxScaler()
+                data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
 
-                # Feature Scaling
-                if scaling_strategy == 'standard':
-                    scaler = StandardScaler()
-                    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-                elif scaling_strategy == 'normalize':
-                    scaler = MinMaxScaler()
-                    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+            # preview of the processed data
+            data_preview = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
+            context['data_preview'] = data_preview
+            
 
-                # preview of the processed data
-                data_preview = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
-                context['data_preview'] = data_preview
-
-                # Store the processed data in the session
-                request.session['processed_data'] = data.to_csv(index=False)
+            
 
         except Exception as e:
             context['error'] = f"Error processing file: {e}"
 
     return render(request, 'main/preprocessing.html', context)
 
-# def download_csv(request):
-#     processed_data_csv = request.session.get('processed_data')
-
-#     if processed_data_csv:
-#         response = HttpResponse(processed_data_csv, content_type='text/csv')
-#         response['Content-Disposition'] = 'attachment; filename=processed_data.csv'
-#         return response
-#     else:
-#         return HttpResponse("No data to download")
