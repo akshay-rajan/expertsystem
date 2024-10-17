@@ -17,6 +17,7 @@ urlpatterns = [
     path('classification/naive_bayes/', views.naive_bayes, name='naive_bayes'),
     path('classification/decision_tree/', views.decision_tree, name='decision_tree'),
     path('classification/random_forest/', views.random_forest, name='random_forest'),
+    path('classification/svm/', views.svm, name='svm'),
     path('clustering/kmeans/', views.kmeans, name='kmeans'),
     path('samples', views.samples, name='samples'),
     path('predict', views.predict, name='predict'),

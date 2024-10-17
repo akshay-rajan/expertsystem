@@ -14,9 +14,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, root_mean_squared_error
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import silhouette_score
 
 import matplotlib
@@ -24,6 +23,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from .utils import construct_line, serialize, regression_evaluation, classification_evaluation
+
 
 def index(request):
     return render(request, 'main/index.html')
@@ -36,6 +36,7 @@ def classification(request):
             {'name': 'Decision Tree', 'url': 'decision_tree',},
             {'name': 'Random Forest', 'url': 'random_forest',},
             {'name': 'Naive Bayes', 'url': 'naive_bayes',},
+            {'name': 'Support Vector Machine', 'url': 'svm',},
         ]
     })
     
@@ -550,6 +551,62 @@ def random_forest(request):
         }
     })
        
+def svm(request):
+    """Support Vector Machine"""
+    
+    if request.method == "POST":
+        dataset = request.FILES.get('dataset', None)
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        kernel = request.POST.get('kernel')
+        C = float(request.POST.get('C'))
+        
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = SVC(kernel=kernel, C=C, random_state=42)
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        
+        download_link = serialize(model, 'svm')
+        
+        return render(request, 'main/svm.html', {
+            'actual': y_test,
+            'predicted': y_pred,
+            'features': features,
+            'target': target,
+            'metrics': {
+                'accuracy': round(accuracy, 2),
+                'precision': round(precision, 2),
+                'recall': round(recall, 2),
+                'f1': round(f1, 2),
+            },
+            'download': download_link,
+        })
+    
+    return render(request, 'main/input.html', {
+        'hyperparameters': {
+            1: {
+                'field': 'select',
+                'name': 'kernel',
+                'type': 'text',
+                'options': ['linear', 'poly', 'rbf', 'sigmoid'],
+            },
+            2: {
+                'name': 'C',
+                'type': 'text',
+            },
+        }
+    })
+
 def kmeans(request):
     """K-Means Clustering"""
     
