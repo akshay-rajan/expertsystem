@@ -789,6 +789,12 @@ def samples(request):
             "file": "purchases.csv",
             "type": "CSV",
             "for": "Preprocessing"
+        },
+        {
+            "name": "Pima Indians Diabetes",
+            "file": "diabetes.csv",
+            "type": "CSV",
+            "for": "Classification (Binary)"
         }
     ]
     return render(request, 'main/samples.html', {
