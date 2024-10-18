@@ -680,28 +680,13 @@ def kmeans(request):
         
         X_data = df[features].values
         
-        # ? Plotting the Clusters (Temporary)
-        plot_url = None
-        if (len(features) >= 2):
-            plt.scatter(X_data[:, 0], X_data[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k')
-            plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
-            plt.xlabel(X.columns[0])
-            plt.ylabel(X.columns[1])
-            plt.title('K-Means Clustering')
-        
-            plot_filename = f"kmeans_plot_{uuid.uuid4().hex[:6]}.png"
-            plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
-            plt.savefig(plot_path)
-            plt.close()
-            plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
-        
         download_link = serialize(model, 'kmeans')
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
             'X': X_data,
             'features': features,
-            'target': "Cluster",
+            'target': "Cluster", # For prediction
             'feature_count': len(features),
             'labels': labels,
             'centroids': centroids_list,
@@ -709,7 +694,6 @@ def kmeans(request):
                 'inertia': inertia,
                 'silhouette_score': silhouette,
             },
-            'plot': plot_url,
             'download': download_link,
         })
     
