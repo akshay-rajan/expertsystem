@@ -682,7 +682,7 @@ def kmeans(request):
         
         # ? Plotting the Clusters (Temporary)
         plot_url = None
-        if (len(features) >= 2):      
+        if (len(features) >= 2):
             plt.scatter(X_data[:, 0], X_data[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k')
             plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=100, linewidths=2)
             plt.xlabel(X.columns[0])
@@ -752,7 +752,7 @@ def hierarchical_clustering(request):
             linked = linkage(X_data, 'ward')
             plt.figure(figsize=(10, 7))
             dendrogram(linked, orientation='top', labels=df.index, distance_sort='descending', show_leaf_counts=True)
-            plt.title('Hierarchical Clustering Dendrogram')
+            plt.title('Dendrogram')
         
             plot_filename = f"hierarchical_clustering_plot_{uuid.uuid4().hex[:6]}.png"
             plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
@@ -864,3 +864,4 @@ def predict(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
