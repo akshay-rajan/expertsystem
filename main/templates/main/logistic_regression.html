@@ -1,0 +1,141 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <h1 class="display-3 title">Results</h1>
+
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th>Accuracy</th>
+          <td class="
+            {% if metrics.accuracy < 0.3 %}
+              table-danger
+              {% elif metrics.accuracy < 0.7 %}
+              table-warning
+              {% else %}
+              table-success
+            {% endif %}
+            ">{{ metrics.accuracy }}</td>
+        </tr>
+        <tr>
+          <th>Precision</th>
+          <td class="
+            {% if metrics.precision < 0.3 %}
+              table-danger
+              {% elif metrics.precision < 0.7 %}
+              table-warning
+              {% else %}
+              table-success
+            {% endif %}
+            ">{{ metrics.precision }}</td>
+        </tr>
+        <tr>
+          <th>Recall</th>
+          <td class="
+            {% if metrics.recall < 0.3 %}
+              table-danger
+              {% elif metrics.recall < 0.7 %}
+              table-warning
+              {% else %}
+              table-success
+            {% endif %}
+            ">{{ metrics.recall }}</td>
+        </tr>
+        <tr>
+          <th>F1 Score</th>
+          <td class="
+            {% if metrics.f1 < 0.3 %}
+              table-danger
+              {% elif metrics.f1 < 0.7 %}
+              table-warning
+              {% else %}
+              table-success
+            {% endif %}
+            ">{{ metrics.f1 }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{{ download }}" class="link">
+        <button class="btn btn-info btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="prediction mt-4 mb-4">
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed display-3" type="button" data-toggle="collapse" data-target="#predictionForm" aria-expanded="true" aria-controls="predictionForm">
+              Predict
+            </button>
+          </h5>
+        </div>
+    
+        <div id="predictionForm" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <div class="form-group">
+              <form onsubmit="return makePrediction(event)">
+                <table class="d-flex justify-content-center w-100">
+                  <tbody class="w-100">
+                    {% for feature in features %}
+                    <tr class="d-flex">
+                      <td class="w-25">
+                        <label for="{{ feature }}">{{ feature }}:</label>
+                      </td>
+                      <td class="w-50">
+                        <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                
+                <input type="hidden" name="model_path" value={{ download }}>
+                <input type="hidden" name="target" value={{ target }}>
+                <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
+                  <button class="btn btn-info m-2">Predict</button>
+                </div>
+                <div id="prediction-result" class="alert alert-success d-none m-2"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <thead class="thead">
+          <th>Actual Values</th>
+          {% for value in actual %}
+            <td>{{ value }}</td>
+          {% endfor %}
+      </thead>
+      <tbody>
+        <tr>
+          <th>Predicted Values</th>
+          {% for value in predicted %}
+            <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

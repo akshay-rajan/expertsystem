@@ -395,6 +395,42 @@ def knn(request):
 def logistic_regression(request):
     """Classification using Logistic Regression"""
     
+    if request.method == "POST":
+        dataset = request.FILES.get('dataset', None)
+        file_extension = dataset.name.split('.')[-1]
+        if file_extension == 'csv':
+            df = pd.read_csv(dataset, )
+        else:
+            df = pd.read_excel(dataset)
+        
+        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
+        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+                
+        X, y = df[features], df[target]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        model = LogisticRegression()
+        model.fit(X_train, y_train)
+        
+        y_pred = model.predict(X_test)
+        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        
+        download_link = serialize(model, 'logistic_regression')
+        
+        return render(request, 'main/logistic_regression.html', {
+            'actual': y_test,
+            'predicted': y_pred,
+            'features': features,
+            'target': target,
+            'metrics': {
+                'accuracy': round(accuracy, 2),
+                'precision': round(precision, 2),
+                'recall': round(recall, 2),
+                'f1': round(f1, 2),
+            },
+            'download': download_link,
+        })
+    
     return render(request, 'main/input.html')
 
 def naive_bayes(request):
