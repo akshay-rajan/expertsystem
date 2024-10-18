@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.linear_model import LinearRegression, Lasso, Ridge, LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree, DecisionTreeRegressor
@@ -35,10 +35,11 @@ def classification(request):
         'type': 'Classification',
         'algorithms': [
             {'name': 'K-Nearest Neighbors', 'url': 'knn',},
-            {'name': 'Decision Tree', 'url': 'decision_tree',},
-            {'name': 'Random Forest', 'url': 'random_forest',},
+            {'name': 'Logistic Regression', 'url': 'logistic_regression',},
             {'name': 'Naive Bayes', 'url': 'naive_bayes',},
             {'name': 'Support Vector Machine', 'url': 'svm',},
+            {'name': 'Decision Tree', 'url': 'decision_tree',},
+            {'name': 'Random Forest', 'url': 'random_forest',},
         ]
     })
     
@@ -390,6 +391,11 @@ def knn(request):
             },
         }
     })
+
+def logistic_regression(request):
+    """Classification using Logistic Regression"""
+    
+    return render(request, 'main/input.html')
 
 def naive_bayes(request):
     """Gaussian Naive Bayes Classifier"""
