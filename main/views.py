@@ -4,7 +4,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.core.files.storage import FileSystemStorage
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -111,39 +111,52 @@ def samples(request):
 # ? Helper Functions
 
 # Preprocessing part ->Deepu
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 def preprocessing(request):
     context = {}
 
-    # updated_data = request.session.get('updated_data', None)
+    # Retrieve updated data from session
+    updated_data = request.session.get('updated_data', None)
 
-    # if updated_data is not None:
-    #     # Data exists in the session, show button to remove it
-    #     context['data_exists'] = True
-    #     context['data_preview'] = pd.DataFrame(updated_data).to_html(classes='table table-bordered table-hover table-striped', index=False)
-    # else:
-    #     context['data_exists'] = False 
+    if updated_data is not None:
+        # Convert dictionary back to DataFrame for further processing
+        data = pd.DataFrame(updated_data)
+        context['data_exists'] = True
+        context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
+    else:
+        context['data_exists'] = False
 
     if request.method == 'POST' and request.FILES.get('file'):
+        # If a new file is uploaded, process it and store it in session
         uploaded_file = request.FILES['file']
         try:
-            # Reading the uploaded file
-            
+            # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
 
-            # Store the  dataframe in the session
-            # request.session['updated_data'] = data.to_dict()
-            
-    
-           # Processing options
-            missing_value_strategy = request.POST.get('missing_value_strategy')
-            selected_columns = request.POST.getlist('feature_selection')
-            encoding_strategy = request.POST.get('encoding_strategy')
-            scaling_strategy = request.POST.get('scaling_strategy')
+            # Store the DataFrame in the session
+            request.session['updated_data'] = data.to_dict()
 
-            
+            context['data_exists'] = True
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
 
-            # Handling Missing Values in selected columns only
+        except Exception as e:
+            context['error'] = f"Error processing file: {e}"
+
+    elif request.method == 'POST' and updated_data:
+        # Retrieve existing dataset from session for further processing
+        data = pd.DataFrame(updated_data)
+
+        # Get the preprocessing options from the form
+        missing_value_strategy = request.POST.get('missing_value_strategy')
+        selected_columns = request.POST.getlist('feature_selection')
+        encoding_strategy = request.POST.get('encoding_strategy')
+        encoding_columns = request.POST.getlist('encoding_selection')
+        scaling_strategy = request.POST.get('scaling_strategy')
+
+        try:
+            # Handle missing values based on the strategy and selected columns
             if missing_value_strategy and selected_columns:
                 if missing_value_strategy == 'mean':
                     for col in selected_columns:
@@ -156,15 +169,16 @@ def preprocessing(request):
                 elif missing_value_strategy == 'drop':
                     data.dropna(subset=selected_columns, inplace=True)
 
-            # Feature Encoding
-            if encoding_strategy == 'onehot':
-                data = pd.get_dummies(data)
-            elif encoding_strategy == 'label':
+            # Handle encoding
+            if encoding_strategy == 'onehot' and encoding_columns:
+                data = pd.get_dummies(data, columns=encoding_columns)
+            elif encoding_strategy == 'label' and encoding_columns:
                 le = LabelEncoder()
-                for column in data.select_dtypes(include=['object']).columns:
-                    data[column] = le.fit_transform(data[column])
+                for col in encoding_columns:
+                    if data[col].dtype == 'object':  # Ensure column is categorical
+                        data[col] = le.fit_transform(data[col])
 
-            # Feature Scaling
+            # Handle scaling
             if scaling_strategy == 'standard':
                 scaler = StandardScaler()
                 data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
@@ -172,17 +186,23 @@ def preprocessing(request):
                 scaler = MinMaxScaler()
                 data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
 
-            # preview of the processed data
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
-            
-            
+            # Store the updated dataset back in session
+            request.session['updated_data'] = data.to_dict()
 
-            
+            # Show the updated data preview
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
 
         except Exception as e:
-            context['error'] = f"Error processing file: {e}"
-    
+            context['error'] = f"Error processing data: {e}"
+
     # No data in session, show upload form
     return render(request, 'main/preprocessing.html', context)
-    
 
+
+def clear_dataset(request):
+    # Clear the dataset from the session
+    if 'updated_data' in request.session:
+        del request.session['updated_data']
+    
+    # Redirect back to the preprocessing page
+    return redirect('preprocessing')

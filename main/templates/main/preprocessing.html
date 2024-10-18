@@ -4,21 +4,22 @@
 {% block body %}
     <h2 class="text-center my-4">Upload Your Dataset and Apply Preprocessing</h2>
     <!-- File Upload Form -->
+
     <div class="d-flex justify-content-center">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- upload dataset here  -->
             {% if data_exists %}
-
+            
+            
             {% else %}
             <div class="mb-3">
                 <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
             </div>
             {% endif %}
 
-
-
+            
             <!-- Preprocessing Options -->
             <div class="mb-3">
                 <label for="missing_value_strategy">Missing Value Strategy:</label>
@@ -30,13 +31,14 @@
                 </select>
             </div>
 
-            <!-- Dynamic Column Selection with Checkboxes -->
+            <!-- Column Selection for Missing Value Strategy -->
             <div class="mb-3">
                 <label id="colselect"></label>
                 <div id="feature_selection" class="form-check">
                     <!-- Checkboxes will be populated dynamically -->
                 </div>
             </div>
+        
 
             <div class="mb-3">
                 <label for="encoding_strategy">Encoding Strategy:</label>
@@ -45,6 +47,14 @@
                     <option value="onehot">One-Hot Encoding</option>
                     <option value="label">Label Encoding</option>
                 </select>
+            </div>
+
+            <!-- Column Selection for Encoding Strategy -->
+            <div class="mb-3">
+                <label id="enc_colselect"></label>
+                <div id="encoding_selection" class="form-check">
+                    <!-- Checkboxes for encoding selection will be populated dynamically -->
+                </div>
             </div>
 
             <div class="mb-3">
@@ -78,55 +88,108 @@
 
 {% block script %}
 <script>
-    document.getElementById('file').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            document.getElementById('heading').innerHTML = "Data Preview";
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const rows = text.split('\n');
-                const headers = rows[0].split(','); // Get the headers (first row)
+   document.getElementById('file').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('heading').innerHTML = "Data Preview";
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const rows = text.split('\n');
+            const headers = rows[0].split(','); // Get the headers (first row)
 
-                // Preview CSV in a table
-                let table = '<table class="table table-bordered table-hover table-striped">';
-                rows.forEach((row, index) => {
-                    const cells = row.split(',');
-                    let rowClass = '';
-                    if (cells.some(cell => cell.trim() === '')) {
-                        rowClass = 'bg-danger';
+            // Track columns that contain empty cells
+            let emptyColumns = new Array(headers.length).fill(false);
+
+            // Preview CSV in a table
+            let table = '<table class="table table-bordered table-hover table-striped">';
+
+            // Iterate over the rows
+            rows.forEach((row, rowIndex) => {
+                const cells = row.split(',');
+                let rowClass = '';
+
+                // Check if any cell in the row is empty and mark the row as dangerous
+                if (cells.some((cell, colIndex) => {
+                    if (cell.trim() === '') {
+                        emptyColumns[colIndex] = true; // Mark column as having an empty cell
+                        return true;
                     }
-                    table += `<tr class="${rowClass}">`;
-                    cells.forEach(cell => {
-                        if (index === 0) {
-                            table += `<th>${cell}</th>`;
-                        } else {
-                            table += `<td>${cell}</td>`;
-                        }
-                    });
-                    table += '</tr>';
-                });
-                table += '</table>';
-                document.getElementById('csv-preview-container').innerHTML = table;
+                    return false;
+                })) {
+                    rowClass = 'bg-danger'; // Mark row as dangerous
+                }
+                
 
-                // Populate the column selection with checkboxes
-                document.getElementById("colselect").innerHTML = "Select Columns for Missing Value Strategy";
-                const featureSelectionDiv = document.getElementById('feature_selection');
-                featureSelectionDiv.innerHTML = ''; // Clear previous checkboxes
-                headers.forEach(header => {
-                    const checkboxId = `column_${header.trim()}`;
-                    const checkbox = `
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="feature_selection" value="${header.trim()}" id="${checkboxId}">
-                            <label class="form-check-label" for="${checkboxId}">
-                                ${header.trim()}
-                            </label>
-                        </div>`;
-                    featureSelectionDiv.innerHTML += checkbox;
+                // Start creating the table rows
+                table += `<tr class="${rowClass}">`;
+                cells.forEach((cell, colIndex) => {
+                    if (rowIndex === 0) {
+                        // Highlight header if that column contains at least one empty cell
+                        let headerClass = emptyColumns[colIndex] ? 'bg-warning' : '';
+
+                        table += `<th class="" id="${colIndex}">${cell}</th>`;
+                    } else {
+                        table += `<td>${cell}</td>`;
+                    }
                 });
-            };
-            reader.readAsText(file);
-        }
-    });
+                table += '</tr>';
+            });
+
+            table += '</table>';
+            document.getElementById('csv-preview-container').innerHTML = table;
+            
+            // to highlight the column name as yellow
+            console.log(emptyColumns);
+            headers.forEach((header, colIndex) => {
+                if (emptyColumns[colIndex]) {
+                    console.log(colIndex);
+                    document.getElementById(colIndex).classList.add('bg-warning'); // Adjusted for numeric IDs
+                }
+            });
+            
+            
+            
+            
+            // Populate the column selection for missing value strategy
+            document.getElementById("colselect").innerHTML = "Select Columns for Missing Value Strategy";
+            const featureSelectionDiv = document.getElementById('feature_selection');
+            featureSelectionDiv.innerHTML = ''; // Clear previous checkboxes
+            headers.forEach((header, colIndex) => {
+                if (emptyColumns[colIndex]) {
+                const checkboxId = `column_${header.trim()}`;
+                const checkbox = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="feature_selection" value="${header.trim()}" id="${checkboxId}">
+                        <label class="form-check-label" for="${checkboxId}">
+                            ${header.trim()}
+                        </label>
+                    </div>`;
+                featureSelectionDiv.innerHTML += checkbox;
+                }
+            });
+
+
+            // Populate the column selection for encoding strategy
+            document.getElementById("enc_colselect").innerHTML = "Select Columns for Encoding Strategy";
+            const encodingSelectionDiv = document.getElementById('encoding_selection');
+            encodingSelectionDiv.innerHTML = ''; // Clear previous checkboxes
+            headers.forEach(header => {
+                const checkboxId = `enc_column_${header.trim()}`;
+                const checkbox = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="encoding_selection" value="${header.trim()}" id="${checkboxId}">
+                        <label class="form-check-label" for="${checkboxId}">
+                            ${header.trim()}
+                        </label>
+                    </div>`;
+                encodingSelectionDiv.innerHTML += checkbox;
+            });
+        };
+        reader.readAsText(file);
+    }
+});
+
+
 </script>
 {% endblock %}
