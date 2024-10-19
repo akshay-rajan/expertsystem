@@ -117,45 +117,24 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 def preprocessing(request):
     context = {}
 
-    # Retrieve updated data from session
-    updated_data = request.session.get('updated_data', None)
-
-    if updated_data is not None:
-        # Convert dictionary back to DataFrame for further processing
-        data = pd.DataFrame(updated_data)
-        context['data_exists'] = True
-        context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
-    else:
-        context['data_exists'] = False
 
     if request.method == 'POST' and request.FILES.get('file'):
-        # If a new file is uploaded, process it and store it in session
+        
         uploaded_file = request.FILES['file']
         try:
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
 
-            # Store the DataFrame in the session
-            request.session['updated_data'] = data.to_dict()
-
-            context['data_exists'] = True
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
-
-        except Exception as e:
-            context['error'] = f"Error processing file: {e}"
-
-    elif request.method == 'POST' and updated_data:
-        # Retrieve existing dataset from session for further processing
-        data = pd.DataFrame(updated_data)
+          
 
         # Get the preprocessing options from the form
-        missing_value_strategy = request.POST.get('missing_value_strategy')
-        selected_columns = request.POST.getlist('feature_selection')
-        encoding_strategy = request.POST.get('encoding_strategy')
-        encoding_columns = request.POST.getlist('encoding_selection')
-        scaling_strategy = request.POST.get('scaling_strategy')
+            missing_value_strategy = request.POST.get('missing_value_strategy')
+            selected_columns = request.POST.getlist('feature_selection')
+            encoding_strategy = request.POST.get('encoding_strategy')
+            encoding_columns = request.POST.getlist('encoding_selection')
+            scaling_strategy = request.POST.get('scaling_strategy')
 
-        try:
+            
             # Handle missing values based on the strategy and selected columns
             if missing_value_strategy and selected_columns:
                 if missing_value_strategy == 'mean':
@@ -189,6 +168,8 @@ def preprocessing(request):
             # Store the updated dataset back in session
             request.session['updated_data'] = data.to_dict()
 
+            
+
             # Show the updated data preview
             context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
 
@@ -199,10 +180,4 @@ def preprocessing(request):
     return render(request, 'main/preprocessing.html', context)
 
 
-def clear_dataset(request):
-    # Clear the dataset from the session
-    if 'updated_data' in request.session:
-        del request.session['updated_data']
-    
-    # Redirect back to the preprocessing page
-    return redirect('preprocessing')
+

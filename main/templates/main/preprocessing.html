@@ -9,16 +9,10 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- upload dataset here  -->
-            {% if data_exists %}
-            
-            
-            {% else %}
+            <!-- upload dataset here  -->                                
             <div class="mb-3">
                 <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
             </div>
-            {% endif %}
-
             
             <!-- Preprocessing Options -->
             <div class="mb-3">
