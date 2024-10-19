@@ -1,110 +1,96 @@
 # EXPERT SYSTEM
 
-### *Abstract*
 
 Machine Learning is a vast and complex field that requires a lot of dedication and time to master. 
-It is a field where the knowledge of programming languages is essential to implement the algorithms and models. 
-But what if we could remove this constraint and allow the users to build models without any coding knowledge? This is where Expert System comes into play. 
+However, the complexity of ML algorithms and the necessity for programming skills create
+significant barriers for individuals who wish to leverage ML for their projects or research. 
+But what if we could remove this constraint and allow the users to build models without any coding knowledge?
 
-Expert System is a platform that allows users to build, train, and test Machine Learning Models without the need for programming languages. 
-It provides a user-friendly interface where users can input their data, select the algorithm, and train the model with a click of a button. 
+**Expert System** is a platform that allows users to build, train, and test Machine Learning Models without the need for programming languages. 
+
+It provides a user-friendly interface where users can:
+
+1. Upload the data
+2. Clean and process it
+3. Select an algorithm
+4. Train the model
+5. Perform evaluations and predictions
+
+in just a few clicks.
+
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
-It aims to democratize Machine Learning and make it easier for people to build and deploy models for their use cases. 
-Expert System is built on the principles of simplicity, accessibility, and ease of use. 
 
 With Expert System, Machine Learning is no longer limited to programmers and data scientists. 
 It is open to everyone who wants to harness the power of data and build intelligent systems.
 
-### *Development* 
+### Design
 
-![alt-text](./others/es_flow.png)
+```mermaid
+flowchart LR
+    A(Start) --> B[Select Algorithm]
+    B --> C1[Classification]
+    B --> C2[Regression]
+    B --> C3[Clustering]
 
-<div style="border: 1px solid red;padding: 15px;">
-Status: Linear Regression implemented.
-</div>
+    C1 --> D0[KNN]
+    C1 --> D1[Logistic Regression]
+    C1 --> D2[Naive Bayes]
+    C1 --> D3[SVM]
+    C1 --> D4[Decision Tree]
+    C1 --> D5[Random Forest]
 
-#### Design
+    C2 --> D6[Linear Regression]
+    C2 --> D7[Lasso Regression]
+    C2 --> D8[Ridge Regression]
+    C2 --> D9[Decision Tree]
+    C2 --> D10[Random Forest]
 
-- `home` page should contain a list of Machine Learning models for the user to choose from.
-- When a user chooses a model, they should be redirected to `model` page for that particular ML model. 
-- Each `model` page must contain fields for user to upload the **Train Set** as well as the **Test Set**.
-- Also add fields for additional user inputs based on the model.
-- **Data Visualization**: (Optional) the properties of the data is graphically displayed.
-- **Data Preprocessing**: the dataset should undergo multiple checks and processing.
-- (Optional) Logs regarding the above computations may be displayed.
-- The user faces an error, in case an incompatibility occurs between the data, input and the model. Otherwise, the model is displayed.
-- The trained model is evaluated and the results are displayed to the user according to the model and problem type (classification / regression / clustering).
+    C3 --> D11[K Means]
+    C3 --> D12[Hierarchical]
 
-#### 1. First Algorithm
+    D0 --> E(Upload Data)
+    D1 --> E(Upload Data)
+    D2 --> E(Upload Data)
+    D3 --> E(Upload Data)
+    D4 --> E(Upload Data)
+    D5 --> E(Upload Data)
+    D6 --> E(Upload Data)
+    D7 --> E(Upload Data)
+    D8 --> E(Upload Data)
+    D9 --> E(Upload Data)
+    D10 --> E(Upload Data)
+    D11 --> E(Upload Data)
+    D12 --> E(Upload Data)
 
-- `Home` page contains a link to `Classification` ✅️
-- `Classification` contains a link to `LinearRegression` ✅️
-- In `LinearRegression`, there are fields to upload the `train set` and `test set`.
-- After submitting the form, it would take us to the next page `Results`. ✅️
-- This page should display the results obtained after processing the data and building the model. ✅️
-- The page can contain 
-    - Actual vs Predicted values ✅️
-    - confusion matrix
-    - f1_score 
-    - accuracy ✅️
-    - precision
-    - recall etc.
-
-#### 2. Growth 
-
-#### 3. Final Stage
+    E --> F(Feature Selection)
+    F --> G(Hyperparameter Selection)
+    G --> H(Modelling)
+    H --> I(Evaluation)
+    H --> J(Prediction)
+    I --> K(End)
+    J --> K(End)
+```
 
 
 ### *Technologies*
 
-1. *Django*: The web interface is built using Django, popular web framework.
-3. *Scikit-learn*: Expert System leverages Scikit-learn, a popular Machine Learning library in Python, to implement the algorithms and models.
-4. *Pandas*, *Numpy*: Powerful data manipulation libraries in Python, to handle the input data.
-5. *Matplotlib*: A popular plotting library in Python, to visualize the data and results.
+1. *Django*
+2. *d3.js*
+3. *Scikit-learn*
+4. *Matplotlib*, *Pandas*, *Numpy* etc.
 
 ### CI/CD Pipeline
 
 Github Actions is used to automate the developer workflow:
 **Development**, **Testing**, **Build** and **Deployment**.
 
-![alt](./others/Workflow.jpeg)
+![alt](./others/Workflow.png)
 
-> Github Actions **Listen** to Github **Events**, such as a PR, Contributor addition etc.
-> The Event **Triggers a Workflow**, which contain **Actions**, for example Sorting, Labelling, Assignment to someone etc.
+[django.yml](.github/workflows/django.yml)
 
-```yml
-name: Django CI
-
-# Github Events that triggers the workflow
-on: 
-  push:
-    branches: [ "main" ] 
-  pull_request:
-    branches: [ "main" ] # Any push / pull request to main branch
-
-jobs: # A group of Actions
-  build: # Name of the job
-
-    runs-on: ubuntu-latest # OS
-    strategy:
-      max-parallel: 4
-      matrix: # To use mulitple versions of python
-        python-version: [3.9]
-
-    steps: # Run commands / setup tasks / actions
-    - uses: actions/checkout@v4 # Use 'checkout' action from github
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: | # Run the commands
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: | # Test the code
-        python manage.py test
-```
+<!-- > Github Actions **Listen** to Github **Events**, such as a PR, Contributor addition etc. -->
+<!-- > The Event **Triggers a Workflow**, which contain **Actions**, for example Sorting, Labelling, Assignment to someone etc. -->
+<!-- [django.yml](.github/workflows/django.yml) -->
 
 ### *Usage*
 
@@ -133,7 +119,7 @@ Start the Django server:
 ```bash
 python manage.py runserver
 ```
-The application is now available at http://127.0.0.1:8000/ .
+The server will start at http://127.0.0.1:8000/ .
 
 
 ---
