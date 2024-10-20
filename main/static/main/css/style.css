@@ -1,6 +1,6 @@
 :root {
   --primary-color: #ffffff;
-  --secondary-color: #5dc6e6;
+  --secondary-color: rgb(0, 150, 255);
   --dark-color: #1a2e35;
 }
 
@@ -208,7 +208,7 @@ a:focus {
 
 .navbar-brand img {
   width: 250px;
-  height: 100px;
+  height: 50px;
   margin-right: 5px;
 }
 
