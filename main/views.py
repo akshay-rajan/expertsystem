@@ -1,3 +1,4 @@
+import csv
 import os
 import uuid
 import pickle
@@ -179,5 +180,28 @@ def preprocessing(request):
     # No data in session, show upload form
     return render(request, 'main/preprocessing.html', context)
 
+def download_csv(request):
+    data_dict=request.session.get('updated_data',None)
+    if data_dict:
+        # Convert the dictionary back to a DataFrame
+        data = pd.DataFrame.from_dict(data_dict)
 
+        # Create the HttpResponse object with the appropriate CSV header
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="updated_data.csv"'
+
+        # Create a CSV writer
+        writer = csv.writer(response)
+
+        # Write the headers (columns) of your CSV file
+        writer.writerow(data.columns)
+
+        # Write the data rows
+        for index, row in data.iterrows():
+            writer.writerow(row)
+
+        return response
+    else:
+        # Handle case where session data is not available
+        return HttpResponse("No data available", status=400)
 
