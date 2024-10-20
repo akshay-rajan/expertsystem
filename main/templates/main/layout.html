@@ -32,9 +32,9 @@
               Algorithms
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for algo in algorithms %}
-                <a class="dropdown-item" href="{% url algo.url %}">{{ algo.name }}</a>
-              {% endfor %}
+              <a class="dropdown-item" href="{% url 'classification' %}">Classification</a>
+              <a class="dropdown-item" href="{% url 'regression' %}">Regression</a>
+              <a class="dropdown-item" href="{% url 'clustering' %}">Clustering</a>
             </div>
           </li>
           <li class="nav-item">
