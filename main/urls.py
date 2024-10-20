@@ -11,8 +11,12 @@ urlpatterns = [
     path('linear_regression/', views.linear_regression, name='linear_regression'),
     path('samples', views.samples, name='samples'),
     path('preprocessing', views.preprocessing, name='preprocessing'),
-    
+    path('preprocessing/fill-missing/', views.fill_missing_values, name='fill_missing'),
+    path('preprocessing/encoding/', views.encoding, name='encoding'),
+    path('preprocessing/scaling/', views.scaling, name='scaling'),
+
     path('download_csv/', views.download_csv, name='download_csv'),
+    
 
 ]
 

@@ -114,71 +114,104 @@ def samples(request):
 # Preprocessing part ->Deepu
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from django.http import JsonResponse
+
+def fill_missing_values(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        missing_value_strategy = request.POST.get('strategy')
+        selected_columns = request.POST.getlist('columns[]')
+
+        # Apply missing value handling logic
+        if missing_value_strategy and selected_columns:
+            for col in selected_columns:
+                if data[col].dtype != 'object':  # Ensure column is numerical
+                    if missing_value_strategy == 'mean':
+                        data[col].fillna(data[col].mean(), inplace=True)
+                    elif missing_value_strategy == 'median':
+                        data[col].fillna(data[col].median(), inplace=True)
+                    elif missing_value_strategy == 'drop':
+                        data.dropna(subset=selected_columns, inplace=True)
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+    
+def encoding(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        encoding_strategy = request.POST.get('encoding_strategy')
+        encoding_columns = request.POST.getlist('encoding_selection')
+
+        # Apply missing value handling logic
+        if encoding_strategy == 'onehot' and encoding_columns:
+                data = pd.get_dummies(data, columns=encoding_columns)
+        elif encoding_strategy == 'label' and encoding_columns:
+            le = LabelEncoder()
+            for col in encoding_columns:
+                if data[col].dtype == 'object':  # Ensure column is categorical
+                    data[col] = le.fit_transform(data[col])
+
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+ 
+  
+def scaling(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        scaling_strategy = request.POST.get('scaling_strategy')
+
+        if scaling_strategy == 'standard':
+            scaler = StandardScaler()
+            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+        elif scaling_strategy == 'normalize':
+            scaler = MinMaxScaler()
+            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+ 
 
 def preprocessing(request):
     context = {}
 
-
     if request.method == 'POST' and request.FILES.get('file'):
-        
         uploaded_file = request.FILES['file']
         try:
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
 
-          
-
-        # Get the preprocessing options from the form
-            missing_value_strategy = request.POST.get('missing_value_strategy')
-            selected_columns = request.POST.getlist('feature_selection')
-            encoding_strategy = request.POST.get('encoding_strategy')
-            encoding_columns = request.POST.getlist('encoding_selection')
-            scaling_strategy = request.POST.get('scaling_strategy')
-
-            
-            # Handle missing values based on the strategy and selected columns
-            if missing_value_strategy and selected_columns:
-                if missing_value_strategy == 'mean':
-                    for col in selected_columns:
-                        if data[col].dtype != 'object':  # Ensure column is numerical
-                            data[col].fillna(data[col].mean(), inplace=True)
-                elif missing_value_strategy == 'median':
-                    for col in selected_columns:
-                        if data[col].dtype != 'object':  # Ensure column is numerical
-                            data[col].fillna(data[col].median(), inplace=True)
-                elif missing_value_strategy == 'drop':
-                    data.dropna(subset=selected_columns, inplace=True)
-
-            # Handle encoding
-            if encoding_strategy == 'onehot' and encoding_columns:
-                data = pd.get_dummies(data, columns=encoding_columns)
-            elif encoding_strategy == 'label' and encoding_columns:
-                le = LabelEncoder()
-                for col in encoding_columns:
-                    if data[col].dtype == 'object':  # Ensure column is categorical
-                        data[col] = le.fit_transform(data[col])
-
-            # Handle scaling
-            if scaling_strategy == 'standard':
-                scaler = StandardScaler()
-                data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-            elif scaling_strategy == 'normalize':
-                scaler = MinMaxScaler()
-                data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-
-            # Store the updated dataset back in session
+            # Store the initial dataset in the session
             request.session['updated_data'] = data.to_dict()
 
-            
-
-            # Show the updated data preview
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover table-striped', index=False)
+            # Prepare the data preview for rendering
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
+            context['headers'] = data.columns.tolist()  # Store headers for use in the template
 
         except Exception as e:
             context['error'] = f"Error processing data: {e}"
 
-    # No data in session, show upload form
     return render(request, 'main/preprocessing.html', context)
+
+
 
 def download_csv(request):
     data_dict=request.session.get('updated_data',None)

@@ -31,6 +31,7 @@
                 <div id="feature_selection" class="form-check">
                     <!-- Checkboxes will be populated dynamically -->
                 </div>
+                <button type="button" class="btn btn-primary" id="missing_value_strategybtn">Apply</button>
             </div>
         
 
@@ -49,6 +50,8 @@
                 <div id="encoding_selection" class="form-check">
                     <!-- Checkboxes for encoding selection will be populated dynamically -->
                 </div>
+                <button type="button" class="btn btn-primary" id="encoding_strategybtn">Apply</button>
+
             </div>
 
             <div class="mb-3">
@@ -59,8 +62,9 @@
                     <option value="normalize">Normalization</option>
                 </select>
             </div>
-
-            <button type="submit" class="btn btn-primary">Upload and Process</button>
+            <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
+            
+            <!-- <button type="submit" class="btn btn-primary">Upload and Process</button> -->
         </form>
     </div>
     
@@ -84,7 +88,9 @@
 
 {% block script %}
 <script>
-   document.getElementById('file').addEventListener('change', function(e) {
+    document.getElementById('file').addEventListener('change',preview_data);
+    function preview_data(e){
+
     const file = e.target.files[0];
     if (file) {
         document.getElementById('heading').innerHTML = "Data Preview";
@@ -184,7 +190,130 @@
         };
         reader.readAsText(file);
     }
-});
+}
+function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+function applyMissingValueStrategy() {
+    const strategy = document.getElementById("missing_value_strategy").value;
+    const selectedColumns = Array.from(document.querySelectorAll('input[name="feature_selection"]:checked'))
+        .map(input => input.value);
+    console.log(strategy);
+    console.log(selectedColumns);
+
+    fetch('/preprocessing/fill-missing/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+        },
+        body: JSON.stringify({
+            strategy: strategy,
+            columns: selectedColumns
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            // Update the dataset preview
+            document.getElementById('csv-preview-container').innerHTML = data.data_preview;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Call this function when the user applies the missing value strategy
+document.getElementById('missing_value_strategybtn').addEventListener('click', applyMissingValueStrategy);
+
+
+//Encoding strategy
+function encoding() {
+    const strategy = document.getElementById("encoding_strategy").value;
+    const selectedColumns = Array.from(document.querySelectorAll('input[name="encoding_selection"]:checked'))
+        .map(input => input.value);
+
+    
+
+
+    fetch('/preprocessing/encoding/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+        },
+        body: JSON.stringify({
+            strategy: strategy,
+            columns: selectedColumns
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            // Update the dataset preview
+            document.getElementById('csv-preview-container').innerHTML = data.data_preview;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Call this function when the user applies the encoding strategy
+document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
+
+
+//scaling strategy
+
+function applyScalingStrategy() {
+    const scalingStrategy = document.getElementById("scaling_strategy").value;
+
+    fetch('/preprocessing/scaling/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+        },
+        body: JSON.stringify({
+            strategy: scalingStrategy
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            // Update the dataset preview with the scaled data
+            document.getElementById('csv-preview-container').innerHTML = data.data_preview;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Call this function when the user applies the scaling strategy
+document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
+
+
+
 
 
 </script>
