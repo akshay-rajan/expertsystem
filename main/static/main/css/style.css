@@ -83,6 +83,14 @@ body {
   top: calc(200px + 10px); /* Place at the junction (height of the first div + half the margin) */
 }
 
+.div-4 {
+  font-size: 18px;
+}
+.div-4 p {
+  width: 50%;
+  color: rgba(0, 0, 0, 0.7);
+}
+
 @media screen and (max-width: 600px) {
   #home {
     height: 120vh;
@@ -94,6 +102,13 @@ body {
     margin-top: 75vh;
     left: 50%;
     transform: translateX(-50%);
+  }
+  .div-4 h2 {
+    text-align: center;
+    font-size: 40px;
+  }
+  .div-4 p {
+    width: 100%;
   }
 }
 
