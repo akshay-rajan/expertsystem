@@ -1,7 +1,7 @@
 :root {
   --primary-color: #ffffff;
   --secondary-color: rgb(0, 150, 255);
-  --dark-color: rgb(0, 26, 255);
+  --dark-color: rgb(0, 10, 102);
 }
 
 body {
@@ -18,7 +18,7 @@ body {
   color: var(--secondary-color)!important;
 }
 
-.fade-in, .fade-in-2 {
+.fade-in, .fade-in-2, .fade-in-3 {
   display: none;
 }
 
@@ -31,25 +31,33 @@ body {
 
 /* ! Home */
 #home {
-  height: 85vh;
+  height: 150vh;
   background-color: var(--secondary-color)!important;
   padding: 0;
   margin: 0;
 }
 #home h1 {
-  font-size: 150px;
+  margin-top: 25vh;
+  font-size: 50px;
 }
 #home span {
-  font-size: 40px;
+  font-size: 30px;
 }
 #home a {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  background-color: var(--secondary-color);
+  width: 200px;
+  text-align: center;
+  padding: 4px 0px;
+  margin-top: 25px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 55px;
+  text-decoration: none;
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  transition: all 0.5s;
 }
 #home a:hover {
-  background-color: var(--primary-color)!important;
-  color: var(--secondary-color)!important;
+  background-color: var(--dark-color)!important;
+  color: var(--primary-color)!important;
 }
 #home a:focus {
   outline: none;
@@ -215,6 +223,13 @@ a:focus {
   height: 50px;
   margin-right: 5px;
   margin-top: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-brand img {
+    width: 220px;
+    height: 35px;
+  }  
 }
 
 .navbar-brand span {

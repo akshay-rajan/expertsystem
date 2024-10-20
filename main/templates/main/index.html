@@ -17,12 +17,14 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
     <a class="navbar-brand" href="{% url 'index' %}">
-      <h1 class="display-4"><img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top"></h1>
+      <h1 class="display-4 d-flex justify-content-center align-items-center">
+        <img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top">
+      </h1>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse mr-2" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'index' %}">Home</a>
@@ -44,23 +46,24 @@
     </div>
   </nav>
 
-  <div class="first d-flex justify-content-center align-items-center" id="home">
-    <div class="text-align-center">
-      <h1 class="display-1 text-white font-weight-bold fade-in">
-        EXPERT SYSTEM
+  <div class="first d-flex flex-wrap justify-content-center" id="home">
+    <div class="text-align-center m-3">
+      <h1 class="text-white font-weight-bold fade-in">
+        Learn. Build. Evaluate.
       </h1>
-      <span class="d-flex justify-content-center text-uppercase text-white">
+      <span class="d-flex justify-content-center text-white">
         <div class="fade-in-2">
-          Build an entire Machine Learning Pipeline in minutes.
+          Build an entire Machine Learning Pipeline in a few clicks.
         </div>
       </span>
-      <div class="d-flex justify-content-center">
-        <a href="#get-started" class="btn btn-lg text-white mt-4">
-          Get Started!
-        </a>
+      <div class="fade-in-3">
+        <div class="d-flex">
+          <a href="#get-started" class="home-btn mr-2">Get Started!</a>
+        </div>
       </div>
     </div>
   </div>  
+  
   <div class="second d-flex p-4" id="get-started">
 
     <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between w-100">
@@ -145,6 +148,7 @@
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
       $('.fade-in-2').fadeIn(1000);
+      $('.fade-in-3').fadeIn(1300);
     });
     
     $(document).ready(function(){
