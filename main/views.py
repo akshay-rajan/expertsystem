@@ -28,7 +28,22 @@ from .utils import construct_line, serialize, regression_evaluation, classificat
 
 
 def index(request):
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', {
+        "algorithms": [
+            {
+                'name': 'Classification', 
+                'url': 'classification',
+            },
+            {
+                'name': 'Regression', 
+                'url': 'regression',
+            },
+            {
+                'name': 'Clustering', 
+                'url': 'clustering',
+            },
+        ]
+    })
 
 def classification(request):
     return render(request, 'main/algorithms.html', {

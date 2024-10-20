@@ -1,7 +1,7 @@
 :root {
   --primary-color: #ffffff;
   --secondary-color: rgb(0, 150, 255);
-  --dark-color: #1a2e35;
+  --dark-color: rgb(0, 26, 255);
 }
 
 body {
@@ -196,6 +196,10 @@ a:focus {
   padding-top: 7px;
 }
 
+.navbar {
+  padding: 5px 5px 0 10px!important;
+}
+
 .navbar-brand {
   margin-right: 5%;
   display: -webkit-box;
@@ -207,9 +211,10 @@ a:focus {
 }
 
 .navbar-brand img {
-  width: 250px;
+  width: 275px;
   height: 50px;
   margin-right: 5px;
+  margin-top: 5px;
 }
 
 .navbar-brand span {
