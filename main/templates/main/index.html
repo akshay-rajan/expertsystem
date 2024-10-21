@@ -159,39 +159,78 @@
     </div>
   </div>
   
-  <div class="third d-flex" id="select-category">
-
-    <div class="left w-50 d-flex align-items-center">
-      <div class="d-flex flex-column p-2">
-        <h2 class="display-2 text-white m-4 mb-0">SELECT CATEGORY</h2>
-        <div class="display-4 text-gray m-3 ml-4 mt-0">
-          OF THE MACHINE LEARNING ALGORITHM.
-        </div>
+  <div class="third d-flex flex-column justify-content-center" id="select-category">
+    <div class="m-2 mb-4 p-2">
+      <div class="d-flex justify-content-center">
+        <h2 class="display-4 mb-4">Select a Category</h2>
+      </div>
+      <div class="d-flex justify-content-center">
+        <p class="text-center subtitle">
+          Pick the category of algorithms that best describes your problem.
+        </p>
       </div>
     </div>
 
-    <div class="right w-50 bg-light d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="">
+        <div class="d-flex justify-content-center flex-wrap">
 
-      <div class="d-block w-100">
-        <ul class="list-group">
-          <a href={% url 'classification' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Classification
-            </li>
-          </a>
-          <a href={% url 'regression' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Regression
-            </li>
-          </a>
-          <a href={% url 'clustering' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Clustering
-            </li>
-          </a>
-        </ul>
+          <div class="card m-2 bg-light" style="width: 18rem;">
+            <div class="card-body d-flex flex-column align-items-start">
+              <div class="start">
+                <h5 class="card-title">Classification</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Supervised Learning Algorithm</h6>
+                <p class="line"></p>
+              </div>
+              <div class="mid">
+                <p class="card-text">
+                  Classify data points into categories based on their features.
+                </p>
+              </div>
+              <div class="last mt-auto">
+                <a href={% url 'classification' %} class="">Go →</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card m-2 bg-light" style="width: 18rem;">
+            <div class="card-body d-flex flex-column align-items-start">
+              <div class="start">
+                <h5 class="card-title">Regression</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Supervised Learning Algorithm</h6>
+                <p class="line"></p>
+              </div>
+              <div class="mid">
+                <p class="card-text">
+                  Predict a continuous value based on the input features.
+                </p>
+              </div>
+              <div class="last mt-auto">
+                <a href={% url 'regression' %} class="">Go →</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card m-2 bg-light" style="width: 18rem;">
+            <div class="card-body d-flex flex-column align-items-start">
+              <div class="start">
+                <h5 class="card-title">Clustering</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Unsupervised Learning Algorithm</h6>
+                <p class="line"></p>
+              </div>
+              <div class="mid">
+                <p class="card-text">
+                  Group similar data points together based on their features.
+                </p>
+              </div>
+              <div class="last mt-auto">
+                <a href={% url 'clustering' %} class="">Go →</a>
+              </div>
+            </div>
+          </div>
+          
+        </div>
       </div>
-
     </div>
 
   </div>
