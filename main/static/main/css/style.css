@@ -8,7 +8,7 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #0c0c0c;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden!important;
 }
 
 .page {
@@ -28,7 +28,6 @@ body {
   box-shadow: none;
   -webkit-box-shadow: none!important;
 }
-
 
 /* ! Home */
 #home {
@@ -203,10 +202,23 @@ body {
 }
 
 .feature-card-img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
 }
 
+@media screen and (max-width: 600px) {
+  #get-started {
+    padding: 10px!important;
+  }
+  #get-started > div {
+    margin: 10px!important;
+    padding: 10px!important;
+    width: 95%!important;
+  }
+  .feature-card-img {
+    display: none!important;
+  }
+}
 
 /* ! Input form */
 .loader {
