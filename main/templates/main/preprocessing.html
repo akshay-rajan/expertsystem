@@ -92,6 +92,35 @@
     function preview_data(e){
 
     const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+
+    fetch('/preprocessing', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'), // Use a helper function to get CSRF token
+        },
+    })
+    .then(response => {
+    console.log(response); // Check the entire response object
+    return response.json();
+})
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            // Update the dataset preview with the scaled data
+            document.getElementById('csv-preview-container').innerHTML = data.data_preview;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+
+
     if (file) {
         document.getElementById('heading').innerHTML = "Data Preview";
         const reader = new FileReader();
