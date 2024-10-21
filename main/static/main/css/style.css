@@ -128,11 +128,15 @@ body {
 
 
 #get-started {
-  height: 100vh;
-  background-color: var(--primary-color)!important;
   padding: 15vh!important;
-  margin: 0;
 }
+#get-started > div {
+  color: var(--primary-color)!important;
+  background-color: var(--secondary-color)!important;  
+  padding: 20px;
+  border-radius: 10px;
+}
+
 .start-card {
   min-width: 30vw;
 }
@@ -156,6 +160,53 @@ body {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+#get-started h5 {
+  color: var(--primary-color);
+  font-size: 40px;
+}
+
+#get-started button {
+  font-size: 18px;
+  font-weight: bold;
+  width: 200px;
+  text-align: center;
+  padding: 4px 0px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 55px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-align: left;
+  margin-left: 10px;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+  transition: all 0.5s;
+}
+#get-started button:disabled {
+  color: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+#get-started button:hover {
+  border: none;
+  text-decoration-color: var(--dark-color)!important;
+  margin-left: 15px;
+  color: var(--dark-color)!important;
+}
+#get-started button:disabled:hover {
+  border: none;
+  text-decoration: none;
+  color: var(--secondary-color)!important;
+}
+#get-started button:focus {
+  outline: none;
+}
+
+.feature-card-img {
+  width: 80px;
+  height: 80px;
+}
+
 
 /* ! Input form */
 .loader {

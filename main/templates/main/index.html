@@ -67,7 +67,7 @@
 
   <div class="div-2"></div>
 
-  <div class="div-3">
+  <div class="div-3 fade-in-2">
     <img src={% static 'main/img/thumbnail.png' %} alt="" class="thumbnail-img">
   </div>
 
@@ -118,45 +118,43 @@
     </div>
   </div>
 
-  <div class="second d-flex p-4" id="get-started">
-
-    <div class="card m-3 fade-in-card d-flex flex-column justify-content-between w-100">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+  <div class="second p-4" id="get-started">
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left  p-4">
         <h5 class="card-title">Introduction</h5>
-        <p class="card-text">Learn the basics of Machine Learning and how to use Expert System.</p>
-        <button disabled class="btn btn-block">
-          Coming soon!
-        </button>
+        <p class="card-text">Learn Machine Learning from scratch, from preprocessing to deployment.</p>
+        <button disabled>Coming soon!</button>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center" style="height: 100%; width: 30%;">
+        <img src="{% static 'main/img/learn.png' %}" class="feature-card-img" alt="Learn">
       </div>
     </div>
-    
-    <div class="card m-3 fade-in-card start-card w-100" style="">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+  
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
         <h5 class="card-title">Start</h5>
         <p class="card-text">Pick an algorithm and start building ML Models.</p>
-        <a href="#select-category" class="btn btn-block">Go!</a>
+        <a href="#select-category">
+          <button>
+            Start Building →
+          </button>
+        </a>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center" style="height: 100%; width: 30%;">
+        <img src="{% static 'main/img/ml.png' %}" class="feature-card-img" alt="Learn">
       </div>
     </div>
-
-    <div class="card m-3 fade-in-card start-card w-100" style="">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
+  
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4 flex-grow-1">
         <h5 class="card-title">Advanced Features</h5>
         <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
-        <button disabled class="btn btn-block">
-          Coming soon!
-        </button>
+        <button disabled>Coming soon!</button>
+      </div>
+      <div class="card-img-top p-4 d-flex justify-content-center align-items-center w-30 h-100" style="height: 100%; width: 30%;">
+        <img src="{% static 'main/img/adv.png' %}" class="feature-card-img" alt="Learn">
       </div>
     </div>
-    
   </div>
   
   <div class="third d-flex" id="select-category">
