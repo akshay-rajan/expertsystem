@@ -192,26 +192,28 @@
         </div>
         
         <div class="card m-2 bg-light category-card" style="width: 18rem;">
-            <div class="card-body d-flex flex-column align-items-start">
-                <div class="start">
-                    <div class="d-flex">
-                        <img src="{% static 'main/img/regression.png' %}" alt="" class="category-logo mr-2">
-                        <div>
-                            <h5 class="card-title">Regression</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
-                        </div>
+          <div class="card-body d-flex flex-column align-items-start">
+            <div class="start">
+                <div class="d-flex">
+                    <img src="{% static 'main/img/regression.png' %}" alt="" class="category-logo mr-2">
+                    <div>
+                        <h5 class="card-title">Regression</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
                     </div>
-                    <p class="line"></p>
                 </div>
-                <div class="mid">
-                    <p class="card-text">
-                        Predict a continuous numerical value.
-                    </p>
-                </div>
-                <div class="last mt-auto">
-                    <a href={% url 'regression' %} class="">Go →</a>
-                </div>
+                <p class="line"></p>
             </div>
+            <div class="mid">
+                <p class="card-text">
+                    Predict a continuous numerical value.
+                </p>
+            </div>
+            <div class="last mt-auto">
+              <a href={% url 'regression' %} class="">
+                Go →
+              </a>
+            </div>
+          </div>
         </div>
         
         <div class="card m-2 bg-light category-card" style="width: 18rem;">
