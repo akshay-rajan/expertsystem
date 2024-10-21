@@ -91,6 +91,20 @@ body {
   color: rgba(0, 0, 0, 0.7);
 }
 
+.div-3 img {
+  width: 1000px;
+  border-radius: 20px;
+  box-shadow: -5px 10px 10px rgba(0, 0, 0, 0.3);
+}
+
+.div-5 {
+  min-height: 30vh;
+}
+
+.div-5 p {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 @media screen and (max-width: 600px) {
   #home {
     height: 120vh;
@@ -112,14 +126,9 @@ body {
   }
 }
 
-.div-3 img {
-  width: 1000px;
-  border-radius: 20px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
-}
 
 #get-started {
-  height: 90vh;
+  height: 100vh;
   background-color: var(--primary-color)!important;
   padding: 15vh!important;
   margin: 0;

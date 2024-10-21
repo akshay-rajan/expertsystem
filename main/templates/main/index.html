@@ -82,63 +82,76 @@
     </div>
   </div>
 
-  <div class="div-5 mt-4">
-    <div class="d-flex justify-content-center flex-wrap">
-      <div class="card m-3 fade-in-card" style="width: 18rem;">
+  <div class="div-5 mt-4 mb-4 p-4 bg-light text-left">
+    <div class="d-flex justify-content-center flex-wrap m-4">
+      
+      <div class="m-3 d-flex justify-content-center" style="width: 20rem;">
         <div class="card-body">
-          <h5 class="card-title">Process the Data</h5>
-          <p class="card-text">Fix problems with data</p>
+          <h4 class="card-title">Process Data</h4>
+          <p class="card-text">
+            Clean, transform and prepare your data to make it suitable for modelling.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
         </div>
       </div>
-      <div class="card m-3 fade-in-card" style="width: 18rem;">
+
+      <div class="m-3 fade-in-card" style="width: 20rem;">
         <div class="card-body">
-          <h5 class="card-title">Build Model</h5>
-          <p class="card-text">Generate model</p>
+          <h4 class="card-title">Build Model</h4>
+          <p class="card-text">
+            Choose the best algorithm for your task and teach it to recognize patterns in your data.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
         </div>
       </div>
-      <div class="card m-3 fade-in-card" style="width: 18rem;">
+
+      <div class="m-3 fade-in-card" style="width: 20rem;">
         <div class="card-body">
-          <h5 class="card-title">Evaluate and Predict</h5>
-          <p class="card-text">Analyze the performance of the model and make predictions with it</p>
+          <h4 class="card-title">Evaluate & Predict</h4>
+          <p class="card-text">
+            Assess the performance of the trained model using various metrics. Apply the model to make predictions.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
         </div>
       </div>
+
     </div>
   </div>
 
   <div class="second d-flex p-4" id="get-started">
 
-    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between w-100">
+    <div class="card m-3 fade-in-card d-flex flex-column justify-content-between w-100">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
       </div>
       <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
         <h5 class="card-title">Introduction</h5>
         <p class="card-text">Learn the basics of Machine Learning and how to use Expert System.</p>
-        <button disabled class="btn btn-info btn-block">
+        <button disabled class="btn btn-block">
           Coming soon!
         </button>
       </div>
     </div>
     
-    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
+    <div class="card m-3 fade-in-card start-card w-100" style="">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
       </div>
       <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
         <h5 class="card-title">Start</h5>
         <p class="card-text">Pick an algorithm and start building ML Models.</p>
-        <a href="#select-category" class="btn btn-info btn-block">Go!</a>
+        <a href="#select-category" class="btn btn-block">Go!</a>
       </div>
     </div>
 
-    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
+    <div class="card m-3 fade-in-card start-card w-100" style="">
       <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
         <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
       </div>
       <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
         <h5 class="card-title">Advanced Features</h5>
         <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
-        <button disabled class="btn btn-info btn-block">
+        <button disabled class="btn btn-block">
           Coming soon!
         </button>
       </div>
