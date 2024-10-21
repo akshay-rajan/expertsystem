@@ -7,7 +7,7 @@
 <div class="fade-in">
   <h1 class="display-3 title">Results</h1>
   <div id="line">
-    <div class="line d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
       <h4 class="display-6 p-3">
         {{ line }}
       </h4>
@@ -89,7 +89,7 @@
         </table>
         <div class="d-flex justify-content-end mt-4 mb-4">
           <a href="{{ download }}" class="link">
-            <button class="btn btn-info btn-block">
+            <button class="btn btn-primary btn-block">
               Download Trained Model
             </button>
           </a>
@@ -131,7 +131,7 @@
                 <input type="hidden" name="model_path" value={{ download }}>
                 <input type="hidden" name="target" value={{ target }}>
                 <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
-                  <button class="btn btn-info m-2">Predict</button>
+                  <button class="btn btn-primary m-2">Predict</button>
                 </div>
                 <div id="prediction-result" class="alert alert-success d-none m-2"></div>
               </form>
@@ -163,7 +163,4 @@
   
 
 </div>
-{% endblock %}
-
-{% block footer %}
 {% endblock %}

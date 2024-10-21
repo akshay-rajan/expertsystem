@@ -10,110 +10,306 @@
   <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
   <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
 
-  <link rel="icon" href="{% static 'main/img/favicon.svg' %}">
+  <link rel="icon" href="{% static 'main/img/favicon_es.png' %}">
 </head>
 <body>
-  <div class="first d-flex justify-content-center align-items-center" id="home">
-    <div class="text-align-center">
-      <h1 class="display-1 text-white font-weight-bold fade-in">
-        EXPERT SYSTEM
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <h1 class="display-4 d-flex justify-content-center align-items-center">
+        <img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top">
       </h1>
-      <span class="d-flex justify-content-center text-uppercase text-white">
+    </a>
+    <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse mr-2" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#select-category">Algorithms</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'samples' %}">Samples</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="first d-flex flex-wrap justify-content-center" id="home">
+    <div class="text-align-center m-3">
+      <h1 class="text-white font-weight-bold fade-in">
+        Learn. Build. Evaluate.
+      </h1>
+      <span class="d-flex justify-content-center text-white">
         <div class="fade-in-2">
-          Build an entire Machine Learning Pipeline in minutes.
+          Build an entire Machine Learning Pipeline in a few clicks.
         </div>
       </span>
-      <div class="d-flex justify-content-center">
-        <a href="#get-started" class="btn btn-lg text-white mt-4">
-          Get Started!
-        </a>
-      </div>
-    </div>
-  </div>  
-  <div class="second d-flex p-4" id="get-started">
-
-    <div class="card border-info m-3 fade-in-card d-flex flex-column justify-content-between w-100">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/learn.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
-        <h5 class="card-title">Introduction</h5>
-        <p class="card-text">Learn the basics of Machine Learning and how to use Expert System.</p>
-        <button disabled class="btn btn-info btn-block">
-          Coming soon!
-        </button>
-      </div>
-    </div>
-    
-    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/ml.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
-        <h5 class="card-title">Start</h5>
-        <p class="card-text">Pick an algorithm and start building ML Models.</p>
-        <a href="#select-category" class="btn btn-info btn-block">Go!</a>
-      </div>
-    </div>
-
-    <div class="card border-info m-3 fade-in-card start-card w-100" style="">
-      <div class="card-img-top p-4 d-flex justify-content-center align-items-center" style="height:70%;">
-        <img src="{% static 'main/img/adv.png' %}" class="" alt="Learn">
-      </div>
-      <div class="card-body text-info mt-auto d-flex flex-column justify-content-end">
-        <h5 class="card-title">Advanced Features</h5>
-        <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
-        <button disabled class="btn btn-info btn-block">
-          Coming soon!
-        </button>
-      </div>
-    </div>
-    
-  </div>
-  <div class="third d-flex" id="select-category">
-
-    <div class="left w-50 d-flex align-items-center">
-      <div class="d-flex flex-column p-2">
-        <h2 class="display-2 text-white m-4 mb-0">SELECT CATEGORY</h2>
-        <div class="display-4 text-gray m-3 ml-4 mt-0">
-          OF THE MACHINE LEARNING ALGORITHM.
+      <div class="fade-in-3">
+        <div class="d-flex">
+          <a href="#get-started" class="home-btn mr-2">Get Started!</a>
         </div>
       </div>
     </div>
+  </div> 
 
-    <div class="right w-50 bg-light d-flex justify-content-center align-items-center">
 
-      <div class="d-block w-100">
-        <ul class="list-group">
-          <a href={% url 'classification' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Classification
-            </li>
-          </a>
-          <a href={% url 'regression' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Regression
-            </li>
-          </a>
-          <a href={% url 'clustering' %} class="">
-            <li class="list-group-item p-4 m-3">
-              Clustering
-            </li>
-          </a>
-        </ul>
+  <div class="div-2"></div>
+
+  <div class="div-3 fade-in-2">
+    <img src={% static 'main/img/thumbnail.png' %} alt="" class="thumbnail-img">
+  </div>
+
+  <div class="div-4 m-2 mb-4 p-2">
+    <div class="d-flex justify-content-center">
+      <h2 class="display-4 mb-4">Machine Learning for Everyone</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+      <p class="text-center">
+        Expert System simplifies machine learning by guiding you through every step of the machine learning process, from data processing and model building to evaluation and prediction, without writing any code. 
+      </p>
+    </div>
+  </div>
+
+  <div class="div-5 mt-4 mb-4 p-4 bg-light text-left">
+    <div class="d-flex justify-content-center flex-wrap m-4">
+      
+      <div class="m-3 d-flex justify-content-center" style="width: 20rem;">
+        <div class="card-body">
+          <h4 class="card-title">Process Data</h4>
+          <p class="card-text">
+            Clean, transform and prepare your data to make it suitable for modelling.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
+        </div>
+      </div>
+
+      <div class="m-3 fade-in-card" style="width: 20rem;">
+        <div class="card-body">
+          <h4 class="card-title">Build Model</h4>
+          <p class="card-text">
+            Choose the best algorithm for your task and teach it to recognize patterns in your data.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
+        </div>
+      </div>
+
+      <div class="m-3 fade-in-card" style="width: 20rem;">
+        <div class="card-body">
+          <h4 class="card-title">Evaluate & Predict</h4>
+          <p class="card-text">
+            Assess the performance of the trained model using various metrics. Apply the model to make predictions.
+          </p>
+          {% comment %} <a href="">Learn More</a> {% endcomment %}
+        </div>
       </div>
 
     </div>
+  </div>
 
+  <div class="second p-4" id="get-started">
+
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
+        <h5 class="card-title">Start</h5>
+        <p class="card-text">Pick an algorithm and start building ML Models.</p>
+        <a href="#select-category">
+          <button>
+            Start Building →
+          </button>
+        </a>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center card-right">
+        <img src="{% static 'main/img/brain.png' %}" class="feature-card-img" alt="Learn">
+      </div>
+    </div>
+
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left  p-4">
+        <h5 class="card-title">Introduction</h5>
+        <p class="card-text">Learn Machine Learning from scratch, from preprocessing to deployment.</p>
+        <button disabled>Coming soon!</button>
+      </div>
+
+      <div class="p-4 d-flex justify-content-center align-items-center card-right">
+        <img src="{% static 'main/img/data.png' %}" class="feature-card-img" alt="Learn">
+      </div>
+    </div>
+  
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4 flex-grow-1">
+        <h5 class="card-title">Advanced Features</h5>
+        <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
+        <button disabled>Coming soon!</button>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center card-right">
+        <img src="{% static 'main/img/adv.png' %}" class="feature-card-img" alt="Learn">
+      </div>
+    </div>
+  </div>
+  
+  <div class="third d-flex flex-column justify-content-center" id="select-category">
+    <div class="m-2 mb-4 p-2">
+      <div class="d-flex justify-content-center">
+        <h2 class="display-4 mb-4">Select a Category</h2>
+      </div>
+      <div class="d-flex justify-content-center">
+        <p class="text-center subtitle">
+          Pick the category of algorithms that best describes your problem.
+        </p>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="">
+        <div class="d-flex justify-content-center flex-wrap">
+
+          <div class="card m-2 bg-light category-card" style="width: 18rem;">
+            <div class="card-body d-flex flex-column align-items-start">
+                <div class="start">
+                    <div class="d-flex">
+                        <img src="{% static 'main/img/classification.png' %}" alt="" class="category-logo mr-2">
+                        <div>
+                            <h5 class="card-title">Classification</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
+                        </div>
+                    </div>
+                    <p class="line"></p>
+                </div>
+                <div class="mid">
+                    <p class="card-text">
+                        Classify data points into predefined categories.
+                    </p>
+                </div>
+                <div class="last mt-auto">
+                    <a href={% url 'classification' %} class="">Go →</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card m-2 bg-light category-card" style="width: 18rem;">
+          <div class="card-body d-flex flex-column align-items-start">
+            <div class="start">
+                <div class="d-flex">
+                    <img src="{% static 'main/img/regression.png' %}" alt="" class="category-logo mr-2">
+                    <div>
+                        <h5 class="card-title">Regression</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
+                    </div>
+                </div>
+                <p class="line"></p>
+            </div>
+            <div class="mid">
+                <p class="card-text">
+                    Predict a continuous numerical value.
+                </p>
+            </div>
+            <div class="last mt-auto">
+              <a href={% url 'regression' %} class="">
+                Go →
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card m-2 bg-light category-card" style="width: 18rem;">
+            <div class="card-body d-flex flex-column align-items-start">
+                <div class="start">
+                    <div class="d-flex">
+                        <img src="{% static 'main/img/clustering.png' %}" alt="" class="category-logo mr-2">
+                        <div>
+                            <h5 class="card-title">Clustering</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Unsupervised Learning</h6>
+                        </div>
+                    </div>
+                    <p class="line"></p>
+                </div>
+                <div class="mid">
+                    <p class="card-text">
+                        Identify natural groupings within your data based on similarities.
+                    </p>
+                </div>
+                <div class="last mt-auto">
+                    <a href={% url 'clustering' %} class="">Go →</a>
+                </div>
+            </div>
+        </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} <div class="fourth d-flex align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
+      <p class="text-center align-items-center">
+        
+      </p>
+    </div>
+  </div> {% endcomment %}
+
+  <div class="footer">
+    <div class="container">
+      <p class="line"></p>
+      <footer class="py-5">
+        <div class="row">
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Classification</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="/classification/knn/" class="nav-link p-0 text-muted">KNN</a></li>
+              <li class="nav-item mb-2"><a href="/classification/naive_bayes/" class="nav-link p-0 text-muted">Naive Bayes</a></li>
+              <li class="nav-item mb-2"><a href="/classification/logistic_regression/" class="nav-link p-0 text-muted">Logistic Regression</a></li>
+              <li class="nav-item mb-2"><a href="/classification/svm/" class="nav-link p-0 text-muted">SVM</a></li>
+              <li class="nav-item mb-2"><a href="/classification/decision_tree/" class="nav-link p-0 text-muted">Decision Tree</a></li>
+              <li class="nav-item mb-2"><a href="/classification/random_forest/" class="nav-link p-0 text-muted">Random Forest</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Regression</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="/regression/linear_regression/" class="nav-link p-0 text-muted">Linear Regression</a></li>
+              <li class="nav-item mb-2"><a href="/regression/lasso/" class="nav-link p-0 text-muted">Lasso Regression</a></li>              
+              <li class="nav-item mb-2"><a href="/regression/ridge/" class="nav-link p-0 text-muted">Ridge Regression</a></li>              
+              <li class="nav-item mb-2"><a href="/regression/decision_tree/" class="nav-link p-0 text-muted">Decision Tree</a></li>              
+              <li class="nav-item mb-2"><a href="/regression/random_forest/" class="nav-link p-0 text-muted">Random Forest</a></li>     
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Clustering</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="clustering/kmeans/" class="nav-link p-0 text-muted">K Means</a></li>
+              <li class="nav-item mb-2"><a href="clustering/hierarchical_clustering/" class="nav-link p-0 text-muted">Hierarchical</a></li>
+            </ul>
+          </div>
+        </div>
+    
+        <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+          <p>Expert System: A User Interface for Machine Learning</p>
+          <ul class="list-unstyled d-flex">
+            <li class="ms-3">
+              <a class="link-light" href="https://github.com/akshay-rajan/expertsystem">
+                <img src="{% static "main/img/github.png" %}" style="width:25px;height:25px;" alt="">
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </div>
   </div>
 
   <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
   <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'main/js/main.js' %}"></script>
+  <script src="{% static 'main/js/custom.js' %}"></script>
   <script>
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
       $('.fade-in-2').fadeIn(1000);
+      $('.fade-in-3').fadeIn(1300);
     });
     
     $(document).ready(function(){

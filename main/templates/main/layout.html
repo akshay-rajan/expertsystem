@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
 
-    <link rel="icon" href="{% static 'main/img/favicon.svg' %}">
+    <link rel="icon" href="{% static 'main/img/favicon_es.png' %}">
   </head>
 
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
       <a class="navbar-brand" href="{% url 'index' %}">
-        <h1 class="display-4"><img src="{% static 'main/img/logo-full.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top"></h1>
+        <h1 class="display-4"><img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top"></h1>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,6 +27,16 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'index' %}">Home</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Algorithms
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'classification' %}">Classification</a>
+              <a class="dropdown-item" href="{% url 'regression' %}">Regression</a>
+              <a class="dropdown-item" href="{% url 'clustering' %}">Clustering</a>
+            </div>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'samples' %}">Samples</a>
           </li>
@@ -34,16 +44,62 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container" style="min-height: 80vh">
       {% block body %}
       {% endblock %}
     </div>
 
-    <footer class="bg-light text-center py-4 footer_section">
-      {% block footer %}
-      <p>Expert System: A User Interface for Machine Learning</p>
-      {% endblock %}
-    </footer>
+
+    <div class="footer mt-2">
+      <div class="container">
+        <p class="line"></p>
+        <footer class="py-5">
+          {% block footer %}
+          <div class="row">
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Classification</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="/classification/knn/" class="nav-link p-0 text-muted">KNN</a></li>
+                <li class="nav-item mb-2"><a href="/classification/naive_bayes/" class="nav-link p-0 text-muted">Naive Bayes</a></li>
+                <li class="nav-item mb-2"><a href="/classification/logistic_regression/" class="nav-link p-0 text-muted">Logistic Regression</a></li>
+                <li class="nav-item mb-2"><a href="/classification/svm/" class="nav-link p-0 text-muted">SVM</a></li>
+                <li class="nav-item mb-2"><a href="/classification/decision_tree/" class="nav-link p-0 text-muted">Decision Tree</a></li>
+                <li class="nav-item mb-2"><a href="/classification/random_forest/" class="nav-link p-0 text-muted">Random Forest</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Regression</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="/regression/linear_regression/" class="nav-link p-0 text-muted">Linear Regression</a></li>
+                <li class="nav-item mb-2"><a href="/regression/lasso/" class="nav-link p-0 text-muted">Lasso Regression</a></li>              
+                <li class="nav-item mb-2"><a href="/regression/ridge/" class="nav-link p-0 text-muted">Ridge Regression</a></li>              
+                <li class="nav-item mb-2"><a href="/regression/decision_tree/" class="nav-link p-0 text-muted">Decision Tree</a></li>              
+                <li class="nav-item mb-2"><a href="/regression/random_forest/" class="nav-link p-0 text-muted">Random Forest</a></li>     
+              </ul>
+            </div>
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Clustering</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="clustering/kmeans/" class="nav-link p-0 text-muted">K Means</a></li>
+                <li class="nav-item mb-2"><a href="clustering/hierarchical_clustering/" class="nav-link p-0 text-muted">Hierarchical</a></li>
+              </ul>
+            </div>
+          </div>
+      
+          <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+            <p>Expert System: A User Interface for Machine Learning</p>
+            <ul class="list-unstyled d-flex">
+              <li class="ms-3">
+                <a class="link-light" href="https://github.com/akshay-rajan/expertsystem">
+                  <img src="{% static "main/img/github.png" %}" style="width:25px;height:25px;" alt="">
+                </a>
+              </li>
+            </ul>
+          </div>
+          {% endblock %}
+        </footer>
+      </div>
+    </div>
 
     <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
