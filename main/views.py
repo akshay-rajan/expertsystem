@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import uuid
 import pickle
@@ -116,6 +117,27 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 from django.http import JsonResponse
 
+def preprocessing(request):
+    context = {}
+
+    if request.method == 'POST' and request.FILES.get('file'):
+        uploaded_file = request.FILES['file']
+        try:
+            # Read the uploaded file into a DataFrame
+            data = pd.read_csv(uploaded_file)
+
+            # Store the initial dataset in the session
+            request.session['updated_data'] = data.to_dict()
+
+            # Prepare the data preview for rendering
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
+            context['headers'] = data.columns.tolist()  # Store headers for use in the template
+
+        except Exception as e:
+            context['error'] = f"Error processing data: {e}"
+
+    return render(request, 'main/preprocessing.html', context)
+
 def fill_missing_values(request):
     if request.method == 'POST':
         # Load the updated data from session
@@ -124,11 +146,16 @@ def fill_missing_values(request):
             return JsonResponse({'error': 'No data available'}, status=400)
 
         data = pd.DataFrame.from_dict(data_dict)
-        missing_value_strategy = request.POST.get('strategy')
-        selected_columns = request.POST.getlist('columns[]')
+        
+        databody = json.loads(request.body)
 
+        missing_value_strategy = databody.get('strategy')
+        selected_columns = databody.get('columns')
+        
+        
         # Apply missing value handling logic
         if missing_value_strategy and selected_columns:
+            
             for col in selected_columns:
                 if data[col].dtype != 'object':  # Ensure column is numerical
                     if missing_value_strategy == 'mean':
@@ -150,9 +177,10 @@ def encoding(request):
             return JsonResponse({'error': 'No data available'}, status=400)
 
         data = pd.DataFrame.from_dict(data_dict)
-        encoding_strategy = request.POST.get('encoding_strategy')
-        encoding_columns = request.POST.getlist('encoding_selection')
+        databody = json.loads(request.body)
 
+        encoding_strategy = databody.get('strategy')
+        encoding_columns = databody.get('columns')
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
                 data = pd.get_dummies(data, columns=encoding_columns)
@@ -176,7 +204,9 @@ def scaling(request):
             return JsonResponse({'error': 'No data available'}, status=400)
 
         data = pd.DataFrame.from_dict(data_dict)
-        scaling_strategy = request.POST.get('scaling_strategy')
+        databody = json.loads(request.body)
+
+        scaling_strategy = databody.get('strategy')
 
         if scaling_strategy == 'standard':
             scaler = StandardScaler()
@@ -190,26 +220,7 @@ def scaling(request):
         return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
  
 
-def preprocessing(request):
-    context = {}
 
-    if request.method == 'POST' and request.FILES.get('file'):
-        uploaded_file = request.FILES['file']
-        try:
-            # Read the uploaded file into a DataFrame
-            data = pd.read_csv(uploaded_file)
-
-            # Store the initial dataset in the session
-            request.session['updated_data'] = data.to_dict()
-
-            # Prepare the data preview for rendering
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
-            context['headers'] = data.columns.tolist()  # Store headers for use in the template
-
-        except Exception as e:
-            context['error'] = f"Error processing data: {e}"
-
-    return render(request, 'main/preprocessing.html', context)
 
 
 

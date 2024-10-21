@@ -239,6 +239,7 @@ function applyMissingValueStrategy() {
     const strategy = document.getElementById("missing_value_strategy").value;
     const selectedColumns = Array.from(document.querySelectorAll('input[name="feature_selection"]:checked'))
         .map(input => input.value);
+        
     console.log(strategy);
     console.log(selectedColumns);
 
