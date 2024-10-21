@@ -1,20 +1,11 @@
-// nav menu style
-var nav = $("#navbarSupportedContent");
-var btn = $(".custom_menu-btn");
-btn.click
-btn.click(function (e) {
-
-    e.preventDefault();
-    nav.toggleClass("lg_nav-toggle");
-    document.querySelector(".custom_menu-btn").classList.toggle("menu_btn-style")
+// Handle navbar dropdown
+const navDropdown = $('.nav-item.dropdown');
+navDropdown.on('mouseover', function() {
+    $(this).addClass('show');
+    $(this).find('.dropdown-menu').addClass('show');
 });
-
-
-function getCurrentYear() {
-    var d = new Date();
-    var currentYear = d.getFullYear()
-
-    $("#displayDate").html(currentYear);
-}
-
-getCurrentYear();
+navDropdown.on('mouseout', function() {
+    $(this).removeClass('show');
+    $(this).find('.dropdown-menu').removeClass('show');
+});
+console.log(navDropdown);
