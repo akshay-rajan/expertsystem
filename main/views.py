@@ -1,12 +1,13 @@
-import os
+import csv
 import json
+import os
 import uuid
 import pickle
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
@@ -19,6 +20,8 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from django.core.files.storage import FileSystemStorage
 
 import matplotlib
 matplotlib.use('Agg')
@@ -863,4 +866,141 @@ def predict(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+# Preprocessing part ->Deepu
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from django.http import JsonResponse
+
+def preprocessing(request):
+    context = {}
+
+    if request.method == 'POST' and request.FILES.get('file'):
+        uploaded_file = request.FILES['file']
+        try:
+            # Read the uploaded file into a DataFrame
+            data = pd.read_csv(uploaded_file)
+
+            # Store the initial dataset in the session
+            request.session['updated_data'] = data.to_dict()
+
+            # Prepare the data preview for rendering
+            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
+            context['headers'] = data.columns.tolist()  # Store headers for use in the template
+
+        except Exception as e:
+            context['error'] = f"Error processing data: {e}"
+
+    return render(request, 'main/preprocessing.html', context)
+
+def fill_missing_values(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        
+        databody = json.loads(request.body)
+
+        missing_value_strategy = databody.get('strategy')
+        selected_columns = databody.get('columns')
+        
+        
+        # Apply missing value handling logic
+        if missing_value_strategy and selected_columns:
+            
+            for col in selected_columns:
+                if data[col].dtype != 'object':  # Ensure column is numerical
+                    if missing_value_strategy == 'mean':
+                        data[col].fillna(data[col].mean(), inplace=True)
+                    elif missing_value_strategy == 'median':
+                        data[col].fillna(data[col].median(), inplace=True)
+                    elif missing_value_strategy == 'drop':
+                        data.dropna(subset=selected_columns, inplace=True)
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+    
+def encoding(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        databody = json.loads(request.body)
+
+        encoding_strategy = databody.get('strategy')
+        encoding_columns = databody.get('columns')
+        # Apply missing value handling logic
+        if encoding_strategy == 'onehot' and encoding_columns:
+                data = pd.get_dummies(data, columns=encoding_columns)
+        elif encoding_strategy == 'label' and encoding_columns:
+            le = LabelEncoder()
+            for col in encoding_columns:
+                if data[col].dtype == 'object':  # Ensure column is categorical
+                    data[col] = le.fit_transform(data[col])
+
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+ 
+  
+def scaling(request):
+    if request.method == 'POST':
+        # Load the updated data from session
+        data_dict = request.session.get('updated_data')
+        if not data_dict:
+            return JsonResponse({'error': 'No data available'}, status=400)
+
+        data = pd.DataFrame.from_dict(data_dict)
+        databody = json.loads(request.body)
+
+        scaling_strategy = databody.get('strategy')
+
+        if scaling_strategy == 'standard':
+            scaler = StandardScaler()
+            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+        elif scaling_strategy == 'normalize':
+            scaler = MinMaxScaler()
+            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+
+        # Update session with new data
+        request.session['updated_data'] = data.to_dict()
+        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+ 
+
+
+
+
+
+def download_csv(request):
+    data_dict=request.session.get('updated_data',None)
+    if data_dict:
+        # Convert the dictionary back to a DataFrame
+        data = pd.DataFrame.from_dict(data_dict)
+
+        # Create the HttpResponse object with the appropriate CSV header
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="updated_data.csv"'
+
+        # Create a CSV writer
+        writer = csv.writer(response)
+
+        # Write the headers (columns) of your CSV file
+        writer.writerow(data.columns)
+
+        # Write the data rows
+        for index, row in data.iterrows():
+            writer.writerow(row)
+
+        return response
+    else:
+        # Handle case where session data is not available
+        return HttpResponse("No data available", status=400)
 
