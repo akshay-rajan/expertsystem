@@ -11,6 +11,32 @@ function handleFileUpload(event) {
     
     $('#upload-btn').addClass('d-none');
     $('#build-btn').removeClass('d-none');
+
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('file', file); // Append the file to FormData
+    
+    // Use Fetch API to send the file to the server
+    fetch('/save_file/', { // Replace with your actual URL endpoint
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': getCSRFToken() // Ensure to send CSRF token
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json(); // Assuming the server returns JSON
+    })
+    .then(data => {
+      // Handle the response data as needed
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
     
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -30,8 +56,15 @@ function handleFileUpload(event) {
       reader.readAsText(file);
     } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
       reader.readAsBinaryString(file);
+    } else {
+      alert('Invalid file format. Please upload a CSV or Excel file.');
     }
   }
+}
+
+function getCSRFToken() {
+  const cookieValue = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : '';
 }
 
 // Activate the build button after the heatmap is plotted

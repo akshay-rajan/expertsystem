@@ -873,6 +873,30 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt  # Use this decorator if you're testing and need to bypass CSRF protection
+def save_file(request):
+    """Save the uploaded file content to the session as a dict using pandas"""
+    if request.method == 'POST' and request.FILES.get('file'):
+        file = request.FILES['file']
+
+        # Use pandas to read the file based on its extension
+        if file.name.endswith('.csv'):
+            df = pd.read_csv(file)
+        elif file.name.endswith('.xls') or file.name.endswith('.xlsx'):
+            df = pd.read_excel(file)
+
+        
+        # Store the file name and dict in the session
+        request.session['filename'] = file.name
+        request.session['file'] = df.to_dict()
+
+        return JsonResponse({
+            'status': 'Success',
+            'file_name': file.name,
+            'content': df.to_dict()
+        })
+    return JsonResponse({'status': 'Failed', 'message': 'No file uploaded'}, status=400)
+
 # ? Preprocessing
 
 def preprocessing(request):

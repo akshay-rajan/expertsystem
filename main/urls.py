@@ -23,6 +23,7 @@ urlpatterns = [
     path('clustering/hierarchical_clustering/', views.hierarchical_clustering, name='hierarchical_clustering'),
     path('samples/', views.samples, name='samples'),
     path('predict', views.predict, name='predict'),
+    path('save_file/', views.save_file, name='save_file'),
     path('preprocessing', views.preprocessing, name='preprocessing'),
     path('preprocessing/fill-missing/', views.fill_missing_values, name='fill_missing'),
     path('preprocessing/encoding/', views.encoding, name='encoding'),
