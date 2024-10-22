@@ -867,10 +867,7 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-# Preprocessing part ->Deepu
-import pandas as pd
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
-from django.http import JsonResponse
+# ? Preprocessing
 
 def preprocessing(request):
     context = {}
@@ -949,7 +946,6 @@ def encoding(request):
         # Update session with new data
         request.session['updated_data'] = data.to_dict()
         return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
- 
   
 def scaling(request):
     if request.method == 'POST':
@@ -974,11 +970,6 @@ def scaling(request):
         request.session['updated_data'] = data.to_dict()
         return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
  
-
-
-
-
-
 def download_csv(request):
     data_dict=request.session.get('updated_data',None)
     if data_dict:
