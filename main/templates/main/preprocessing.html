@@ -31,7 +31,9 @@
                 <div id="feature_selection" class="form-check">
                     <!-- Checkboxes will be populated dynamically -->
                 </div>
+                <div class="mt-3">
                 <button type="button" class="btn btn-primary" id="missing_value_strategybtn">Apply</button>
+                </div>
             </div>
         
 
@@ -50,8 +52,9 @@
                 <div id="encoding_selection" class="form-check">
                     <!-- Checkboxes for encoding selection will be populated dynamically -->
                 </div>
+                <div class="mt-3">
                 <button type="button" class="btn btn-primary" id="encoding_strategybtn">Apply</button>
-
+                </div>
             </div>
 
             <div class="mb-3">
@@ -62,9 +65,9 @@
                     <option value="normalize">Normalization</option>
                 </select>
             </div>
+            <div class="mt-3">
             <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
-            
-            <!-- <button type="submit" class="btn btn-primary">Upload and Process</button> -->
+            </div>
         </form>
     </div>
     
@@ -82,45 +85,90 @@
 {% block script %}
 <script>
     document.getElementById('file').addEventListener('change',preview_data);
+    const featureSelectionDiv = document.getElementById("feature_selection");
+    const encoding_selection = document.getElementById("encoding_selection");
+    const tableContainer = document.getElementById('csv-preview-container');
+    
+
+
+
+
     
     function preview_data(e) {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      let text,rows,headers,null_columns;
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        let text,rows,headers,null_columns;
 
-      fetch('/preprocessing', {
-          method: 'POST',
-          body: formData,
-          headers: {
-              'X-CSRFToken': getCookie('csrftoken'), // Use a helper function to get CSRF token
-          },
-      })
-      .then(response => {
+        fetch('/preprocessing', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'), // Use a helper function to get CSRF token
+            },
+        })
+        .then(response => {
+
         return response.json();
-      })
-      .then(data => {
+        })
+        .then(data => {
         if (data.error) {
-          alert(data.error);
+            alert(data.error);
         } else {
-            text=data.raw_data
+
+            text=JSON.parse(data.json_data)
+            console.log(text)        
             headers=data.headers
             null_columns=data.null_columns
-            console.log(text);
-            console.log(headers);
-            console.log(null_columns);
+            non_numerical_cols=data.non_numerical_cols
+            generatecolumns(null_columns,featureSelectionDiv)    //generate columns for missing values     
+            generatecolumns(non_numerical_cols,encoding_selection)         //generate columns for encoding
+            tableContainer.appendChild(generateTable(text,null_columns)); // Append the generated table to the container
 
-            // Update the dataset preview with the scaled data
-            document.getElementById('csv-preview-container').innerHTML = data.data_preview;
         }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-      });
-
-    }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     
+    }
+
+
+    // Function to generate table from JSON data
+    function generateTable(jsonData,null_columns) {
+        const table = document.createElement('table');
+        table.className = 'table table-bordered table-hover table-striped';
+        const headerRow = document.createElement('tr');
+
+        // Create table headers
+        Object.keys(jsonData[0]).forEach(key => {
+            const th = document.createElement('th');
+            th.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Capitalize first letter
+            // Add the bg-warning class if the key is in null_columns
+            if (null_columns.includes(key)) {
+                th.classList.add('bg-warning');
+            }
+            headerRow.appendChild(th);
+        });
+
+        table.appendChild(headerRow);
+
+        // Create table rows
+        jsonData.forEach(item => {
+            const row = document.createElement('tr');
+            Object.values(item).forEach(value => {
+                const td = document.createElement('td');
+                td.innerText = value;
+                row.appendChild(td);
+            });
+            table.appendChild(row);
+        });
+
+        return table;
+    }
+
+
     // // to highlight the column name as yellow
     // headers.forEach((header, colIndex) => {
     //     if (emptyColumns[colIndex]) {
@@ -132,43 +180,44 @@
        
             
             
-    // // Populate the column selection for missing value strategy
-    // document.getElementById("colselect").innerHTML = "Select Columns for Missing Value Strategy";
-    // const featureSelectionDiv = document.getElementById('feature_selection');
-    // featureSelectionDiv.innerHTML = ''; // Clear previous checkboxes
-    // headers.forEach((header, colIndex) => {
-    //     if (emptyColumns[colIndex]) {
-    //     const checkboxId = `column_${header.trim()}`;
-    //     const checkbox = `
-    //         <div class="form-check">
-    //             <input class="form-check-input" type="checkbox" name="feature_selection" value="${header.trim()}" id="${checkboxId}">
-    //             <label class="form-check-label" for="${checkboxId}">
-    //                 ${header.trim()}
-    //             </label>
-    //         </div>`;
-    //     featureSelectionDiv.innerHTML += checkbox;
-    //     }
-    // });
+    // Populate the column selection for missing value strategy
+    function generatecolumns(null_columns,featureSelectionDiv) {
+        // Get the feature_selection div where checkboxes will be populated
+
+        // Clear any existing checkboxes
+        featureSelectionDiv.innerHTML = '';
+
+        // Iterate over the null_columns array
+        null_columns.forEach(column => {
+
+            // Create a new checkbox input element
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = column; // Set the checkbox id to the column name
+            checkbox.value = column; // Set the checkbox value to the column name
+            checkbox.className = "form-check-input"; // Add Bootstrap class for styling
+
+            // Create a label for the checkbox
+            const label = document.createElement("label");
+            label.htmlFor = column; // Link the label to the checkbox
+            label.textContent = column; // Set the label text to the column name
+            label.className = "form-check-label"; // Add Bootstrap class for styling
+
+            // Create a div to contain the checkbox and label
+            const checkboxDiv = document.createElement("div");
+            checkboxDiv.className = "form-check"; // Add Bootstrap class for styling
+            checkboxDiv.appendChild(checkbox);
+            checkboxDiv.appendChild(label);
+
+            // Append the checkbox div to the feature selection div
+            featureSelectionDiv.appendChild(checkboxDiv);
+        });
+    }
 
 
-      // // Populate the column selection for encoding strategy
-      // document.getElementById("enc_colselect").innerHTML = "Select Columns for Encoding Strategy";
-      // const encodingSelectionDiv = document.getElementById('encoding_selection');
-      // encodingSelectionDiv.innerHTML = ''; // Clear previous checkboxes
-      // headers.forEach(header => {
-      //     const checkboxId = `enc_column_${header.trim()}`;
-      //     const checkbox = `
-      //         <div class="form-check">
-      //             <input class="form-check-input" type="checkbox" name="encoding_selection" value="${header.trim()}" id="${checkboxId}">
-      //             <label class="form-check-label" for="${checkboxId}">
-      //                 ${header.trim()}
-      //             </label>
-      //         </div>`;
-      //     encodingSelectionDiv.innerHTML += checkbox;
-      // });
-  
+
         
-function getCookie(name) {
+    function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');

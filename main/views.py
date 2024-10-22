@@ -128,18 +128,37 @@ def preprocessing(request):
 
             # Store the initial dataset in the session
             request.session['updated_data'] = data.to_dict()
+            data.replace(0, np.nan, inplace=True)
 
             null_columns = data.columns[data.isnull().any()]
-            
+            ################################################################################
+
+            print("TESTin here")
+            print(data.info())
+            # print(data.describe())
+            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+            print(type(non_numerical_cols))
+
+            # print(data.isnull().sum())
+
+
+            #################################################################################
 
             # Prepare the data preview for rendering
-            raw_data = data.to_dict(orient='records')
+            json_data = data.to_json(orient='records')
             headers = data.columns.tolist()
             null_columns = null_columns.tolist()
+            non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+            print(type(non_numerical_cols))
+
+            
+
+
             return JsonResponse({
-                'raw_data': raw_data,
+                'json_data': json_data,
                 'headers': headers,
-                'null_columns': null_columns
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
             })
         except Exception as e:
             return JsonResponse({'error': f"Error processing data: {e}"})
