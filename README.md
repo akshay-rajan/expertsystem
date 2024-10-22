@@ -115,6 +115,10 @@ Install the requirements:
 ```bash
 pip install -r requirements.txt
 ```
+Run the database migrations:
+```bash
+python manage.py migrate
+```
 Start the Django server:
 ```bash
 python manage.py runserver
