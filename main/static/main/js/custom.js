@@ -8,4 +8,3 @@ navDropdown.on('mouseout', function() {
     $(this).removeClass('show');
     $(this).find('.dropdown-menu').removeClass('show');
 });
-console.log(navDropdown);
