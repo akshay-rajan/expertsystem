@@ -290,6 +290,9 @@ body {
   text-decoration: none;
   border-radius: 5px;
 }
+.algo li {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
 .algo:hover {
   text-decoration: none;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
@@ -376,3 +379,10 @@ a:focus {
   background-color: var(--primary-color)!important;
 }
 
+/* ! Sampling */
+.sample-card:hover {
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+.sample-download:hover {
+  filter: brightness(120%);
+}

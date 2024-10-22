@@ -8,7 +8,7 @@
   <h1 class='display-4'>Download Sample Datasets</h1>
   <div id="dataset-container" class="d-flex mt-3 justify-content-center flex-wrap">
     {% for dataset in datasets %}
-      <div class="card m-2 p-2" style="min-width: 18rem;">
+      <div class="card m-2 p-2 sample-card" style="min-width: 18rem;">
         <div class="card-body">
           <div class="font-weight-bold card-title h5">{{ dataset.name }}</div>
           <div class="d-flex justify-content-between">
@@ -16,7 +16,7 @@
               <div class="font-weight-bold text-muted">Type: {{ dataset.type }}</div>
               <div class="text-muted">For {{ dataset.for }}</div>
             </div>
-              <a class="btn" href="{% static 'main/files/' %}{{ dataset.file }}" download="{{ dataset.file }}">
+              <a class="btn sample-download" href="{% static 'main/files/' %}{{ dataset.file }}" download="{{ dataset.file }}">
                 <img src="{% static 'main/img/download.svg' %}" alt="Get" width="30" height="30">
               </a>
           </div>
