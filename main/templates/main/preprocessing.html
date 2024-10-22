@@ -2,10 +2,11 @@
 {% load static %}
 {% block title %}Preprocessing{% endblock %}
 {% block body %}
+<div class="fade-in">
     <h2 class="text-center my-4">Upload Your Dataset and Apply Preprocessing</h2>
     <!-- File Upload Form -->
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center fade-in">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -83,6 +84,7 @@
     </div>
     {% endif %}
     <a href="{% url 'download_csv' %}">Download Updated Dataset as CSV</a>
+</div>
 
 {% endblock %}
 
