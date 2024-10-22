@@ -129,12 +129,20 @@ def preprocessing(request):
             # Store the initial dataset in the session
             request.session['updated_data'] = data.to_dict()
 
-            # Prepare the data preview for rendering
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
-            context['headers'] = data.columns.tolist()  # Store headers for use in the template
+            null_columns = data.columns[data.isnull().any()]
+            
 
+            # Prepare the data preview for rendering
+            raw_data = data.to_dict(orient='records')
+            headers = data.columns.tolist()
+            null_columns = null_columns.tolist()
+            return JsonResponse({
+                'raw_data': raw_data,
+                'headers': headers,
+                'null_columns': null_columns
+            })
         except Exception as e:
-            context['error'] = f"Error processing data: {e}"
+            return JsonResponse({'error': f"Error processing data: {e}"})
 
     return render(request, 'main/preprocessing.html', context)
 
