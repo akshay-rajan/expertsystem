@@ -285,6 +285,16 @@ body {
   color: rgba(255, 255, 255, 0.7)!important;
 }
 
+/* ! Algorithm */
+.algo {
+  text-decoration: none;
+  border-radius: 5px;
+}
+.algo:hover {
+  text-decoration: none;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+}
+
 /* ! Input form */
 .loader {
   height: 70vh;

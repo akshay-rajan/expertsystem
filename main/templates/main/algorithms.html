@@ -9,7 +9,7 @@
   
   <ul class="list-group m-4">
     {% for algorithm in algorithms %}
-    <a href="{% url algorithm.url %}">
+    <a href="{% url algorithm.url %}" class="algo">
       <li class="list-group-item m-1">
           {{ algorithm.name }}
         </li>
