@@ -14,7 +14,7 @@
           <div class="d-flex justify-content-between">
             <div>
               <div class="font-weight-bold text-muted">Type: {{ dataset.type }}</div>
-              <div class="text-muted">For {{ dataset.for }}</div>
+              <div class="text-muted">{{ dataset.note }}</div>
             </div>
               <a class="btn sample-download" href="{% static 'main/files/' %}{{ dataset.file }}" download="{{ dataset.file }}">
                 <img src="{% static 'main/img/download.svg' %}" alt="Get" width="30" height="30">

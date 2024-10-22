@@ -796,43 +796,49 @@ def samples(request):
             "name": "California Housing",
             "file": "fetch_california_housing.xlsx",
             "type": "XLSX",
-            "for": "Regression"
+            "note": "For Regression (Large)"
         },
         {
             "name": "California Housing",
             "file": "fetch_california_housing.csv",
             "type": "CSV",
-            "for": "Regression"
+            "note": "For Regression (Large)"
         },
         {
             "name": "Numerical Data",
             "file": "numerical_data.xlsx",
             "type": "XLSX",
-            "for": "Regression"
+            "note": "For Regression (Large)"
         },
         {
             "name": "Iris",
             "file": "iris.csv",
             "type": "CSV",
-            "for": "Classification"
+            "note": "For Classification (Small)"
         },
         {
             "name": "Mall Customers",
             "file": "mall_customers.csv",
             "type": "CSV",
-            "for": "Clustering"
+            "note": "For Clustering (Small)"
         },
         {   
-            "name": "Purchases",
+            "name": "Countries and Purchases",
             "file": "purchases.csv",
             "type": "CSV",
-            "for": "Preprocessing"
+            "note": "Uncleaned (Small)"
         },
         {
             "name": "Pima Indians Diabetes",
             "file": "diabetes.csv",
             "type": "CSV",
-            "for": "Classification (Binary)"
+            "note": "For Classification (Binary)"
+        },
+        {
+            "name": "Big Mart Sales",
+            "file": "big_mart_sales.csv",
+            "type": "CSV",
+            "note": "Uncleaned (Large)"
         }
     ]
     return render(request, 'main/samples.html', {
