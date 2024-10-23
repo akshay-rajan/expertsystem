@@ -900,7 +900,7 @@ def get_file(request):
             columns = df.columns.tolist()
             return JsonResponse({
                 'filename': filename, 
-                'file': file_dict,
+                'file': df.to_csv(index=False),
                 'columns': columns,
             })
         return JsonResponse({'Error': 'No file available'}, status=400)

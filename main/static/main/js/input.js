@@ -67,7 +67,6 @@ function handleFileUpload(event) {
       const content = e.target.result;
       console.log(content);
       const columns = extractColumns(content, file.name);
-      console.log(columns);
       // Enable hyperparameter input
       $('#hyperparameter-div').removeClass('d-none');
       // Parse data and plot heatmap
