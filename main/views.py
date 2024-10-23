@@ -384,6 +384,7 @@ def knn(request):
         accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'knn')
+        request.session['model'] = download_link
         
         return render(request, 'main/knn.html', {
             'actual': y_test,
@@ -848,16 +849,18 @@ def samples(request):
 def predict(request):
     """Open an endpoint to predict using a saved model"""
     if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            
-            input_data = np.array(data['input']).reshape(1, -1)
-            model_path = data['model_path'][1:] # Remove leading '/'
+        try:            
+            # Load the model
+            model_path = request.session.get('model')[1:] # Remove the leading '/'
+            if not model_path:
+                return JsonResponse({'error': 'No model available'}, status=400)
             
             with open(model_path, 'rb') as file:
                 model = pickle.load(file)
             
             # Validate input data            
+            data = json.loads(request.body)
+            input_data = np.array(data['input']).reshape(1, -1)
             expected_shape = model.n_features_in_
             if input_data.shape[1] != expected_shape:
                 return JsonResponse({'error': f'Input data must have {expected_shape} features'}, status=400)
