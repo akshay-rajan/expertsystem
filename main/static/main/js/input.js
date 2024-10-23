@@ -7,15 +7,15 @@ function handleFileUpload(event) {
   event.preventDefault();
   const fileInput = document.getElementById('dataset');
   const file = fileInput.files[0];
+  
   if (file) {
-    
     $('#upload-btn').addClass('d-none');
     $('#build-btn').removeClass('d-none');
 
-    // ! Save file to Server
+    // Save file to the server
     const formData = new FormData();
     formData.append('file', file);
-    
+
     fetch('/save_file/', {
       method: 'POST',
       body: formData,
@@ -27,34 +27,54 @@ function handleFileUpload(event) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json(); // Assuming the server returns JSON
+      return response.json();
     })
     .then(data => {
-      // Handle the response data as needed
-      // alert(data.message);
       fileInput.disabled = true;
       // Append tick icon
       const parent = fileInput.parentElement;
       parent.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      
+      // Fetch formatted data from the server after file upload is successful
+      return fetch('/get_file/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        }
+      });
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Fetched data!");
+      console.log(JSON.stringify(data.file));
+      console.log(data.columns);
+      // Populate Checkboxes
+      populateFeatureCheckboxes(data.columns);
+      // Populate Dropdown
+      populateTargetDropdown(data.columns);
     })
     .catch(error => {
       console.error('Could not store file: ', error);
     });
-    
+
     const reader = new FileReader();
     reader.onload = function(e) {
       const content = e.target.result;
+      console.log(content);
       const columns = extractColumns(content, file.name);
-      // Populate checkboxes
-      populateFeatureCheckboxes(columns);
-      // Populate target dropdown
-      populateTargetDropdown(columns);
+      console.log(columns);
       // Enable hyperparameter input
       $('#hyperparameter-div').removeClass('d-none');
       // Parse data and plot heatmap
       const { data, correlationMatrix } = parseData(content, file.name);
       plotHeatMap(correlationMatrix);
     };
+    
     if (file.name.endsWith('.csv')) {
       reader.readAsText(file);
     } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {

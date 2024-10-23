@@ -891,18 +891,20 @@ def save_file(request):
 
 def get_file(request):
     """Return the file content stored in the session"""
-    file_dict = request.session.get('file', None)
-    filename = request.session.get('filename', 'file.csv')
+    if request.method == 'POST':
+        file_dict = request.session.get('file', None)
+        filename = request.session.get('filename', 'file.csv')
     
-    if file_dict:
-        df = pd.DataFrame.from_dict(file_dict)
-        columns = df.columns.tolist()
-        return JsonResponse({
-            'filename': filename, 
-            'file': file_dict,
-            'columns': columns,
-        })
-    return JsonResponse({'Error': 'No file available'}, status=400)
+        if file_dict:
+            df = pd.DataFrame.from_dict(file_dict)
+            columns = df.columns.tolist()
+            return JsonResponse({
+                'filename': filename, 
+                'file': file_dict,
+                'columns': columns,
+            })
+        return JsonResponse({'Error': 'No file available'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 # ? Preprocessing
 
