@@ -321,7 +321,7 @@ a:focus {
           box-shadow: none;
 }
 
-.tick {
+.icon.tick {
   width: 20px;
   height: 20px;
 }

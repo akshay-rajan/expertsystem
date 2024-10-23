@@ -32,8 +32,7 @@ function handleFileUpload(event) {
     .then(data => {
       fileInput.disabled = true;
       // Append tick icon
-      const parent = fileInput.parentElement;
-      parent.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       
       // Fetch formatted data from the server after file upload is successful
       return fetch('/get_file/', {
@@ -59,6 +58,7 @@ function handleFileUpload(event) {
       populateTargetDropdown(data.columns);
     })
     .catch(error => {
+      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/wrong.svg" class="d-inline ml-2 icon tick" alt="tick">';
       console.error('Could not store file: ', error);
     });
 
