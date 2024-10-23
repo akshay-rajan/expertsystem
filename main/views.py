@@ -362,13 +362,11 @@ def knn(request):
     """Build KNN model and evaluate it"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
+        dataset = request.session.get('file', None)
+        filename = request.session.get('filename', 'file.csv')
         
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        file_extension = filename.split('.')[-1]
+        df = pd.DataFrame.from_dict(dataset)
         
         features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
         target = request.POST.get('target').replace('\n', '').replace('\r', '')
@@ -873,7 +871,6 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@csrf_exempt  # Use this decorator if you're testing and need to bypass CSRF protection
 def save_file(request):
     """Save the uploaded file content to the session as a dict using pandas"""
     if request.method == 'POST' and request.FILES.get('file'):
@@ -890,12 +887,24 @@ def save_file(request):
         request.session['filename'] = file.name
         request.session['file'] = df.to_dict()
 
+        return JsonResponse({'message': 'File uploaded successfully!'})
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def get_file(request):
+    """Return the file content stored in the session"""
+    file_dict = request.session.get('file', None)
+    filename = request.session.get('filename', 'file.csv')
+    
+    if file_dict:
+        df = pd.DataFrame.from_dict(file_dict)
+        columns = df.columns.tolist()
         return JsonResponse({
-            'status': 'Success',
-            'file_name': file.name,
-            'content': df.to_dict()
+            'filename': filename, 
+            'file': file_dict,
+            'columns': columns,
         })
-    return JsonResponse({'status': 'Failed', 'message': 'No file uploaded'}, status=400)
+    return JsonResponse({'Error': 'No file available'}, status=400)
 
 # ? Preprocessing
 

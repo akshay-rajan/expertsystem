@@ -321,6 +321,11 @@ a:focus {
           box-shadow: none;
 }
 
+.tick {
+  width: 20px;
+  height: 20px;
+}
+
 .custom_nav-container .nav_search-btn {
   background-image: url(../images/search-icon.png);
   background-size: 17px;

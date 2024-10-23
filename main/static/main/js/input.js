@@ -12,16 +12,15 @@ function handleFileUpload(event) {
     $('#upload-btn').addClass('d-none');
     $('#build-btn').removeClass('d-none');
 
-    // Create a FormData object
+    // ! Save file to Server
     const formData = new FormData();
-    formData.append('file', file); // Append the file to FormData
+    formData.append('file', file);
     
-    // Use Fetch API to send the file to the server
-    fetch('/save_file/', { // Replace with your actual URL endpoint
+    fetch('/save_file/', {
       method: 'POST',
       body: formData,
       headers: {
-        'X-CSRFToken': getCSRFToken() // Ensure to send CSRF token
+        'X-CSRFToken': getCSRFToken()
       }
     })
     .then(response => {
@@ -32,10 +31,14 @@ function handleFileUpload(event) {
     })
     .then(data => {
       // Handle the response data as needed
-      console.log(data);
+      // alert(data.message);
+      fileInput.disabled = true;
+      // Append tick icon
+      const parent = fileInput.parentElement;
+      parent.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
     })
     .catch(error => {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error('Could not store file: ', error);
     });
     
     const reader = new FileReader();
