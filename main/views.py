@@ -902,12 +902,14 @@ def get_file(request):
     
         if file_dict:
             df = pd.DataFrame.from_dict(file_dict)
+            correlation_matrix = df.corr()
+            print(correlation_matrix)
             columns = df.columns.tolist()
             return JsonResponse({
                 'filename': filename, 
-                # 'file': df.to_csv(index=False),
-                'file': df.to_dict(),
+                'file': file_dict,
                 'columns': columns,
+                'correlation_matrix': correlation_matrix.to_dict(),
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
