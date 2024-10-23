@@ -873,12 +873,17 @@ def save_file(request):
     """Save the uploaded file content to the session as a dict using pandas"""
     if request.method == 'POST' and request.FILES.get('file'):
         file = request.FILES['file']
-
+        
+        # Check file size and format
+        if file.size > 2 * 1024 * 1024: # 2MB
+            return JsonResponse({'error': 'File size is too large. Max file size is 2MB'}, status=400)        
         # Use pandas to read the file based on its extension
         if file.name.endswith('.csv'):
             df = pd.read_csv(file)
         elif file.name.endswith('.xls') or file.name.endswith('.xlsx'):
             df = pd.read_excel(file)
+        else:
+            return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed'}, status=400)
 
         
         # Store the file name and dict in the session
