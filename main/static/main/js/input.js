@@ -31,8 +31,6 @@ function handleFileUpload(event) {
     })
     .then(data => {
       fileInput.disabled = true;
-      // Append tick icon
-      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       
       // Fetch formatted data from the server after file upload is successful
       return fetch('/get_file/', {
@@ -56,9 +54,15 @@ function handleFileUpload(event) {
       populateFeatureCheckboxes(data.columns);
       // Populate Dropdown
       populateTargetDropdown(data.columns);
+      // Append tick icon (removes upload field)
+      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
     })
     .catch(error => {
-      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/wrong.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      // Reactivate file input field
+      fileInput.disabled = false;
+      // Alert user and reload page
+      alert('An error occurred while uploading the file. Please try again.');
+      location.reload();
       console.error('Could not store file: ', error);
     });
 
