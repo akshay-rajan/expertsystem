@@ -126,18 +126,20 @@ def preprocessing(request):
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
 
+            
+            data.replace(0, np.nan, inplace=True)
             # Store the initial dataset in the session
             request.session['updated_data'] = data.to_dict()
-            data.replace(0, np.nan, inplace=True)
 
             null_columns = data.columns[data.isnull().any()]
+            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
             ################################################################################
 
-            print("TESTin here")
-            print(data.info())
+            # print("TESTin here")
+            # print(data.info())
             # print(data.describe())
-            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-            print(type(non_numerical_cols))
+           
 
             # print(data.isnull().sum())
 
@@ -145,11 +147,11 @@ def preprocessing(request):
             #################################################################################
 
             # Prepare the data preview for rendering
-            json_data = data.to_json(orient='records')
+            json_data = data.head(20).to_json(orient='records')
             headers = data.columns.tolist()
             null_columns = null_columns.tolist()
             non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
-            print(type(non_numerical_cols))
+            
 
             
 
@@ -180,6 +182,7 @@ def fill_missing_values(request):
         selected_columns = databody.get('columns')
         
         
+        
         # Apply missing value handling logic
         if missing_value_strategy and selected_columns:
             
@@ -191,11 +194,30 @@ def fill_missing_values(request):
                         data[col].fillna(data[col].median(), inplace=True)
                     elif missing_value_strategy == 'drop':
                         data.dropna(subset=selected_columns, inplace=True)
+            
 
+        
+        
         # Update session with new data
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
-    
+
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
+
+
 def encoding(request):
     if request.method == 'POST':
         # Load the updated data from session
@@ -208,6 +230,7 @@ def encoding(request):
 
         encoding_strategy = databody.get('strategy')
         encoding_columns = databody.get('columns')
+
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
                 data = pd.get_dummies(data, columns=encoding_columns)
@@ -220,8 +243,21 @@ def encoding(request):
 
         # Update session with new data
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
- 
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
   
 def scaling(request):
     if request.method == 'POST':

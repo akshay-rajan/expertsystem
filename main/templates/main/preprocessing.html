@@ -76,6 +76,7 @@
     
     <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
         <!-- JavaScript will render data here as table -->
+         
     </div>
     
     <a href="{% url 'download_csv' %}">Download Updated Dataset as CSV</a>
@@ -87,7 +88,9 @@
     document.getElementById('file').addEventListener('change',preview_data);
     const featureSelectionDiv = document.getElementById("feature_selection");
     const encoding_selection = document.getElementById("encoding_selection");
-    const tableContainer = document.getElementById('csv-preview-container');
+    const feat="feature_selection";
+    const enco="encoding_selection";
+
     
 
 
@@ -122,9 +125,9 @@
             headers=data.headers
             null_columns=data.null_columns
             non_numerical_cols=data.non_numerical_cols
-            generatecolumns(null_columns,featureSelectionDiv)    //generate columns for missing values     
-            generatecolumns(non_numerical_cols,encoding_selection)         //generate columns for encoding
-            tableContainer.appendChild(generateTable(text,null_columns)); // Append the generated table to the container
+            generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
+            generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+            generateTable(text,null_columns)
 
         }
         })
@@ -136,7 +139,12 @@
 
 
     // Function to generate table from JSON data
-    function generateTable(jsonData,null_columns) {
+    function generateTable(jsonData, null_columns) {
+        const container = document.getElementById('csv-preview-container');
+
+        // Clear existing content in the container
+        container.innerHTML = '';
+
         const table = document.createElement('table');
         table.className = 'table table-bordered table-hover table-striped';
         const headerRow = document.createElement('tr');
@@ -165,24 +173,19 @@
             table.appendChild(row);
         });
 
-        return table;
+        // Append the new table to the container
+        container.appendChild(table);
     }
 
 
-    // // to highlight the column name as yellow
-    // headers.forEach((header, colIndex) => {
-    //     if (emptyColumns[colIndex]) {
-    //         console.log(colIndex);
-    //         document.getElementById(colIndex).classList.add('bg-warning'); // Adjusted for numeric IDs
-    //     }
-    // });
+
             
        
             
             
-    // Populate the column selection for missing value strategy
-    function generatecolumns(null_columns,featureSelectionDiv) {
-        // Get the feature_selection div where checkboxes will be populated
+    // Populate the column for selection 
+    function generatecolumns(null_columns,featureSelectionDiv,selection) {
+        
 
         // Clear any existing checkboxes
         featureSelectionDiv.innerHTML = '';
@@ -196,6 +199,7 @@
             checkbox.id = column; // Set the checkbox id to the column name
             checkbox.value = column; // Set the checkbox value to the column name
             checkbox.className = "form-check-input"; // Add Bootstrap class for styling
+            checkbox.name = selection; //feature selection or encoding selection
 
             // Create a label for the checkbox
             const label = document.createElement("label");
@@ -232,79 +236,99 @@
         return cookieValue;
     }
 
-// function applyMissingValueStrategy() {
-//     const strategy = document.getElementById("missing_value_strategy").value;
-//     const selectedColumns = Array.from(document.querySelectorAll('input[name="feature_selection"]:checked'))
-//         .map(input => input.value);
+    function applyMissingValueStrategy() {
+        const strategy = document.getElementById("missing_value_strategy").value;
         
-//     console.log(strategy);
-//     console.log(selectedColumns);
+        const selectedColumns = Array.from(document.querySelectorAll('input[name="feature_selection"]:checked')).map(checkbox => checkbox.value);
+        
+        
+        
 
-//     fetch('/preprocessing/fill-missing/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
-//         },
-//         body: JSON.stringify({
-//             strategy: strategy,
-//             columns: selectedColumns
-//         }),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.error) {
-//             alert(data.error);
-//         } else {
-//             // Update the dataset preview
-//             document.getElementById('csv-preview-container').innerHTML = data.data_preview;
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
+        fetch('/preprocessing/fill-missing/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+            },
+            body: JSON.stringify({
+                strategy: strategy,
+                columns: selectedColumns
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
 
-// // Call this function when the user applies the missing value strategy
-// document.getElementById('missing_value_strategybtn').addEventListener('click', applyMissingValueStrategy);
-
-
-// //Encoding strategy
-// function encoding() {
-//     const strategy = document.getElementById("encoding_strategy").value;
-//     const selectedColumns = Array.from(document.querySelectorAll('input[name="encoding_selection"]:checked'))
-//         .map(input => input.value);
-
-    
+                text=JSON.parse(data.json_data)        
+                headers=data.headers
+                null_columns=data.null_columns
+                non_numerical_cols=data.non_numerical_cols
+                generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
+                generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+                generateTable(text,null_columns); // Append the generated table to the container
 
 
-//     fetch('/preprocessing/encoding/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
-//         },
-//         body: JSON.stringify({
-//             strategy: strategy,
-//             columns: selectedColumns
-//         }),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.error) {
-//             alert(data.error);
-//         } else {
-//             // Update the dataset preview
-//             document.getElementById('csv-preview-container').innerHTML = data.data_preview;
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
 
-// // Call this function when the user applies the encoding strategy
-// document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
+
+
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Call this function when the user applies the missing value strategy
+    document.getElementById('missing_value_strategybtn').addEventListener('click', applyMissingValueStrategy);
+
+
+    //Encoding strategy
+    function encoding() {
+        const strategy = document.getElementById("encoding_strategy").value;
+        const selectedColumns = Array.from(document.querySelectorAll('input[name="encoding_selection"]:checked'))
+            .map(input => input.value);
+
+        console.log(strategy);
+        console.log(selectedColumns);
+
+
+        fetch('/preprocessing/encoding/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+            },
+            body: JSON.stringify({
+                strategy: strategy,
+                columns: selectedColumns
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                
+                text=JSON.parse(data.json_data)        
+                headers=data.headers
+                null_columns=data.null_columns
+                non_numerical_cols=data.non_numerical_cols
+                generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
+                generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+                generateTable(text,null_columns); // Append the generated table to the container
+
+
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Call this function when the user applies the encoding strategy
+    document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
 
 
 // //scaling strategy
