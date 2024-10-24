@@ -583,11 +583,11 @@ def kmeans(request):
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
-            'X': X_data,
+            'X': X_data[:100],
             'features': features,
             'target': "Cluster", # For prediction
             'feature_count': len(features),
-            'labels': labels,
+            'labels': labels[:100],
             'centroids': centroids_list,
             'metrics': {
                 'inertia': inertia,
@@ -609,20 +609,17 @@ def hierarchical_clustering(request):
     """Agglomerative Hierarchical Clustering"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
+        dataset = request.session.get('file', None)
+        df = pd.DataFrame.from_dict(dataset)
+        
+        features = request.POST.getlist('features')                
         n_clusters = int(request.POST.get('n_clusters'))
         
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
         X = df[features]
 
         model = AgglomerativeClustering(n_clusters=n_clusters)
         labels = model.fit_predict(X)
+        
         centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
         centroids_list = [list(map(lambda x: round(x, 2), centroid)) for centroid in centroids.tolist()]
         silhouette = round(silhouette_score(X, labels), 2)
@@ -644,14 +641,15 @@ def hierarchical_clustering(request):
             plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
         
         download_link = serialize(model, 'hierarchical_clustering')
+        request.session['model'] = download_link
         
         return render(request, 'main/hierarchical_clustering.html', {
             'k': n_clusters,
-            'X': X_data,
+            'X': X_data[:100],
             'features': features,
             'target': "Cluster",
             'feature_count': len(features),
-            'labels': labels,
+            'labels': labels[:100],
             'centroids': centroids_list,
             'metrics': {
                 'silhouette_score': silhouette,
