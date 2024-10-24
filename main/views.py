@@ -387,8 +387,8 @@ def knn(request):
         request.session['model'] = download_link
         
         return render(request, 'main/knn.html', {
-            'actual': y_test,
-            'predicted': y_pred,
+            'actual': y_test[:100],
+            'predicted': y_pred[:100],
             'features': features,
             'target': target,
             'metrics': {
@@ -906,7 +906,6 @@ def get_file(request):
         if file_dict:
             df = pd.DataFrame.from_dict(file_dict)
             correlation_matrix = df.corr()
-            print(correlation_matrix)
             columns = df.columns.tolist()
             return JsonResponse({
                 'filename': filename, 
