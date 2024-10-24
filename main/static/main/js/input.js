@@ -308,102 +308,101 @@ function activateBuildButton() {
 }
 
 // ! Scatter Plot
-function plotCorrelogram(data, correlationMatrix) {
-  return; // ! Disable correlogram for now 
-  // Extract unique variables from the data
-  var allVar = [...new Set(correlationMatrix.map(d => d.group))];
-  var numVar = allVar.length;
+// function plotCorrelogram(data, correlationMatrix) {
+//   // Extract unique variables from the data
+//   var allVar = [...new Set(correlationMatrix.map(d => d.group))];
+//   var numVar = allVar.length;
 
-  // Dimension of the whole chart. Only one size since it has to be square
-  var marginWhole = {top: 10, right: 10, bottom: 10, left: 10},
-      sizeWhole = 640 - marginWhole.left - marginWhole.right;
+//   // Dimension of the whole chart. Only one size since it has to be square
+//   var marginWhole = {top: 10, right: 10, bottom: 10, left: 10},
+//       sizeWhole = 640 - marginWhole.left - marginWhole.right;
 
-  // Create the svg area
-  var svg = d3.select("#canvas-2")
-    .append("svg")
-      .attr("width", sizeWhole + marginWhole.left + marginWhole.right)
-      .attr("height", sizeWhole + marginWhole.top + marginWhole.bottom)
-    .append("g")
-      .attr("transform", "translate(" + marginWhole.left + "," + marginWhole.top + ")");
+//   // Create the svg area
+//   var svg = d3.select("#canvas-2")
+//     .append("svg")
+//       .attr("width", sizeWhole + marginWhole.left + marginWhole.right)
+//       .attr("height", sizeWhole + marginWhole.top + marginWhole.bottom)
+//     .append("g")
+//       .attr("transform", "translate(" + marginWhole.left + "," + marginWhole.top + ")");
 
-  // Now I can compute the size of a single chart
-  var mar = 20;
-  var size = sizeWhole / numVar;
+//   // Now I can compute the size of a single chart
+//   var mar = 20;
+//   var size = sizeWhole / numVar;
 
-  // Create a scale: gives the position of each pair each variable
-  var position = d3.scalePoint()
-    .domain(allVar)
-    .range([0, sizeWhole - size]);
+//   // Create a scale: gives the position of each pair each variable
+//   var position = d3.scalePoint()
+//     .domain(allVar)
+//     .range([0, sizeWhole - size]);
 
-  // Color scale: give me a value, I return a color
-  var color = d3.scaleSequential()
-    .interpolator(d3.interpolateGnBu)
-    .domain([-1, 1]);
+//   // Color scale: give me a value, I return a color
+//   var color = d3.scaleSequential()
+//     .interpolator(d3.interpolateGnBu)
+//     .domain([-1, 1]);
 
-  // Add charts
-  for (var i in allVar) {
-    for (var j in allVar) {
-      // Get current variable name
-      var var1 = allVar[i];
-      var var2 = allVar[j];
+//   // Add charts
+//   for (var i in allVar) {
+//     for (var j in allVar) {
+//       // Get current variable name
+//       var var1 = allVar[i];
+//       var var2 = allVar[j];
 
-      // If var1 == var2 I'm on the diagonal, I skip that
-      if (var1 === var2) { continue; }
+//       // If var1 == var2 I'm on the diagonal, I skip that
+//       if (var1 === var2) { continue; }
 
-      // Filter data for the current pair of variables
-      var filteredData = data.map(d => ({ x: d[var1], y: d[var2] }));
+//       // Filter data for the current pair of variables
+//       var filteredData = data.map(d => ({ x: d[var1], y: d[var2] }));
 
-      // Add X Scale of each graph
-      var xextent = d3.extent(filteredData, function(d) { return +d.x; });
-      var x = d3.scaleLinear()
-        .domain(xextent).nice()
-        .range([0, size - 2 * mar]);
+//       // Add X Scale of each graph
+//       var xextent = d3.extent(filteredData, function(d) { return +d.x; });
+//       var x = d3.scaleLinear()
+//         .domain(xextent).nice()
+//         .range([0, size - 2 * mar]);
 
-      // Add Y Scale of each graph
-      var yextent = d3.extent(filteredData, function(d) { return +d.y; });
-      var y = d3.scaleLinear()
-        .domain(yextent).nice()
-        .range([size - 2 * mar, 0]);
+//       // Add Y Scale of each graph
+//       var yextent = d3.extent(filteredData, function(d) { return +d.y; });
+//       var y = d3.scaleLinear()
+//         .domain(yextent).nice()
+//         .range([size - 2 * mar, 0]);
 
-      // Add a 'g' at the right position
-      var tmp = svg
-        .append('g')
-        .attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
+//       // Add a 'g' at the right position
+//       var tmp = svg
+//         .append('g')
+//         .attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
 
-      // Add X and Y axis in tmp
-      tmp.append("g")
-        .attr("transform", "translate(0," + (size - mar * 2) + ")")
-        .call(d3.axisBottom(x).ticks(3));
-      tmp.append("g")
-        .call(d3.axisLeft(y).ticks(3));
+//       // Add X and Y axis in tmp
+//       tmp.append("g")
+//         .attr("transform", "translate(0," + (size - mar * 2) + ")")
+//         .call(d3.axisBottom(x).ticks(3));
+//       tmp.append("g")
+//         .call(d3.axisLeft(y).ticks(3));
 
-      // Add circles
-      tmp.selectAll("myCircles")
-        .data(filteredData)
-        .enter()
-        .append("circle")
-          .attr("cx", function(d) { return x(+d.x); })
-          .attr("cy", function(d) { return y(+d.y); })
-          .attr("r", 3)
-          .attr("fill", function(d) { return color(d3.mean([d.x, d.y])); });
-    }
-  }
+//       // Add circles
+//       tmp.selectAll("myCircles")
+//         .data(filteredData)
+//         .enter()
+//         .append("circle")
+//           .attr("cx", function(d) { return x(+d.x); })
+//           .attr("cy", function(d) { return y(+d.y); })
+//           .attr("r", 3)
+//           .attr("fill", function(d) { return color(d3.mean([d.x, d.y])); });
+//     }
+//   }
 
-  // Add variable names = diagonal
-  for (var i in allVar) {
-    for (var j in allVar) {
-      // If var1 == var2 I'm on the diagonal, otherwise I skip
-      if (i != j) { continue; }
-      // Add text
-      var var1 = allVar[i];
-      var var2 = allVar[j];
-      svg.append('g')
-        .attr("transform", "translate(" + position(var1) + "," + position(var2) + ")")
-        .append('text')
-          .attr("x", size / 2)
-          .attr("y", size / 2)
-          .text(var1)
-          .attr("text-anchor", "middle");
-    }
-  }
-}
+//   // Add variable names = diagonal
+//   for (var i in allVar) {
+//     for (var j in allVar) {
+//       // If var1 == var2 I'm on the diagonal, otherwise I skip
+//       if (i != j) { continue; }
+//       // Add text
+//       var var1 = allVar[i];
+//       var var2 = allVar[j];
+//       svg.append('g')
+//         .attr("transform", "translate(" + position(var1) + "," + position(var2) + ")")
+//         .append('text')
+//           .attr("x", size / 2)
+//           .attr("y", size / 2)
+//           .text(var1)
+//           .attr("text-anchor", "middle");
+//     }
+//   }
+// }
