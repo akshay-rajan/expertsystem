@@ -138,7 +138,7 @@ def lasso(request):
     """Implement Lasso Regression"""
     
     if request.method == 'POST':
-        dataset = request.session.get('file', None)        
+        dataset = request.session.get('file', None)   
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -559,17 +559,12 @@ def kmeans(request):
     """K-Means Clustering"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
+        dataset = request.session.get('file', None)
+        df = pd.DataFrame.from_dict(dataset)
+        
+        features = request.POST.getlist('features')                
         n_clusters = int(request.POST.get('n_clusters'))
         
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-                
         X = df[features]
 
         model = KMeans(n_clusters=n_clusters, random_state=42)
@@ -584,6 +579,7 @@ def kmeans(request):
         X_data = df[features].values
         
         download_link = serialize(model, 'kmeans')
+        request.session['model'] = download_link
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,

@@ -51,8 +51,6 @@ function handleFileUpload(event) {
       populateFeatureCheckboxes(data.columns);
       // Populate Dropdown
       populateTargetDropdown(data.columns);
-      // Get content 
-      const content = data.file;
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
       plotHeatMap(formatCorrelationMatrix(correlationMatrix));
