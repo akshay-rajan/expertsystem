@@ -391,3 +391,8 @@ a:focus {
 .sample-download:hover {
   filter: brightness(120%);
 }
+
+/* ! Results */
+#predictionForm {
+  transition: all 2s ease!important; /* For a smooth transition */
+}

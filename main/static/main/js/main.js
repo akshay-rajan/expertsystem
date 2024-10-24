@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', () => {
+  $('#predictionForm').slideDown();
+  setTimeout(() => {
+  }, 2000);
+});
 // ! Make prediction using the saved model
 async function makePrediction(event) {
   event.preventDefault(); 
