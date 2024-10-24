@@ -24,6 +24,13 @@ def construct_line(intercept, coefficients, X, target):
             equation += f" - ({abs(coef):.2f} * {feature})"
     return equation
 
+def format_predictions(nums):
+    """
+    Round the list of predictions to 3 decimal places
+    Return only the first 100 predictions
+    """
+    return [round(num, 3) for num in nums][:100]
+
 def serialize(model, algorithm):
     """Serialize the model and save it to a .pkl file, return the path"""
     model_filename = f"{algorithm}_{uuid.uuid4().hex[:6]}.pkl"

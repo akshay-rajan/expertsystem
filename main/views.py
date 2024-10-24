@@ -1,7 +1,5 @@
 import csv
 import json
-import os
-import uuid
 import pickle
 import numpy as np
 import pandas as pd
@@ -14,19 +12,15 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier, plot_tree, DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_score
-from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-
-from .utils import construct_line, serialize, regression_evaluation, classification_evaluation
+from .utils import construct_line, format_predictions, serialize, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram
 
 
@@ -108,7 +102,6 @@ def linear_regression(request):
         
         # ! Model Evaluation
         y_pred = model.predict(X_test)
-        y_pred_modified = [round(i, 3) for i in y_pred]
         # MSE, RMSE, MAE, R2
         metrics = regression_evaluation(y_test, y_pred)
         
@@ -123,7 +116,7 @@ def linear_regression(request):
         
         return render(request, 'main/linear_regression.html', {
             'actual': y_test[:100],
-            'predicted': y_pred_modified[:100],
+            'predicted': format_predictions(y_pred), # Round to 3 decimal places, show only 100
             'features': features,
             'target': target,
             'metrics': metrics,
@@ -152,7 +145,6 @@ def lasso(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        y_pred_modified = [round(i, 3) for i in y_pred]
         
         coeff = pd.Series(model.coef_, index=features)
 
@@ -168,7 +160,7 @@ def lasso(request):
         return render(request, 'main/lasso.html', {
             'coefficients': coeff,
             'actual': y_test[:100],
-            'predicted': y_pred_modified[:100],
+            'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
@@ -204,7 +196,6 @@ def ridge(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        y_pred_modified = [round(i, 3) for i in y_pred]
         
         coeff = pd.Series(model.coef_, index=features)
 
@@ -220,7 +211,7 @@ def ridge(request):
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
             'actual': y_test,
-            'predicted': y_pred_modified,
+            'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
@@ -254,7 +245,6 @@ def decision_tree_regression(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        y_pred_modified = [round(i, 3) for i in y_pred]
         
         metrics = regression_evaluation(y_test, y_pred)
         
@@ -263,7 +253,7 @@ def decision_tree_regression(request):
         
         return render(request, 'main/decision_tree_regression.html', {
             'actual': y_test,
-            'predicted': y_pred_modified,
+            'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
@@ -290,7 +280,6 @@ def random_forest_regression(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        y_pred_modified = [round(i, 3) for i in y_pred]
         
         metrics = regression_evaluation(y_test, y_pred)
         
@@ -299,7 +288,7 @@ def random_forest_regression(request):
         
         return render(request, 'main/random_forest_regression.html', {
             'actual': y_test,
-            'predicted': y_pred_modified,
+            'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
