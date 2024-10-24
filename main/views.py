@@ -271,7 +271,9 @@ def scaling(request):
 
         scaling_strategy = databody.get('strategy')
         scaling_columns = databody.get('columns')
+        print(scaling_strategy)
         print(scaling_columns)
+
 
         if scaling_strategy == 'standard':
             scaler = StandardScaler()

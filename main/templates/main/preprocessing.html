@@ -346,11 +346,11 @@
 //scaling strategy
 
 function applyScalingStrategy() {
-    const strategy = document.getElementById("scaling_strategy").value;
+    const scalingStrategy = document.getElementById("scaling_strategy").value;
     const selectedColumns = Array.from(document.querySelectorAll('input[name="scaling_selection"]:checked'))
         .map(input => input.value);
 
-    console.log(strategy);
+    console.log(scalingStrategy);
     console.log(selectedColumns);
     fetch('/preprocessing/scaling/', {
         method: 'POST',
