@@ -65,9 +65,16 @@
                     <option value="normalize">Normalization</option>
                 </select>
             </div>
-            <div class="mt-3">
-            <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
+            <div class="mb-3">
+                <label id="scale_colselect"></label>
+                <div id="scale_selection" class="form-check">
+                    <!-- Checkboxes for scalling selection will be populated dynamically -->
+                </div>
+                <div class="mt-3">
+                <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
+                </div>
             </div>
+            
         </form>
     </div>
     
@@ -88,8 +95,10 @@
     document.getElementById('file').addEventListener('change',preview_data);
     const featureSelectionDiv = document.getElementById("feature_selection");
     const encoding_selection = document.getElementById("encoding_selection");
+    const scale_selection = document.getElementById("scale_selection");
     const feat="feature_selection";
     const enco="encoding_selection";
+    const scale="scaling_selection"
 
     
 
@@ -126,7 +135,8 @@
             null_columns=data.null_columns
             non_numerical_cols=data.non_numerical_cols
             generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
-            generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+            generatecolumns(non_numerical_cols,encoding_selection,enco)     //generate columns for encoding
+            generatecolumns(headers,scale_selection,scale)
             generateTable(text,null_columns)
 
         }
@@ -267,6 +277,7 @@
                 non_numerical_cols=data.non_numerical_cols
                 generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
                 generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+                generatecolumns(headers,scale_selection,scale)
                 generateTable(text,null_columns); // Append the generated table to the container
 
 
@@ -317,12 +328,13 @@
                 non_numerical_cols=data.non_numerical_cols
                 generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
                 generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+                generatecolumns(headers,scale_selection,scale)
                 generateTable(text,null_columns); // Append the generated table to the container
 
 
             }
         })
-        .catch(error => {
+        .catch(error => { 
             console.error('Error:', error);
         });
     }
@@ -331,37 +343,49 @@
     document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
 
 
-// //scaling strategy
+//scaling strategy
 
-// function applyScalingStrategy() {
-//     const scalingStrategy = document.getElementById("scaling_strategy").value;
+function applyScalingStrategy() {
+    const strategy = document.getElementById("scaling_strategy").value;
+    const selectedColumns = Array.from(document.querySelectorAll('input[name="scaling_selection"]:checked'))
+        .map(input => input.value);
 
-//     fetch('/preprocessing/scaling/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
-//         },
-//         body: JSON.stringify({
-//             strategy: scalingStrategy
-//         }),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.error) {
-//             alert(data.error);
-//         } else {
-//             // Update the dataset preview with the scaled data
-//             document.getElementById('csv-preview-container').innerHTML = data.data_preview;
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
+    console.log(strategy);
+    console.log(selectedColumns);
+    fetch('/preprocessing/scaling/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+        },
+        body: JSON.stringify({
+            strategy: scalingStrategy,
+            columns: selectedColumns
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            text=JSON.parse(data.json_data)        
+            headers=data.headers
+            null_columns=data.null_columns
+            non_numerical_cols=data.non_numerical_cols
+            generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
+            generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+            generatecolumns(headers,scale_selection,scale)
+            generateTable(text,null_columns); // Append the generated table to the container
 
-// // Call this function when the user applies the scaling strategy
-// document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Call this function when the user applies the scaling strategy
+document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
 
 
 
