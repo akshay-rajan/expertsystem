@@ -366,12 +366,11 @@ def knn(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        n_neighbors = int(request.POST.get('n_neighbors'))
                 
         X, y = df[features], df[target]
-
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        n_neighbors = int(request.POST.get('n_neighbors'))
         model = KNeighborsClassifier(n_neighbors=n_neighbors)
         model.fit(X_train, y_train)
         
@@ -410,7 +409,6 @@ def logistic_regression(request):
         target = request.POST.get('target')
                 
         X, y = df[features], df[target]
-
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = LogisticRegression()
@@ -444,7 +442,6 @@ def naive_bayes(request):
         target = request.POST.get('target')
                 
         X, y = df[features], df[target]
-
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = GaussianNB()
@@ -482,7 +479,6 @@ def decision_tree(request):
         target = request.POST.get('target')
                 
         X, y = df[features], df[target]
-
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = DecisionTreeClassifier(random_state=42)
@@ -519,14 +515,11 @@ def random_forest(request):
     """Random Forest Classifier"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
+        
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         n_estimators = int(request.POST.get('n_estimators'))
                 
         X, y = df[features], df[target]
@@ -534,11 +527,12 @@ def random_forest(request):
         
         model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
         model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
         
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        y_pred = model.predict(X_test)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'random_forest')
+        request.session['model'] = download_link
 
         # Plot Feature Importances
         importances = model.feature_importances_
@@ -561,12 +555,7 @@ def random_forest(request):
             'predicted': y_pred,
             'features': features,
             'target': target,
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
             'plot': plot_url,
         })

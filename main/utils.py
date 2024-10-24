@@ -52,3 +52,6 @@ def classification_evaluation(y_test, y_pred):
         'recall': round(recall, 2),
         'f1': round(f1, 2)
     }
+
+
+
