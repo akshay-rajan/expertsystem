@@ -33,7 +33,12 @@ def regression_evaluation(y_test, y_pred):
     rmse = root_mean_squared_error(y_test, y_pred)
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
-    return mse, rmse, mae, r2
+    return {
+        'mse': round(mse, 2),
+        'rmse': round(rmse, 2),
+        'mae': round(mae, 2),
+        'r2': round(r2, 2)
+    }
 
 def classification_evaluation(y_test, y_pred):
     """Perform evaluations of a classification model"""
@@ -41,4 +46,9 @@ def classification_evaluation(y_test, y_pred):
     precision = precision_score(y_test, y_pred, average='weighted')
     recall = recall_score(y_test, y_pred, average='weighted')
     f1 = f1_score(y_test, y_pred, average='weighted')
-    return accuracy, precision, recall, f1
+    return {
+        'accuracy': round(accuracy, 2),
+        'precision': round(precision, 2),
+        'recall': round(recall, 2),
+        'f1': round(f1, 2)
+    }

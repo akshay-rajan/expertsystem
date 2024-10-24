@@ -367,8 +367,7 @@ def knn(request):
         features = request.POST.getlist('features')
         target = request.POST.get('target')
                 
-        X = df[features]
-        y = df[target]
+        X, y = df[features], df[target]
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
@@ -377,7 +376,7 @@ def knn(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'knn')
         request.session['model'] = download_link
@@ -387,12 +386,7 @@ def knn(request):
             'predicted': y_pred[:100],
             'features': features,
             'target': target,
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })
     
