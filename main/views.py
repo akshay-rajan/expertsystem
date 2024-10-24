@@ -26,7 +26,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-from .utils import construct_line, serialize, regression_evaluation, classification_evaluation
+from .utils import construct_line, serialize, regression_evaluation, classification_evaluation, plot_feature_importances
 
 
 def index(request):
@@ -534,21 +534,10 @@ def random_forest(request):
         download_link = serialize(model, 'random_forest')
         request.session['model'] = download_link
 
-        # Plot Feature Importances
         importances = model.feature_importances_
         indices = np.argsort(importances)[::-1]
-
-        plt.figure(figsize=(10,6))
-        plt.title("Feature Importances")
-        plt.bar(range(X.shape[1]), importances[indices], align="center", color="skyblue")
-        plt.xticks(range(X.shape[1]), [str(i) for i in features], rotation=90)
-        plt.tight_layout()
-        plot_filename = f"random_forest_plot_{uuid.uuid4().hex[:6]}.png"
-        plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
-        plt.savefig(plot_path)
-        plt.close()
-        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)  
-
+        graph_json = plot_feature_importances(features, importances, indices)
+        print(graph_json)
         
         return render(request, 'main/random_forest.html', {
             'actual': y_test,
@@ -557,7 +546,7 @@ def random_forest(request):
             'target': target,
             'metrics': metrics,
             'download': download_link,
-            'plot': plot_url,
+            'graph': graph_json,
         })
     
     return render(request, 'main/input.html', {

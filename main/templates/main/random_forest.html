@@ -68,7 +68,7 @@
         </div>
   
         <div class="visual">
-          <img src="{{ plot }}" class="img-fluid" alt="Plot" style="max-width: 500px;">
+          <div id="plotly-plot" class="img-fluid feature-importance-plot" style="max-width: 500px;"></div>
         </div>
 
       </div>
@@ -147,4 +147,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+  var graph_data = {{ graph | safe }};
+  Plotly.newPlot('plotly-plot', graph_data);
+</script>
 {% endblock %}

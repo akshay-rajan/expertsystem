@@ -1,7 +1,11 @@
 import os
-import pickle
+import json
 import uuid
+import pickle
 from django.conf import settings
+import plotly.io as pio
+import plotly.express as px
+from plotly.utils import PlotlyJSONEncoder
 from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_absolute_error, r2_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
@@ -53,5 +57,15 @@ def classification_evaluation(y_test, y_pred):
         'f1': round(f1, 2)
     }
 
-
+def plot_feature_importances(features, importances, indices):
+    """Plot the feature importances for Random Forest""", 
+    fig = px.bar(
+        x=[features[int(i)] for i in indices],
+        y=importances[indices],
+        labels={'x': "Features", 'y': "Importance"},
+        title='Feature Importances',
+        template='plotly_white'
+    )
+    fig.update_traces(marker_color='rgb(0,150,255)')
+    return json.dumps(fig, cls=PlotlyJSONEncoder)
 
