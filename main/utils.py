@@ -5,6 +5,7 @@ import pickle
 from django.conf import settings
 import plotly.io as pio
 import plotly.express as px
+import plotly.graph_objects as go
 from plotly.utils import PlotlyJSONEncoder
 from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_absolute_error, r2_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -69,3 +70,51 @@ def plot_feature_importances(features, importances, indices):
     fig.update_traces(marker_color='rgb(0,150,255)')
     return json.dumps(fig, cls=PlotlyJSONEncoder)
 
+def plot_decision_tree(model, feature_names):
+    """Plot a decision tree using Plotly Treemap"""
+    
+    # Initialize labels and parents with size of nodes in the tree
+    labels = [''] * model.tree_.node_count
+    parents = [''] * model.tree_.node_count
+    
+    # Root node is labeled as 'root'
+    labels[0] = 'root'
+    
+    # Iterate through the tree nodes
+    for i, (f, t, l, r) in enumerate(zip(
+        model.tree_.feature,
+        model.tree_.threshold,
+        model.tree_.children_left,
+        model.tree_.children_right,
+    )):
+        if l != r:  # If the node has children (non-leaf node)
+            # Label left child with the condition for the split
+            labels[l] = f'{feature_names[f]} <= {t:g}'
+            # Label right child with the condition for the split
+            labels[r] = f'{feature_names[f]} > {t:g}'
+            # Set both left and right children's parent to the current node
+            parents[l] = parents[r] = labels[i]
+    
+    # Create the Treemap plot using Plotly
+    fig = go.Figure(go.Treemap(
+        branchvalues='total',
+        labels=labels,
+        parents=parents,
+        values=model.tree_.n_node_samples,  # Node sizes based on number of samples
+        textinfo='label+value+percent root',  # Display label, value, and % relative to the root
+         # Colors based on node impurity
+        marker=dict(
+            colors=model.tree_.impurity,
+            colorscale='thermal',
+            cmin=model.tree_.impurity.min(),
+            cmax=model.tree_.impurity.max(),
+        ),
+        customdata=list(map(str, model.tree_.value)),  # Class distribution in custom data
+        hovertemplate='''<b>%{label}</b><br>
+        impurity: %{color}<br>
+        samples: %{value} (%{percentRoot:%.2f})<br>
+        value: %{customdata}''',
+    ))
+    
+    # Return the Plotly figure in JSON format to be used in the frontend
+    return json.dumps(fig, cls=PlotlyJSONEncoder)

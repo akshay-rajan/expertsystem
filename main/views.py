@@ -26,7 +26,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-from .utils import construct_line, serialize, regression_evaluation, classification_evaluation, plot_feature_importances
+from .utils import construct_line, serialize, regression_evaluation, classification_evaluation
+from .utils import plot_feature_importances, plot_decision_tree
 
 
 def index(request):
@@ -489,15 +490,7 @@ def decision_tree(request):
         
         download_link = serialize(model, 'decision_tree')
             
-        plt.figure(figsize=(20,10))
-        class_names_str = [str(cls) for cls in model.classes_]
-        plot_tree(model, feature_names=features, class_names=class_names_str, filled=True)
-        
-        plot_filename = f"decision_tree_plot_{uuid.uuid4().hex[:6]}.png"
-        plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
-        plt.savefig(plot_path)
-        plt.close()
-        plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
+        graph_json = plot_decision_tree(model, features)
         
         return render(request, 'main/decision_tree.html', {
             'actual': y_test,
@@ -506,7 +499,7 @@ def decision_tree(request):
             'target': target,
             'metrics': metrics,
             'download': download_link,
-            'plot': plot_url,
+            'tree': graph_json,
         })
     
     return render(request, 'main/input.html')
@@ -537,7 +530,6 @@ def random_forest(request):
         importances = model.feature_importances_
         indices = np.argsort(importances)[::-1]
         graph_json = plot_feature_importances(features, importances, indices)
-        print(graph_json)
         
         return render(request, 'main/random_forest.html', {
             'actual': y_test,
