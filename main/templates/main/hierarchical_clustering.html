@@ -59,8 +59,8 @@
       </a>
     </div>
     
-    <div class="plot justify-content-end">
-      <img src="{{ plot }}" class="img-fluid" alt="Plot">
+    <div class="visual">
+      <div id="plotly-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
     </div>
 
     <div class="table-responsive">
@@ -87,4 +87,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+  var graph_data = {{ dendrogram | safe }};
+  Plotly.newPlot('plotly-plot', graph_data);
+</script>
 {% endblock %}

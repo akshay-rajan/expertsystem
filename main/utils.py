@@ -6,6 +6,7 @@ from django.conf import settings
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 from plotly.utils import PlotlyJSONEncoder
 from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_absolute_error, r2_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -117,4 +118,15 @@ def plot_decision_tree(model, feature_names):
     ))
     
     # Return the Plotly figure in JSON format to be used in the frontend
+    return json.dumps(fig, cls=PlotlyJSONEncoder)
+
+def plot_dendrogram(linkage_matrix, labels):
+    """Plot a dendrogram using Plotly"""
+    if len(labels) != linkage_matrix.shape[0] + 1:
+        raise ValueError("Number of labels must match the number of observations in the data.")
+    fig = ff.create_dendrogram(
+        linkage_matrix,
+        # labels=labels,
+    )
+    fig.update_layout(title='Dendrogram', template='plotly_white', width=1000, height=600)
     return json.dumps(fig, cls=PlotlyJSONEncoder)

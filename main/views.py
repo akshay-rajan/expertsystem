@@ -27,7 +27,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from .utils import construct_line, serialize, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram
 
 
 def index(request):
@@ -627,18 +627,10 @@ def hierarchical_clustering(request):
         X_data = df[features].values
         
         # ? Plotting the Dendrogram
-        plot_url = None
-        if (len(features) >= 2):      
-            linked = linkage(X_data, 'ward')
-            plt.figure(figsize=(10, 7))
-            dendrogram(linked, orientation='top', labels=df.index, distance_sort='descending', show_leaf_counts=True)
-            plt.title('Dendrogram')
-        
-            plot_filename = f"hierarchical_clustering_plot_{uuid.uuid4().hex[:6]}.png"
-            plot_path = os.path.join(settings.MEDIA_ROOT, plot_filename)
-            plt.savefig(plot_path)
-            plt.close()
-            plot_url = os.path.join(settings.MEDIA_URL, plot_filename)
+        plot_json = None
+        if (len(features) >= 2):
+            linked = linkage(X_data, 'ward') # Using Ward linkage method
+            plot_json = plot_dendrogram(linked, df.index)
         
         download_link = serialize(model, 'hierarchical_clustering')
         request.session['model'] = download_link
@@ -654,7 +646,7 @@ def hierarchical_clustering(request):
             'metrics': {
                 'silhouette_score': silhouette,
             },
-            'plot': plot_url,
+            'dendrogram': plot_json,
             'download': download_link,
         })
     
