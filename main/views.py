@@ -266,27 +266,44 @@ def scaling(request):
         if not data_dict:
             return JsonResponse({'error': 'No data available'}, status=400)
 
+        # Convert data dictionary to pandas DataFrame
         data = pd.DataFrame.from_dict(data_dict)
+
+        # Parse the request body
         databody = json.loads(request.body)
 
+        # Get the scaling strategy and columns to scale
         scaling_strategy = databody.get('strategy')
         scaling_columns = databody.get('columns')
-        print(scaling_strategy)
-        print(scaling_columns)
 
+        if not scaling_strategy or not scaling_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
 
-        if scaling_strategy == 'standard':
-            scaler = StandardScaler()
-            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-        elif scaling_strategy == 'normalize':
+        # Ensure the columns exist in the data
+        if not all(col in data.columns for col in scaling_columns):
+            return JsonResponse({'error': 'One or more columns do not exist in the data'}, status=400)
+
+        # Apply the appropriate scaling strategy
+        if scaling_strategy == 'normalize':
             scaler = MinMaxScaler()
-            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+        elif scaling_strategy == 'standard':
+            scaler = StandardScaler()
+        else:
+            return JsonResponse({'error': 'Invalid scaling strategy'}, status=400)
 
-        # Update session with new data
+        try:
+            # Perform scaling on the specified columns
+            data[scaling_columns] = scaler.fit_transform(data[scaling_columns])
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+        # Store the scaled data back into the session
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
- 
 
+        # Return the scaled data as a response
+        return JsonResponse({'message': 'Data scaled successfully', 'data': data.to_dict()}, status=200)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 
