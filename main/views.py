@@ -403,38 +403,31 @@ def logistic_regression(request):
     """Classification using Logistic Regression"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
                 
         X, y = df[features], df[target]
+
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = LogisticRegression()
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'logistic_regression')
+        request.session['model'] = download_link
         
         return render(request, 'main/logistic_regression.html', {
-            'actual': y_test,
-            'predicted': y_pred,
+            'actual': y_test[:100],
+            'predicted': y_pred[:100],
             'features': features,
             'target': target,
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })
     
@@ -444,17 +437,14 @@ def naive_bayes(request):
     """Gaussian Naive Bayes Classifier"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
                 
         X, y = df[features], df[target]
+
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = GaussianNB()
@@ -462,24 +452,20 @@ def naive_bayes(request):
         
         y_pred = model.predict(X_test)
         y_pred_modified = [round(i, 3) for i in y_pred]
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'naive_bayes')
+        request.session['model'] = download_link
         
         mean_per_class = [[round(float(j), 4) for j in i] for i in model.theta_]
         
         return render(request, 'main/naive_bayes.html', {
-            'actual': y_test,
-            'predicted': y_pred_modified,
+            'actual': y_test[:100],
+            'predicted': y_pred_modified[:100],
             'features': features,
             'target': target,
             'results': dict(zip(model.classes_, mean_per_class)),
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })
     
@@ -489,25 +475,21 @@ def decision_tree(request):
     """Decision Tree Classifier"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
                 
         X, y = df[features], df[target]
+
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         model = DecisionTreeClassifier(random_state=42)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'decision_tree')
             
@@ -526,12 +508,7 @@ def decision_tree(request):
             'predicted': y_pred,
             'features': features,
             'target': target,
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
             'plot': plot_url,
         })
@@ -607,15 +584,11 @@ def svm(request):
     """Support Vector Machine"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         kernel = request.POST.get('kernel')
         C = float(request.POST.get('C'))
         
@@ -626,21 +599,17 @@ def svm(request):
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        accuracy, precision, recall, f1 = classification_evaluation(y_test, y_pred)
+        metrics = classification_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'svm')
+        request.session['model'] = download_link
         
         return render(request, 'main/svm.html', {
-            'actual': y_test,
-            'predicted': y_pred,
+            'actual': y_test[:100],
+            'predicted': y_pred[:100],
             'features': features,
             'target': target,
-            'metrics': {
-                'accuracy': round(accuracy, 2),
-                'precision': round(precision, 2),
-                'recall': round(recall, 2),
-                'f1': round(f1, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })
     
