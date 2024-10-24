@@ -91,20 +91,13 @@ def linear_regression(request):
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
-        dataset = request.FILES.get('dataset', None)
-        
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
-                
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
+                        
         # Features and Target selection
-        X = df[features]
-        y = df[target]
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
+        X, y = df[features], df[target]
 
         # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -116,34 +109,28 @@ def linear_regression(request):
         # ! Model Evaluation
         y_pred = model.predict(X_test)
         y_pred_modified = [round(i, 3) for i in y_pred]
+        # MSE, RMSE, MAE, R2
+        metrics = regression_evaluation(y_test, y_pred)
         
-        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
-        
-        # ! Find the line equation
+        # Construct the line equation for the model
         intercept = model.intercept_
         coefficients = model.coef_
-
         equation = construct_line(intercept, coefficients, X, target)
         
-        # Serialize the model and return the download link
+        # Serialize the model and return the download link, store link in session
         download_link = serialize(model, 'linear_regression')
+        request.session['model'] = download_link
         
         return render(request, 'main/linear_regression.html', {
-            'actual': y_test,
-            'predicted': y_pred_modified,
+            'actual': y_test[:100],
+            'predicted': y_pred_modified[:100],
             'features': features,
             'target': target,
-            'metrics': {
-                'mse': round(mse, 2),
-                'rmse': round(rmse, 2),
-                'mae': round(mae, 2),
-                'r2': round(r2, 2),
-            },
+            'metrics': metrics,
             'line': equation,
             'download': download_link,
         })
         
-    
     # Render the Input Form
     return render(request, 'main/input.html')
     
@@ -151,15 +138,11 @@ def lasso(request):
     """Implement Lasso Regression"""
     
     if request.method == 'POST':
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         alpha = float(request.POST.get('alpha'))
                 
         X, y = df[features], df[target]
@@ -177,22 +160,18 @@ def lasso(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
+        metrics = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'lasso')
+        request.session['model'] = download_link
         
         return render(request, 'main/lasso.html', {
             'coefficients': coeff,
-            'actual': y_test,
-            'predicted': y_pred_modified,
+            'actual': y_test[:100],
+            'predicted': y_pred_modified[:100],
             'features': features,
             'target': target,
-            'metrics': {
-                'mse': round(mse, 2),
-                'rmse': round(rmse, 2),
-                'mae': round(mae, 2),
-                'r2': round(r2, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
             'line': equation,
         })
@@ -210,20 +189,17 @@ def ridge(request):
     """Implement Ridge Regression"""
     
     if request.method == 'POST':
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         alpha = float(request.POST.get('alpha'))
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
+        alpha = float(request.POST.get('alpha'))
+                        
         model = Ridge(alpha=alpha)
         model.fit(X_train, y_train)
         
@@ -236,9 +212,10 @@ def ridge(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
+        metrics = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'ridge')
+        request.session['model'] = download_link
         
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
@@ -246,12 +223,7 @@ def ridge(request):
             'predicted': y_pred_modified,
             'features': features,
             'target': target,
-            'metrics': {
-                'mse': round(mse, 2),
-                'rmse': round(rmse, 2),
-                'mae': round(mae, 2),
-                'r2': round(r2, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
             'line': equation,
         })
@@ -269,15 +241,11 @@ def decision_tree_regression(request):
     """Decision Tree Regressor"""
     
     if request.method == 'POST':
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -288,21 +256,17 @@ def decision_tree_regression(request):
         y_pred = model.predict(X_test)
         y_pred_modified = [round(i, 3) for i in y_pred]
         
-        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
+        metrics = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'decision_tree_regression')
+        request.session['model'] = download_link
         
         return render(request, 'main/decision_tree_regression.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
             'features': features,
             'target': target,
-            'metrics': {
-                'mse': round(mse, 2),
-                'rmse': round(rmse, 2),
-                'mae': round(mae, 2),
-                'r2': round(r2, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })        
     
@@ -312,14 +276,11 @@ def random_forest_regression(request):
     """Random Forest Regressor"""
     
     if request.method == "POST":
-        dataset = request.FILES.get('dataset', None)
-        file_extension = dataset.name.split('.')[-1]
-        if file_extension == 'csv':
-            df = pd.read_csv(dataset, )
-        else:
-            df = pd.read_excel(dataset)
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        dataset = request.session.get('file', None)        
+        df = pd.DataFrame.from_dict(dataset)
+        
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
         n_estimators = int(request.POST.get('n_estimators'))
                 
         X, y = df[features], df[target]
@@ -331,21 +292,17 @@ def random_forest_regression(request):
         y_pred = model.predict(X_test)
         y_pred_modified = [round(i, 3) for i in y_pred]
         
-        mse, rmse, mae, r2 = regression_evaluation(y_test, y_pred)
+        metrics = regression_evaluation(y_test, y_pred)
         
         download_link = serialize(model, 'random_forest_regression')
+        request.session['model'] = download_link
         
         return render(request, 'main/random_forest_regression.html', {
             'actual': y_test,
             'predicted': y_pred_modified,
             'features': features,
             'target': target,
-            'metrics': {
-                'mse': round(mse, 2),
-                'rmse': round(rmse, 2),
-                'mae': round(mae, 2),
-                'r2': round(r2, 2),
-            },
+            'metrics': metrics,
             'download': download_link,
         })
     
@@ -493,8 +450,8 @@ def decision_tree(request):
         graph_json = plot_decision_tree(model, features)
         
         return render(request, 'main/decision_tree.html', {
-            'actual': y_test,
-            'predicted': y_pred,
+            'actual': y_test[:100],
+            'predicted': y_pred[:100],
             'features': features,
             'target': target,
             'metrics': metrics,
@@ -532,8 +489,8 @@ def random_forest(request):
         graph_json = plot_feature_importances(features, importances, indices)
         
         return render(request, 'main/random_forest.html', {
-            'actual': y_test,
-            'predicted': y_pred,
+            'actual': y_test[:100],
+            'predicted': y_pred[:100],
             'features': features,
             'target': target,
             'metrics': metrics,
