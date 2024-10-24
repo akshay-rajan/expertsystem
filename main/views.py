@@ -21,7 +21,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
-from django.core.files.storage import FileSystemStorage
 
 import matplotlib
 matplotlib.use('Agg')
@@ -362,14 +361,11 @@ def knn(request):
     """Build KNN model and evaluate it"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)
-        filename = request.session.get('filename', 'file.csv')
-        
-        file_extension = filename.split('.')[-1]
+        dataset = request.session.get('file', None)        
         df = pd.DataFrame.from_dict(dataset)
         
-        features = [s.replace('\n', '').replace('\r', '') for s in request.POST.getlist('features')]
-        target = request.POST.get('target').replace('\n', '').replace('\r', '')
+        features = request.POST.getlist('features')
+        target = request.POST.get('target')
                 
         X = df[features]
         y = df[target]
