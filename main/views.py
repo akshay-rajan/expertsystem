@@ -570,7 +570,8 @@ def kmeans(request):
         download_link = serialize(model, 'kmeans')
         request.session['model'] = download_link
 
-        plot_json = plot_kmeans_clusters(X, labels, centroids)
+        plot_json = plot_kmeans_clusters(X_data, labels, centroids)
+
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
