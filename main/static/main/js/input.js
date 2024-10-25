@@ -53,10 +53,7 @@ function handleFileUpload(event) {
       populateTargetDropdown(data.columns);
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
-      // plotHeatMap(formatCorrelationMatrix(correlationMatrix));
-      const heatmap = data.heatmap;
-      Plotly.newPlot('plotly-plot', heatmap);
-      
+      plotHeatMap(formatCorrelationMatrix(correlationMatrix));      
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       $('#hyperparameter-div').removeClass('d-none');

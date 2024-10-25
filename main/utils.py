@@ -3,7 +3,6 @@ import json
 import uuid
 import pickle
 from django.conf import settings
-import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
@@ -189,7 +188,12 @@ def plot_heatmap(correlation_matrix):
     fig = px.imshow(
         correlation_matrix, 
         color_continuous_scale="twilight",
-        labels=dict(x="Features", y="Features", color="Correlation")
+        labels={
+            "x":"Features", 
+            "y":"Features", 
+            "color":"Correlation"
+        },
+        range_color=[-1, 1],
     )
     # fig.show()
     return json.dumps(fig, cls=PlotlyJSONEncoder)
