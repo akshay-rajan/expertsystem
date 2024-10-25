@@ -174,7 +174,7 @@ def plot_kmeans_clusters(X, labels, centroids):
     
     # Update layout
     fig.update_layout(
-        title="KMeans Clustering",
+        title="Clusters and Centroids",
         xaxis_title="Feature 1",
         yaxis_title="Feature 2",
         template="plotly_white",
