@@ -138,7 +138,7 @@ def plot_dendrogram(linkage_matrix, labels):
     fig.update_layout(title='Dendrogram', template='plotly_white', width=1000, height=600)
     return json.dumps(fig, cls=PlotlyJSONEncoder)
 
-def plot_kmeans_clusters(X, labels, centroids):
+def plot_kmeans_clusters(X, labels, centroids, features, x_feature, y_feature):
     """Plot KMeans clusters and centroids using Plotly"""
     
     # Create a scatter plot for the data points
@@ -146,8 +146,8 @@ def plot_kmeans_clusters(X, labels, centroids):
     
     # Plot the clusters
     fig.add_trace(go.Scatter(
-        x=X[:, 0],
-        y=X[:, 1],
+        x=X[:, x_feature],
+        y=X[:, y_feature],
         mode='markers',
         marker=dict(
             size=10,
@@ -160,8 +160,8 @@ def plot_kmeans_clusters(X, labels, centroids):
 
     # Plot the centroids
     fig.add_trace(go.Scatter(
-        x=centroids[:, 0],
-        y=centroids[:, 1],
+        x=centroids[:, x_feature],
+        y=centroids[:, y_feature],
         mode='markers',
         marker=dict(
             size=12,
@@ -175,8 +175,8 @@ def plot_kmeans_clusters(X, labels, centroids):
     # Update layout
     fig.update_layout(
         title="Clusters and Centroids",
-        xaxis_title="Feature 1",
-        yaxis_title="Feature 2",
+        xaxis_title=features[x_feature],
+        yaxis_title=features[y_feature],
         template="plotly_white",
         showlegend=True
     )
