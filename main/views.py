@@ -21,7 +21,7 @@ from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import construct_line, format_predictions, serialize, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
 
 
 def index(request):
@@ -569,6 +569,8 @@ def kmeans(request):
         
         download_link = serialize(model, 'kmeans')
         request.session['model'] = download_link
+
+        plot_json = plot_kmeans_clusters(X, labels, centroids)
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
@@ -583,6 +585,7 @@ def kmeans(request):
                 'silhouette_score': silhouette,
             },
             'download': download_link,
+            'plot': plot_json,
         })
     
     return render(request, 'main/input_clustering.html', {

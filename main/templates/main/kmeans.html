@@ -62,6 +62,10 @@
       </a>
     </div>
 
+    <div class="visual">
+      <div id="plotly-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
+    </div>
+
     <div class="prediction mt-4 mb-4">
       <div class="accordion" id="accordionExample">
         <div class="card">
@@ -131,4 +135,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+  var graph_data = {{ plot | safe }};
+  Plotly.newPlot('plotly-plot', graph_data);
+</script>
 {% endblock %}
