@@ -53,7 +53,10 @@ function handleFileUpload(event) {
       populateTargetDropdown(data.columns);
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
-      plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+      // plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+      const heatmap = data.heatmap;
+      Plotly.newPlot('plotly-plot', heatmap);
+      
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       $('#hyperparameter-div').removeClass('d-none');
@@ -63,7 +66,7 @@ function handleFileUpload(event) {
       fileInput.disabled = false;
       // Alert user and reload page
       alert('An error occurred while uploading the file. Please try again.');
-      location.reload();
+      // location.reload();
       console.error('Could not store file: ', error);
     });
   }

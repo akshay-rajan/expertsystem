@@ -188,7 +188,8 @@ def plot_heatmap(correlation_matrix):
     """Plot Correlation Heatmap from the session"""
     fig = px.imshow(
         correlation_matrix, 
-        color_continuous_scale="GnBu",
+        color_continuous_scale="twilight",
         labels=dict(x="Features", y="Features", color="Correlation")
     )
+    # fig.show()
     return json.dumps(fig, cls=PlotlyJSONEncoder)
