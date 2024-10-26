@@ -181,7 +181,9 @@ def fill_missing_values(request):
         missing_value_strategy = databody.get('strategy')
         selected_columns = databody.get('columns')
         
-        
+        if not missing_value_strategy or not selected_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
+
         
         # Apply missing value handling logic
         if missing_value_strategy and selected_columns:
@@ -230,6 +232,10 @@ def encoding(request):
 
         encoding_strategy = databody.get('strategy')
         encoding_columns = databody.get('columns')
+
+        if not encoding_strategy or not encoding_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
+
 
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
@@ -300,8 +306,21 @@ def scaling(request):
         # Store the scaled data back into the session
         request.session['updated_data'] = data.to_dict()
 
-        # Return the scaled data as a response
-        return JsonResponse({'message': 'Data scaled successfully', 'data': data.to_dict()}, status=200)
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 

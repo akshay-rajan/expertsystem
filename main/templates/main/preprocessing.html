@@ -301,9 +301,7 @@
         const selectedColumns = Array.from(document.querySelectorAll('input[name="encoding_selection"]:checked'))
             .map(input => input.value);
 
-        console.log(strategy);
-        console.log(selectedColumns);
-
+      
 
         fetch('/preprocessing/encoding/', {
             method: 'POST',
