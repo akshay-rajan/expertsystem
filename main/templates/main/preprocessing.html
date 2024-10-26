@@ -3,91 +3,97 @@
 {% block title %}Preprocessing{% endblock %}
 {% block body %}
     <h2 class="text-center my-4">Upload Your Dataset and Apply Preprocessing</h2>
-    <!-- File Upload Form -->
+    
+    <div class="container">
+        <div class="row">
+            <!-- Preprocessing Form Section (Left Column) -->
+            <div class="col-lg-4 col-md-6">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-    <div class="d-flex justify-content-center">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+                    <!-- Upload dataset section -->
+                    <div class="mb-3">
+                        <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
+                    </div>
 
-            <!-- upload dataset here  -->                                
-            <div class="mb-3">
-                <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
-            </div>
-            
-            <!-- Preprocessing Options -->
-            <div class="mb-3">
-                <label for="missing_value_strategy">Missing Value Strategy:</label>
-                <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
-                    <option value="None">None</option>
-                    <option value="mean">Fill with Mean</option>
-                    <option value="median">Fill with Median</option>
-                    <option value="drop">Remove Rows</option>
-                </select>
+                    <!-- Preprocessing Options -->
+                    <div class="mb-3">
+                        <label for="missing_value_strategy">Missing Value Strategy:</label>
+                        <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
+                            <option value="None">None</option>
+                            <option value="mean">Fill with Mean</option>
+                            <option value="median">Fill with Median</option>
+                            <option value="drop">Remove Rows</option>
+                        </select>
+                    </div>
+
+                    <!-- Column Selection for Missing Value Strategy -->
+                    <div class="mb-3">
+                        <label id="colselect"></label>
+                        <div id="feature_selection" class="form-check">
+                            <!-- Dynamic checkboxes for columns will be here -->
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-primary" id="missing_value_strategybtn">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- Encoding Strategy Selection -->
+                    <div class="mb-3">
+                        <label for="encoding_strategy">Encoding Strategy:</label>
+                        <select id="encoding_strategy" name="encoding_strategy" class="form-control">
+                            <option value="None">None</option>
+                            <option value="onehot">One-Hot Encoding</option>
+                            <option value="label">Label Encoding</option>
+                        </select>
+                    </div>
+
+                    <!-- Column Selection for Encoding Strategy -->
+                    <div class="mb-3">
+                        <label id="enc_colselect"></label>
+                        <div id="encoding_selection" class="form-check">
+                            <!-- Dynamic checkboxes for encoding selection will be here -->
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-primary" id="encoding_strategybtn">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- Scaling Strategy Selection -->
+                    <div class="mb-3">
+                        <label for="scaling_strategy">Scaling Strategy:</label>
+                        <select id="scaling_strategy" name="scaling_strategy" class="form-control">
+                            <option value="None">None</option>
+                            <option value="standard">Standardization</option>
+                            <option value="normalize">Normalization</option>
+                        </select>
+                    </div>
+
+                    <!-- Column Selection for Scaling Strategy -->
+                    <div class="mb-3">
+                        <label id="scale_colselect"></label>
+                        <div id="scale_selection" class="form-check">
+                            <!-- Dynamic checkboxes for scaling selection will be here -->
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'download_csv' %}" class="btn btn-success mt-4">Download Updated Dataset as CSV</a>
+                </form>
             </div>
 
-            <!-- Column Selection for Missing Value Strategy -->
-            <div class="mb-3">
-                <label id="colselect"></label>
-                <div id="feature_selection" class="form-check">
-                    <!-- Checkboxes will be populated dynamically -->
-                </div>
-                <div class="mt-3">
-                <button type="button" class="btn btn-primary" id="missing_value_strategybtn">Apply</button>
+            <!-- Preview Table Section (Right Column) -->
+            <div class="col-lg-8 col-md-6">
+                <h3 class="text-center my-4" id="heading"></h3>
+                
+                <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
+                    <!-- JavaScript will render data here as table -->
                 </div>
             </div>
-        
-
-            <div class="mb-3">
-                <label for="encoding_strategy">Encoding Strategy:</label>
-                <select id="encoding_strategy" name="encoding_strategy" class="form-control">
-                    <option value="None">None</option>
-                    <option value="onehot">One-Hot Encoding</option>
-                    <option value="label">Label Encoding</option>
-                </select>
-            </div>
-
-            <!-- Column Selection for Encoding Strategy -->
-            <div class="mb-3">
-                <label id="enc_colselect"></label>
-                <div id="encoding_selection" class="form-check">
-                    <!-- Checkboxes for encoding selection will be populated dynamically -->
-                </div>
-                <div class="mt-3">
-                <button type="button" class="btn btn-primary" id="encoding_strategybtn">Apply</button>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="scaling_strategy">Scaling Strategy:</label>
-                <select id="scaling_strategy" name="scaling_strategy" class="form-control">
-                    <option value="None">None</option>
-                    <option value="standard">Standardization</option>
-                    <option value="normalize">Normalization</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label id="scale_colselect"></label>
-                <div id="scale_selection" class="form-check">
-                    <!-- Checkboxes for scalling selection will be populated dynamically -->
-                </div>
-                <div class="mt-3">
-                <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
-                </div>
-            </div>
-            
-        </form>
+        </div>
     </div>
-    
-   
-    <h3 class="text-center my-4" id="heading"></h3>
-    
-    <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
-        <!-- JavaScript will render data here as table -->
-         
-    </div>
-    
-    <a href="{% url 'download_csv' %}">Download Updated Dataset as CSV</a>
-
 {% endblock %}
 
 {% block script %}

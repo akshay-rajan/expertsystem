@@ -138,7 +138,11 @@ def preprocessing(request):
 
             # print("TESTin here")
             # print(data.info())
-            # print(data.describe())
+            print(type(data.describe()))
+            print(data.describe())
+
+            # print(type(data.head(10)))
+
            
 
             # print(data.isnull().sum())
