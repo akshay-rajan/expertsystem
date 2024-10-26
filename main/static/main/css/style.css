@@ -11,6 +11,24 @@ body {
   overflow-x: hidden!important;
 }
 
+.btn-primary {
+  background-color: var(--secondary-color)!important;
+  color: var(--primary-color);
+  border: none;
+  border-radius: 55px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.5s;
+}
+.btn-primary:hover {
+  background-color: var(--dark-color)!important;
+}
+.btn-primary:disabled:hover {
+  background-color: var(--secondary-color)!important;
+  color: var(--primary-color)!important;
+}
+
 .fade-in, .fade-in-2, .fade-in-3 {
   display: none;
 }
@@ -395,4 +413,7 @@ a:focus {
 /* ! Results */
 #predictionForm {
   transition: all 2s ease!important; /* For a smooth transition */
+}
+.evaluation a {
+  text-decoration: none!important;
 }
