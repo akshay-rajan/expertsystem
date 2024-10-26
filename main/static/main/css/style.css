@@ -13,13 +13,9 @@ body {
 
 .btn-primary {
   background-color: var(--secondary-color)!important;
-  color: var(--primary-color);
-  border: none;
-  border-radius: 55px;
-  padding: 10px 20px;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.5s;
+  border: none!important;
+  border-radius: 3px!important;
+  transition: background-color 0.3s!important;
 }
 .btn-primary:hover {
   background-color: var(--dark-color)!important;
