@@ -63,7 +63,7 @@ function handleFileUpload(event) {
       fileInput.disabled = false;
       // Alert user and reload page
       alert('An error occurred while uploading the file. Please try again.');
-      // location.reload();
+      location.reload();
       console.error('Could not store file: ', error);
     });
   }
