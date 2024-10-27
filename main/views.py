@@ -795,15 +795,48 @@ def preprocessing(request):
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
 
+            
+            data.replace(0, np.nan, inplace=True)
             # Store the initial dataset in the session
             request.session['updated_data'] = data.to_dict()
 
-            # Prepare the data preview for rendering
-            context['data_preview'] = data.to_html(classes='table table-bordered table-hover', index=False)
-            context['headers'] = data.columns.tolist()  # Store headers for use in the template
+            null_columns = data.columns[data.isnull().any()]
+            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
+            ################################################################################
+
+            # print("TESTin here")
+            # print(data.info())
+            print(type(data.describe()))
+            print(data.describe())
+
+            # print(type(data.head(10)))
+
+           
+
+            # print(data.isnull().sum())
+
+
+            #################################################################################
+
+            # Prepare the data preview for rendering
+            json_data = data.head(20).to_json(orient='records')
+            headers = data.columns.tolist()
+            null_columns = null_columns.tolist()
+            non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+            
+
+            
+
+
+            return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
         except Exception as e:
-            context['error'] = f"Error processing data: {e}"
+            return JsonResponse({'error': f"Error processing data: {e}"})
 
     return render(request, 'main/preprocessing.html', context)
 
@@ -821,6 +854,9 @@ def fill_missing_values(request):
         missing_value_strategy = databody.get('strategy')
         selected_columns = databody.get('columns')
         
+        if not missing_value_strategy or not selected_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
+
         
         # Apply missing value handling logic
         if missing_value_strategy and selected_columns:
@@ -833,11 +869,29 @@ def fill_missing_values(request):
                         data[col].fillna(data[col].median(), inplace=True)
                     elif missing_value_strategy == 'drop':
                         data.dropna(subset=selected_columns, inplace=True)
+            
 
+        
+        
         # Update session with new data
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
-    
+
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
+
 def encoding(request):
     if request.method == 'POST':
         # Load the updated data from session
@@ -850,6 +904,11 @@ def encoding(request):
 
         encoding_strategy = databody.get('strategy')
         encoding_columns = databody.get('columns')
+
+        if not encoding_strategy or not encoding_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
+
+
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
                 data = pd.get_dummies(data, columns=encoding_columns)
@@ -862,7 +921,21 @@ def encoding(request):
 
         # Update session with new data
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
   
 def scaling(request):
     if request.method == 'POST':
@@ -871,22 +944,58 @@ def scaling(request):
         if not data_dict:
             return JsonResponse({'error': 'No data available'}, status=400)
 
+        # Convert data dictionary to pandas DataFrame
         data = pd.DataFrame.from_dict(data_dict)
+
+        # Parse the request body
         databody = json.loads(request.body)
 
+        # Get the scaling strategy and columns to scale
         scaling_strategy = databody.get('strategy')
+        scaling_columns = databody.get('columns')
 
-        if scaling_strategy == 'standard':
-            scaler = StandardScaler()
-            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-        elif scaling_strategy == 'normalize':
+        if not scaling_strategy or not scaling_columns:
+            return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
+
+        # Ensure the columns exist in the data
+        if not all(col in data.columns for col in scaling_columns):
+            return JsonResponse({'error': 'One or more columns do not exist in the data'}, status=400)
+
+        # Apply the appropriate scaling strategy
+        if scaling_strategy == 'normalize':
             scaler = MinMaxScaler()
-            data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+        elif scaling_strategy == 'standard':
+            scaler = StandardScaler()
+        else:
+            return JsonResponse({'error': 'Invalid scaling strategy'}, status=400)
 
-        # Update session with new data
+        try:
+            # Perform scaling on the specified columns
+            data[scaling_columns] = scaler.fit_transform(data[scaling_columns])
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+        # Store the scaled data back into the session
         request.session['updated_data'] = data.to_dict()
-        return JsonResponse({'data_preview': data.to_html(classes='table table-bordered', index=False)})
- 
+
+        null_columns = data.columns[data.isnull().any()]
+        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+
+
+        json_data = data.head(20).to_json(orient='records')
+        headers = data.columns.tolist()
+        null_columns = null_columns.tolist()
+        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        return JsonResponse({
+                'json_data': json_data,
+                'headers': headers,
+                'null_columns': null_columns,
+                'non_numerical_cols':non_numerical_cols
+            })
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 def download_csv(request):
     data_dict=request.session.get('updated_data',None)
     if data_dict:
