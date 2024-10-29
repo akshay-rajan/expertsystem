@@ -210,7 +210,7 @@ def ridge(request):
         
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
-            'actual': y_test,
+            'actual': y_test[:100],
             'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
@@ -252,7 +252,7 @@ def decision_tree_regression(request):
         request.session['model'] = download_link
         
         return render(request, 'main/decision_tree_regression.html', {
-            'actual': y_test,
+            'actual': y_test[:100],
             'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
@@ -287,7 +287,7 @@ def random_forest_regression(request):
         request.session['model'] = download_link
         
         return render(request, 'main/random_forest_regression.html', {
-            'actual': y_test,
+            'actual': y_test[:100],
             'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
