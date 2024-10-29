@@ -111,9 +111,7 @@ def linear_regression(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        # # Serialize the model and return the download link, store link in session
-        # download_link = serialize(model, 'linear_regression')
-        # request.session['model'] = download_link
+        # Store the model in the database and save the model ID in the session
         ml_model = MLModel()
         ml_model.save_model(model)
         request.session['model'] = str(ml_model.model_id)        
@@ -738,13 +736,13 @@ def predict(request):
     if request.method == "POST":
         try:            
             # Load the model
-            model_path = request.session.get('model')[1:] # Remove the leading '/'
-            if not model_path:
+            model_id = request.session.get('model')
+            if not model_id:
                 return JsonResponse({'error': 'No model available'}, status=400)
             
-            with open(model_path, 'rb') as file:
-                model = pickle.load(file)
-            
+            ml_model = get_object_or_404(MLModel, model_id=model_id)
+            model = ml_model.load_model()
+                        
             # Validate input data            
             data = json.loads(request.body)
             input_data = np.array(data['input']).reshape(1, -1)
