@@ -715,7 +715,21 @@ def samples(request):
         'datasets': datasets,
     })
 
+def download_model(request):
+    """Download the trained model stored in the database"""
+    # Retrieve the model ID from the session
+    model_id = request.session.get('model')
+    if not model_id:
+        raise Http404("Model ID not found in session.")
 
+    # Retrieve the model from the database using the model ID
+    ml_model = get_object_or_404(MLModel, model_id=model_id)
+    
+    # Create an HTTP response with the model data as a downloadable file
+    response = HttpResponse(ml_model.model_data, content_type='application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename="model-{model_id}.pkl"'
+    
+    return response
 
 # ? API Endpoints
 @csrf_exempt
