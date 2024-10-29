@@ -4,8 +4,8 @@ import pickle
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
@@ -22,6 +22,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import construct_line, format_predictions, serialize, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
+from .models import MLModel
 
 
 def index(request):
@@ -110,9 +111,12 @@ def linear_regression(request):
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
         
-        # Serialize the model and return the download link, store link in session
-        download_link = serialize(model, 'linear_regression')
-        request.session['model'] = download_link
+        # # Serialize the model and return the download link, store link in session
+        # download_link = serialize(model, 'linear_regression')
+        # request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/linear_regression.html', {
             'actual': y_test[:100],
@@ -121,7 +125,8 @@ def linear_regression(request):
             'target': target,
             'metrics': metrics,
             'line': equation,
-            'download': download_link,
+            # 'download': download_link,
+            'download': "",
         })
         
     # Render the Input Form
@@ -709,6 +714,8 @@ def samples(request):
     return render(request, 'main/samples.html', {
         'datasets': datasets,
     })
+
+
 
 # ? API Endpoints
 @csrf_exempt
