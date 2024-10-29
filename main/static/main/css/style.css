@@ -428,3 +428,9 @@ a:focus {
 .evaluation a {
   text-decoration: none!important;
 }
+
+/* ! Others */
+.error-404 {
+  color: var(--secondary-color)!important;
+  text-align: center;
+}
