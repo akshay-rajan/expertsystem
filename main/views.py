@@ -845,6 +845,7 @@ def preprocessing(request):
             # Store the initial dataset in the session
             # request.session['updated_data'] = data.to_dict()
             file_model = DataFile()
+            print(data.to_dict())
             file_model.save_file(uploaded_file.name, data.to_dict())
             request.session['file'] = str(file_model.file_id)
 
@@ -876,7 +877,6 @@ def fill_missing_values(request):
         # Load the updated data from session
         # data_dict = request.session.get('updated_data')
         file_id = request.session.get('file', None)
-        print(file_id)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         _, file_dict = file_model.load_file()
 
