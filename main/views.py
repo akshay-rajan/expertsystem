@@ -22,7 +22,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import construct_line, format_predictions, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
-from .models import MLModel
+from .models import MLModel, DataFile
 
 
 def index(request):
@@ -86,7 +86,9 @@ def linear_regression(request):
     # On submission of the datasets
     if request.method == 'POST':
         # ! Data Processing
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
                         
         # Features and Target selection
@@ -773,9 +775,10 @@ def save_file(request):
             return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed'}, status=400)
 
         
-        # Store the file name and dict in the session
-        request.session['filename'] = file.name
-        request.session['file'] = df.to_dict()
+        # Store the file name and file as JSON in the db, store the id in the session
+        file_model = DataFile()
+        file_model.save_file(file.name, df.to_dict())    
+        request.session['file'] = str(file_model.file_id)
 
         return JsonResponse({'message': 'File uploaded successfully!'})
     
@@ -784,8 +787,8 @@ def save_file(request):
 def get_file(request):
     """Return the file content stored in the session"""
     if request.method == 'POST':
-        file_dict = request.session.get('file', None)
-        filename = request.session.get('filename', 'file.csv')
+        file_model = get_object_or_404(DataFile, file_id=request.session.get('file'))
+        filename, file_dict = file_model.load_file()
     
         if file_dict:
             df = pd.DataFrame.from_dict(file_dict)
@@ -794,7 +797,7 @@ def get_file(request):
             correlation_matrix = df.corr()
 
             return JsonResponse({
-                'filename': filename, 
+                'filename': filename,
                 'file': file_dict,
                 'columns': columns,
                 'correlation_matrix': correlation_matrix.to_dict(),

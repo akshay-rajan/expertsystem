@@ -23,3 +23,26 @@ class MLModel(models.Model):
         """Deserialize the model from the database and return it"""
         return pickle.loads(self.model_data)
 
+# Store all uploaded and processed files
+class DataFile(models.Model):
+    # Unique identifier for the file
+    file_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    # File name
+    filename = models.CharField(max_length=255)
+    # File content
+    file_data = models.JSONField()
+    # Timestamp
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.file_name
+    
+    def save_file(self, filename, file):
+        """Save the file to the database as JSON"""
+        self.filename = filename
+        self.file_data = file
+        self.save()
+        
+    def load_file(self):
+        """Return the file from the database"""
+        return self.filename, self.file_data
