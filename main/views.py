@@ -134,7 +134,9 @@ def lasso(request):
     """Implement Lasso Regression"""
     
     if request.method == 'POST':
-        dataset = request.session.get('file', None)   
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -184,7 +186,9 @@ def ridge(request):
     """Implement Ridge Regression"""
     
     if request.method == 'POST':
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -235,7 +239,9 @@ def decision_tree_regression(request):
     """Decision Tree Regressor"""
     
     if request.method == 'POST':
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -269,7 +275,9 @@ def random_forest_regression(request):
     """Random Forest Regressor"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -311,7 +319,9 @@ def knn(request):
     """Build KNN model and evaluate it"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -352,7 +362,9 @@ def logistic_regression(request):
     """Classification using Logistic Regression"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -385,7 +397,9 @@ def naive_bayes(request):
     """Gaussian Naive Bayes Classifier"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -422,7 +436,9 @@ def decision_tree(request):
     """Decision Tree Classifier"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -458,7 +474,9 @@ def random_forest(request):
     """Random Forest Classifier"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -504,7 +522,9 @@ def svm(request):
     """Support Vector Machine"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)        
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')
@@ -552,7 +572,9 @@ def kmeans(request):
     """K-Means Clustering"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')                
@@ -607,7 +629,9 @@ def hierarchical_clustering(request):
     """Agglomerative Hierarchical Clustering"""
     
     if request.method == "POST":
-        dataset = request.session.get('file', None)
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, dataset = file_model.load_file()
         df = pd.DataFrame.from_dict(dataset)
         
         features = request.POST.getlist('features')                
