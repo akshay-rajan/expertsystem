@@ -783,7 +783,7 @@ def predict(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def save_file(request):
-    """Save the uploaded file content to the session as a dict using pandas"""
+    """Save the uploaded file to the database as JSON"""
     if request.method == 'POST' and request.FILES.get('file'):
         file = request.FILES['file']
         
@@ -832,67 +832,58 @@ def get_file(request):
 # ? Preprocessing
 
 def preprocessing(request):
-    context = {}
-
+    """Store the uploaded file and display the data preview"""
+    
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         try:
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
-
-            
+            # Replace 0s with NaNs
             data.replace(0, np.nan, inplace=True)
+            
             # Store the initial dataset in the session
-            request.session['updated_data'] = data.to_dict()
+            # request.session['updated_data'] = data.to_dict()
+            file_model = DataFile()
+            file_model.save_file(uploaded_file.name, data.to_dict())
+            request.session['file'] = str(file_model.file_id)
 
             null_columns = data.columns[data.isnull().any()]
             non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-
-            ################################################################################
-
-            # print("TESTin here")
-            # print(data.info())
-            print(type(data.describe()))
-            print(data.describe())
-
-            # print(type(data.head(10)))
-
-           
-
-            # print(data.isnull().sum())
-
-
-            #################################################################################
 
             # Prepare the data preview for rendering
             json_data = data.head(20).to_json(orient='records')
             headers = data.columns.tolist()
             null_columns = null_columns.tolist()
-            non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+            non_numerical_cols = non_numerical_cols.tolist() # columns with categorical values
             
-
-            
-
-
             return JsonResponse({
                 'json_data': json_data,
                 'headers': headers,
                 'null_columns': null_columns,
                 'non_numerical_cols':non_numerical_cols
             })
+            
         except Exception as e:
             return JsonResponse({'error': f"Error processing data: {e}"})
 
-    return render(request, 'main/preprocessing.html', context)
+    return render(request, 'main/preprocessing.html')
 
 def fill_missing_values(request):
+    """Replace missing values with mean / median or drop the rows"""
+    
     if request.method == 'POST':
         # Load the updated data from session
-        data_dict = request.session.get('updated_data')
-        if not data_dict:
+        # data_dict = request.session.get('updated_data')
+        file_id = request.session.get('file', None)
+        print(file_id)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, file_dict = file_model.load_file()
+
+        if not file_dict:
             return JsonResponse({'error': 'No data available'}, status=400)
 
-        data = pd.DataFrame.from_dict(data_dict)
+        data = pd.DataFrame.from_dict(file_dict)
         
         databody = json.loads(request.body)
 
@@ -901,11 +892,9 @@ def fill_missing_values(request):
         
         if not missing_value_strategy or not selected_columns:
             return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
-
         
         # Apply missing value handling logic
-        if missing_value_strategy and selected_columns:
-            
+        if missing_value_strategy and selected_columns:            
             for col in selected_columns:
                 if data[col].dtype != 'object':  # Ensure column is numerical
                     if missing_value_strategy == 'mean':
@@ -915,21 +904,18 @@ def fill_missing_values(request):
                     elif missing_value_strategy == 'drop':
                         data.dropna(subset=selected_columns, inplace=True)
             
-
-        
-        
         # Update session with new data
-        request.session['updated_data'] = data.to_dict()
+        # request.session['updated_data'] = data.to_dict()
+        file_model.save_file(file_model.filename, data.to_dict())
+        request.session['file'] = str(file_model.file_id)
 
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
-
-
         json_data = data.head(20).to_json(orient='records')
         headers = data.columns.tolist()
         null_columns = null_columns.tolist()
-        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        non_numerical_cols = non_numerical_cols.tolist()  #columns with categorical values
         return JsonResponse({
                 'json_data': json_data,
                 'headers': headers,
@@ -938,9 +924,17 @@ def fill_missing_values(request):
             })
 
 def encoding(request):
+    """
+    Encoding categorical columns into numerical values
+    One-Hot Encoding: Convert each category value into a new column and assigns a 1 or 0 (True/False) value to the column.
+    Label Encoding: Convert each category value into a unique integer value.
+    """
     if request.method == 'POST':
         # Load the updated data from session
-        data_dict = request.session.get('updated_data')
+        # data_dict = request.session.get('updated_data')
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, data_dict = file_model.load_file()
         if not data_dict:
             return JsonResponse({'error': 'No data available'}, status=400)
 
@@ -965,16 +959,17 @@ def encoding(request):
 
 
         # Update session with new data
-        request.session['updated_data'] = data.to_dict()
+        # request.session['updated_data'] = data.to_dict()
+        file_model.save_file(file_model.filename, data.to_dict())
+        request.session['file'] = str(file_model.file_id)
+        
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-
-
 
         json_data = data.head(20).to_json(orient='records')
         headers = data.columns.tolist()
         null_columns = null_columns.tolist()
-        non_numerical_cols=non_numerical_cols.tolist()  #columns with categorical values
+        non_numerical_cols = non_numerical_cols.tolist()  #columns with categorical values
         return JsonResponse({
                 'json_data': json_data,
                 'headers': headers,
@@ -983,9 +978,17 @@ def encoding(request):
             })
   
 def scaling(request):
+    """
+    Perform Normalization or Standardization on the data
+    Min-Max Scaling: Scale the data between 0 and 1
+    Standard Scaling: Scale the data to have a mean of 0 and a standard deviation of 1
+    """
     if request.method == 'POST':
         # Load the updated data from session
-        data_dict = request.session.get('updated_data')
+        # data_dict = request.session.get('updated_data')
+        file_id = request.session.get('file', None)
+        file_model = get_object_or_404(DataFile, file_id=file_id)
+        _, data_dict = file_model.load_file()
         if not data_dict:
             return JsonResponse({'error': 'No data available'}, status=400)
 
@@ -1021,12 +1024,12 @@ def scaling(request):
             return JsonResponse({'error': str(e)}, status=500)
 
         # Store the scaled data back into the session
-        request.session['updated_data'] = data.to_dict()
+        # request.session['updated_data'] = data.to_dict()
+        file_model.save_file(file_model.filename, data.to_dict())
+        request.session['file'] = str(file_model.file_id)
 
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-
-
 
         json_data = data.head(20).to_json(orient='records')
         headers = data.columns.tolist()
@@ -1042,7 +1045,12 @@ def scaling(request):
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def download_csv(request):
-    data_dict=request.session.get('updated_data',None)
+    """Download the updated data"""
+    # data_dict=request.session.get('updated_data',None)
+    file_id = request.session.get('file', None)
+    file_model = get_object_or_404(DataFile, file_id=file_id)
+    _, data_dict = file_model.load_file()
+    
     if data_dict:
         # Convert the dictionary back to a DataFrame
         data = pd.DataFrame.from_dict(data_dict)
@@ -1065,4 +1073,3 @@ def download_csv(request):
     else:
         # Handle case where session data is not available
         return HttpResponse("No data available", status=400)
-
