@@ -20,7 +20,7 @@ from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
-from .utils import construct_line, format_predictions, serialize, regression_evaluation, classification_evaluation
+from .utils import construct_line, format_predictions, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
 from .models import MLModel
 
@@ -123,8 +123,6 @@ def linear_regression(request):
             'target': target,
             'metrics': metrics,
             'line': equation,
-            # 'download': download_link,
-            'download': "",
         })
         
     # Render the Input Form
@@ -157,8 +155,9 @@ def lasso(request):
         
         metrics = regression_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'lasso')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/lasso.html', {
             'coefficients': coeff,
@@ -167,7 +166,6 @@ def lasso(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
             'line': equation,
         })
         
@@ -208,8 +206,9 @@ def ridge(request):
         
         metrics = regression_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'ridge')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
@@ -218,7 +217,6 @@ def ridge(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
             'line': equation,
         })
     
@@ -251,8 +249,9 @@ def decision_tree_regression(request):
         
         metrics = regression_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'decision_tree_regression')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/decision_tree_regression.html', {
             'actual': y_test[:100],
@@ -260,7 +259,6 @@ def decision_tree_regression(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
         })        
     
     return render(request, 'main/input.html')
@@ -286,8 +284,9 @@ def random_forest_regression(request):
         
         metrics = regression_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'random_forest_regression')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/random_forest_regression.html', {
             'actual': y_test[:100],
@@ -295,7 +294,6 @@ def random_forest_regression(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
         })
     
     return render(request, 'main/input.html', {
@@ -327,8 +325,9 @@ def knn(request):
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'knn')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/knn.html', {
             'actual': y_test[:100],
@@ -336,7 +335,6 @@ def knn(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
         })
     
     return render(request, 'main/input.html', {
@@ -367,8 +365,9 @@ def logistic_regression(request):
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'logistic_regression')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/logistic_regression.html', {
             'actual': y_test[:100],
@@ -376,7 +375,6 @@ def logistic_regression(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
         })
     
     return render(request, 'main/input.html')
@@ -401,8 +399,9 @@ def naive_bayes(request):
         y_pred_modified = [round(i, 3) for i in y_pred]
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'naive_bayes')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         mean_per_class = [[round(float(j), 4) for j in i] for i in model.theta_]
         
@@ -413,7 +412,6 @@ def naive_bayes(request):
             'target': target,
             'results': dict(zip(model.classes_, mean_per_class)),
             'metrics': metrics,
-            'download': download_link,
         })
     
     return render(request, 'main/input.html')
@@ -437,7 +435,9 @@ def decision_tree(request):
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'decision_tree')
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
             
         graph_json = plot_decision_tree(model, features)
         
@@ -447,7 +447,6 @@ def decision_tree(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
             'tree': graph_json,
         })
     
@@ -473,8 +472,9 @@ def random_forest(request):
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'random_forest')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
 
         importances = model.feature_importances_
         indices = np.argsort(importances)[::-1]
@@ -486,7 +486,6 @@ def random_forest(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
             'graph': graph_json,
         })
     
@@ -520,8 +519,9 @@ def svm(request):
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
         
-        download_link = serialize(model, 'svm')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/svm.html', {
             'actual': y_test[:100],
@@ -529,7 +529,6 @@ def svm(request):
             'features': features,
             'target': target,
             'metrics': metrics,
-            'download': download_link,
         })
     
     return render(request, 'main/input.html', {
@@ -570,8 +569,9 @@ def kmeans(request):
         
         X_data = df[features].values
         
-        download_link = serialize(model, 'kmeans')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
 
         plot_json = None
         if (len(features) >= 2):
@@ -589,7 +589,6 @@ def kmeans(request):
                 'inertia': inertia,
                 'silhouette_score': silhouette,
             },
-            'download': download_link,
             'plot': plot_json,
         })
     
@@ -629,8 +628,9 @@ def hierarchical_clustering(request):
             linked = linkage(X_data, 'ward') # Using Ward linkage method
             plot_json = plot_dendrogram(linked, df.index)
         
-        download_link = serialize(model, 'hierarchical_clustering')
-        request.session['model'] = download_link
+        ml_model = MLModel()
+        ml_model.save_model(model)
+        request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/hierarchical_clustering.html', {
             'k': n_clusters,
@@ -644,7 +644,6 @@ def hierarchical_clustering(request):
                 'silhouette_score': silhouette,
             },
             'dendrogram': plot_json,
-            'download': download_link,
         })
     
     return render(request, 'main/input_clustering.html', {
@@ -725,7 +724,7 @@ def download_model(request):
     
     # Create an HTTP response with the model data as a downloadable file
     response = HttpResponse(ml_model.model_data, content_type='application/octet-stream')
-    response['Content-Disposition'] = f'attachment; filename="model-{model_id}.pkl"'
+    response['Content-Disposition'] = f'attachment; filename="model-{model_id[:5]}.pkl"'
     
     return response
 

@@ -30,15 +30,6 @@ def format_predictions(nums):
     """
     return [round(num, 3) for num in nums][:100]
 
-def serialize(model, algorithm):
-    """Serialize the model and save it to a .pkl file, return the path"""
-    model_filename = f"{algorithm}_{uuid.uuid4().hex[:6]}.pkl"
-    model_path = os.path.join(settings.MEDIA_ROOT, model_filename)
-    with open(model_path, 'wb') as file:
-        pickle.dump(model, file)
-    download_link = os.path.join(settings.MEDIA_URL, model_filename)
-    return download_link
-
 def regression_evaluation(y_test, y_pred):
     """Perform evaluations of a regression model"""
     mse = mean_squared_error(y_test, y_pred)
