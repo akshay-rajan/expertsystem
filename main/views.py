@@ -840,12 +840,12 @@ def preprocessing(request):
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
             # Replace 0s with NaNs
-            data.replace(0, np.nan, inplace=True)
-            
+            # data.replace(0, np.nan, inplace=True)
+            data.replace(np.nan, None, inplace=True)
+                        
             # Store the initial dataset in the session
             # request.session['updated_data'] = data.to_dict()
             file_model = DataFile()
-            print(data.to_dict())
             file_model.save_file(uploaded_file.name, data.to_dict())
             request.session['file'] = str(file_model.file_id)
 
@@ -906,6 +906,7 @@ def fill_missing_values(request):
             
         # Update session with new data
         # request.session['updated_data'] = data.to_dict()
+        data.replace(np.nan, None, inplace=True)        
         file_model.save_file(file_model.filename, data.to_dict())
         request.session['file'] = str(file_model.file_id)
 
@@ -960,6 +961,7 @@ def encoding(request):
 
         # Update session with new data
         # request.session['updated_data'] = data.to_dict()
+        data.replace(np.nan, None, inplace=True)
         file_model.save_file(file_model.filename, data.to_dict())
         request.session['file'] = str(file_model.file_id)
         
@@ -1025,6 +1027,7 @@ def scaling(request):
 
         # Store the scaled data back into the session
         # request.session['updated_data'] = data.to_dict()
+        data.replace(np.nan, None, inplace=True)        
         file_model.save_file(file_model.filename, data.to_dict())
         request.session['file'] = str(file_model.file_id)
 
