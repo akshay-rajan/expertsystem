@@ -1,5 +1,7 @@
 import uuid
 import pickle
+import numpy as np
+import pandas as pd
 from django.db import models
 
 # Stores all the trained models
@@ -37,12 +39,13 @@ class DataFile(models.Model):
     def __str__(self):
         return self.filename
     
-    def save_file(self, filename, file):
+    def save_file(self, filename, df):
         """Save the file to the database as JSON"""
         self.filename = filename
-        self.file_data = file
+        df.replace(np.nan, None, inplace=True) # Convert NaN to None
+        self.file_data = df.to_dict()
         self.save()
         
     def load_file(self):
-        """Return the file from the database"""
-        return self.filename, self.file_data
+        """Return the file from the database as a DataFrame"""
+        return pd.DataFrame.from_dict(self.file_data)
