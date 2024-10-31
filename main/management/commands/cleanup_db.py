@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from main.models import MLModel
+from main.models import MLModel, DataFile
 
 class Command(BaseCommand):
     help = "Deletes models saved in the database that are older than 5 minutes"
@@ -14,4 +14,7 @@ class Command(BaseCommand):
         # Fetch and delete the old models
         old_models = MLModel.objects.filter(created_at__lt=cutoff)
         old_models.delete()
-        self.stdout.write(self.style.SUCCESS(f"Deleted models older than {cutoff}"))
+        # Delete the old files
+        old_files = DataFile.objects.filter(uploaded_at__lt=cutoff)
+        old_files.delete()
+        self.stdout.write(self.style.SUCCESS(f"Deleted models and files older than {cutoff}"))
