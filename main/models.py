@@ -35,7 +35,7 @@ class DataFile(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.file_name
+        return self.filename
     
     def save_file(self, filename, file):
         """Save the file to the database as JSON"""
