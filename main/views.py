@@ -88,8 +88,7 @@ def linear_regression(request):
         # ! Data Processing
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
                         
         # Features and Target selection
         features = request.POST.getlist('features')
@@ -136,8 +135,7 @@ def lasso(request):
     if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -188,8 +186,7 @@ def ridge(request):
     if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -241,8 +238,7 @@ def decision_tree_regression(request):
     if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -277,8 +273,7 @@ def random_forest_regression(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -321,8 +316,7 @@ def knn(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -364,8 +358,7 @@ def logistic_regression(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -399,8 +392,7 @@ def naive_bayes(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -438,8 +430,7 @@ def decision_tree(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -476,8 +467,7 @@ def random_forest(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -524,8 +514,7 @@ def svm(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
@@ -574,8 +563,7 @@ def kmeans(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')                
         n_clusters = int(request.POST.get('n_clusters'))
@@ -631,8 +619,7 @@ def hierarchical_clustering(request):
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, dataset = file_model.load_file()
-        df = pd.DataFrame.from_dict(dataset)
+        df = file_model.load_file()
         
         features = request.POST.getlist('features')                
         n_clusters = int(request.POST.get('n_clusters'))
@@ -801,7 +788,7 @@ def save_file(request):
         
         # Store the file name and file as JSON in the db, store the id in the session
         file_model = DataFile()
-        file_model.save_file(file.name, df.to_dict())    
+        file_model.save_file(file.name, df)    
         request.session['file'] = str(file_model.file_id)
 
         return JsonResponse({'message': 'File uploaded successfully!'})
@@ -812,17 +799,15 @@ def get_file(request):
     """Return the file content stored in the session"""
     if request.method == 'POST':
         file_model = get_object_or_404(DataFile, file_id=request.session.get('file'))
-        filename, file_dict = file_model.load_file()
+        filename, df = file_model.filename, file_model.load_file()
     
-        if file_dict:
-            df = pd.DataFrame.from_dict(file_dict)
-            columns = df.columns.tolist()
-            
+        if not df.empty:
+            columns = df.columns.tolist()            
             correlation_matrix = df.corr()
 
             return JsonResponse({
                 'filename': filename,
-                'file': file_dict,
+                'file': df.to_dict(),
                 'columns': columns,
                 'correlation_matrix': correlation_matrix.to_dict(),
             })
@@ -839,16 +824,13 @@ def preprocessing(request):
         try:
             # Read the uploaded file into a DataFrame
             data = pd.read_csv(uploaded_file)
-            # Replace 0s with NaNs
-            # data.replace(0, np.nan, inplace=True)
-            data.replace(np.nan, None, inplace=True)
-                        
-            # Store the initial dataset in the session
-            # request.session['updated_data'] = data.to_dict()
+            
+            # Store the initial dataset in the database
             file_model = DataFile()
-            file_model.save_file(uploaded_file.name, data.to_dict())
+            file_model.save_file(uploaded_file.name, data)
             request.session['file'] = str(file_model.file_id)
 
+            # Get the columns with missing values and non-numerical columns
             null_columns = data.columns[data.isnull().any()]
             non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
@@ -856,7 +838,7 @@ def preprocessing(request):
             json_data = data.head(20).to_json(orient='records')
             headers = data.columns.tolist()
             null_columns = null_columns.tolist()
-            non_numerical_cols = non_numerical_cols.tolist() # columns with categorical values
+            non_numerical_cols = non_numerical_cols.tolist() # Cols with categorical values
             
             return JsonResponse({
                 'json_data': json_data,
@@ -874,16 +856,13 @@ def fill_missing_values(request):
     """Replace missing values with mean / median or drop the rows"""
     
     if request.method == 'POST':
-        # Load the updated data from session
-        # data_dict = request.session.get('updated_data')
+        # Load the file
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, file_dict = file_model.load_file()
+        data = file_model.load_file()
 
-        if not file_dict:
+        if data.empty:
             return JsonResponse({'error': 'No data available'}, status=400)
-
-        data = pd.DataFrame.from_dict(file_dict)
         
         databody = json.loads(request.body)
 
@@ -904,25 +883,24 @@ def fill_missing_values(request):
                     elif missing_value_strategy == 'drop':
                         data.dropna(subset=selected_columns, inplace=True)
             
-        # Update session with new data
-        # request.session['updated_data'] = data.to_dict()
-        data.replace(np.nan, None, inplace=True)        
-        file_model.save_file(file_model.filename, data.to_dict())
+        # Save the updated data back to the database
+        file_model.save_file(file_model.filename, data)
         request.session['file'] = str(file_model.file_id)
 
+        # Return the updated data preview
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
         json_data = data.head(20).to_json(orient='records')
         headers = data.columns.tolist()
         null_columns = null_columns.tolist()
-        non_numerical_cols = non_numerical_cols.tolist()  #columns with categorical values
+        non_numerical_cols = non_numerical_cols.tolist() 
         return JsonResponse({
-                'json_data': json_data,
-                'headers': headers,
-                'null_columns': null_columns,
-                'non_numerical_cols':non_numerical_cols
-            })
+            'json_data': json_data,
+            'headers': headers,
+            'null_columns': null_columns,
+            'non_numerical_cols':non_numerical_cols
+        })
 
 def encoding(request):
     """
@@ -931,27 +909,23 @@ def encoding(request):
     Label Encoding: Convert each category value into a unique integer value.
     """
     if request.method == 'POST':
-        # Load the updated data from session
-        # data_dict = request.session.get('updated_data')
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, data_dict = file_model.load_file()
-        if not data_dict:
+        data = file_model.load_file()
+        if data.empty:
             return JsonResponse({'error': 'No data available'}, status=400)
 
-        data = pd.DataFrame.from_dict(data_dict)
+        # Get the encoding strategy and columns to encode
         databody = json.loads(request.body)
-
         encoding_strategy = databody.get('strategy')
         encoding_columns = databody.get('columns')
 
         if not encoding_strategy or not encoding_columns:
             return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
 
-
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
-                data = pd.get_dummies(data, columns=encoding_columns)
+            data = pd.get_dummies(data, columns=encoding_columns)
         elif encoding_strategy == 'label' and encoding_columns:
             le = LabelEncoder()
             for col in encoding_columns:
@@ -959,12 +933,11 @@ def encoding(request):
                     data[col] = le.fit_transform(data[col])
 
 
-        # Update session with new data
-        # request.session['updated_data'] = data.to_dict()
-        data.replace(np.nan, None, inplace=True)
-        file_model.save_file(file_model.filename, data.to_dict())
+        # Update data in the database
+        file_model.save_file(file_model.filename, data)
         request.session['file'] = str(file_model.file_id)
         
+        # Return the updated data preview
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
@@ -973,11 +946,11 @@ def encoding(request):
         null_columns = null_columns.tolist()
         non_numerical_cols = non_numerical_cols.tolist()  #columns with categorical values
         return JsonResponse({
-                'json_data': json_data,
-                'headers': headers,
-                'null_columns': null_columns,
-                'non_numerical_cols':non_numerical_cols
-            })
+            'json_data': json_data,
+            'headers': headers,
+            'null_columns': null_columns,
+            'non_numerical_cols':non_numerical_cols
+        })
   
 def scaling(request):
     """
@@ -990,12 +963,9 @@ def scaling(request):
         # data_dict = request.session.get('updated_data')
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
-        _, data_dict = file_model.load_file()
-        if not data_dict:
+        data = file_model.load_file()
+        if data.empty:
             return JsonResponse({'error': 'No data available'}, status=400)
-
-        # Convert data dictionary to pandas DataFrame
-        data = pd.DataFrame.from_dict(data_dict)
 
         # Parse the request body
         databody = json.loads(request.body)
@@ -1026,11 +996,10 @@ def scaling(request):
             return JsonResponse({'error': str(e)}, status=500)
 
         # Store the scaled data back into the session
-        # request.session['updated_data'] = data.to_dict()
-        data.replace(np.nan, None, inplace=True)        
-        file_model.save_file(file_model.filename, data.to_dict())
+        file_model.save_file(file_model.filename, data)
         request.session['file'] = str(file_model.file_id)
 
+        # Return the updated data preview
         null_columns = data.columns[data.isnull().any()]
         non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
@@ -1052,12 +1021,9 @@ def download_csv(request):
     # data_dict=request.session.get('updated_data',None)
     file_id = request.session.get('file', None)
     file_model = get_object_or_404(DataFile, file_id=file_id)
-    _, data_dict = file_model.load_file()
+    data = file_model.load_file()
     
-    if data_dict:
-        # Convert the dictionary back to a DataFrame
-        data = pd.DataFrame.from_dict(data_dict)
-
+    if not data.empty:
         # Create the HttpResponse object with the appropriate CSV header
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="updated_data.csv"'
