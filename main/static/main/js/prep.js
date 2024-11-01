@@ -259,6 +259,16 @@ function showSection(sectionId) {
   document.getElementById("missing_value_section").style.display = "none";
   document.getElementById("encoding_section").style.display = "none";
   document.getElementById("scaling_section").style.display = "none";
+  // Reset class of all buttons
+  document.getElementById("missing_value_section-btn").classList = "btn btn-primary mb-auto w-100";
+  document.getElementById("encoding_section-btn").classList = "btn btn-primary mb-auto w-100";
+  document.getElementById("scaling_section-btn").classList = "btn btn-primary mb-auto w-100";
+
+  // Mark the selected section
+  let thisBtn = document.getElementById(sectionId + "-btn");
+  thisBtn.classList.remove("btn-primary");
+  thisBtn.classList.add("btn-outline-primary");
+  thisBtn.classList.add("disabled");
 
   // Show the selected section
   document.getElementById(sectionId).style.display = "block";

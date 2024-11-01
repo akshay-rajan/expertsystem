@@ -78,7 +78,7 @@
             <div id="scale_selection" class="form-check">
               <!-- Dynamic checkboxes for scaling selection will be here -->
             </div>
-            <div class="mt-2">
+            <div class="mt-3">
                 <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
             </div>
           </div>
@@ -96,10 +96,10 @@
     </div>
 
     <!-- Buttons Section (Right Column) -->
-    <div class="col-lg-2 col-md-12 d-flex flex-column align-items-end">
-      <button type="button" class="btn btn-primary mb-3 w-100" onclick="showSection('missing_value_section')">Missing Value</button>
-      <button type="button" class="btn btn-primary mb-3 w-100" onclick="showSection('encoding_section')">Encoding</button>
-      <button type="button" class="btn btn-primary mb-3 w-100" onclick="showSection('scaling_section')">Scaling</button>
+    <div class="col-lg-2 d-flex flex-column p-2 align-items-end">
+      <button type="button" class="btn btn-primary mb-auto w-100" id="missing_value_section-btn" onclick="showSection('missing_value_section')">Missing Value</button>
+      <button type="button" class="btn btn-primary mb-auto w-100" id="encoding_section-btn" onclick="showSection('encoding_section')">Encoding</button>
+      <button type="button" class="btn btn-primary mb-auto w-100" id="scaling_section-btn" onclick="showSection('scaling_section')">Scaling</button>
     </div>
   </div>
 </div>
