@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function() {
+  showSection("missing_value_section");
+});
+
 document.getElementById('file').addEventListener('change',preview_data);
 
 const featureSelectionDiv = document.getElementById("feature_selection");
@@ -248,3 +252,14 @@ fetch('/preprocessing/scaling/', {
 
 // Call this function when the user applies the scaling strategy
 document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
+
+// Function to control the visibility of sections
+function showSection(sectionId) {
+  // Hide all sections
+  document.getElementById("missing_value_section").style.display = "none";
+  document.getElementById("encoding_section").style.display = "none";
+  document.getElementById("scaling_section").style.display = "none";
+
+  // Show the selected section
+  document.getElementById(sectionId).style.display = "block";
+}
