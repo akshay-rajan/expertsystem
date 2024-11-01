@@ -19,7 +19,7 @@
         <!-- Section: Missing Values -->
         <div id="missing_value_section">
           <h4>Missing Value Options</h4>
-          <div class="mb-3">
+          <div class="mb-0">
               <label for="missing_value_strategy">Missing Value Strategy:</label>
               <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
                   <option value="None">None</option>
@@ -43,7 +43,7 @@
         <!-- Section: Encoding -->
         <div id="encoding_section" style="display: none;">
           <h4>Encoding Options</h4>
-          <div class="mb-3">
+          <div class="mb-0">
               <label for="encoding_strategy">Encoding Strategy:</label>
               <select id="encoding_strategy" name="encoding_strategy" class="form-control">
                   <option value="None">None</option>
@@ -65,7 +65,7 @@
         <!-- Section: Scaling -->
         <div id="scaling_section" style="display: none;">
           <h4>Scaling Options</h4>
-          <div class="mb-3">
+          <div class="mb-0">
               <label for="scaling_strategy">Scaling Strategy:</label>
               <select id="scaling_strategy" name="scaling_strategy" class="form-control">
                   <option value="None">None</option>
@@ -79,12 +79,12 @@
               <!-- Dynamic checkboxes for scaling selection will be here -->
             </div>
             <div class="mt-3">
-                <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
+              <button type="button" class="btn btn-primary" id="scaling_strategybtn">Apply</button>
             </div>
           </div>
         </div>
 
-        <a href="{% url 'download_csv' %}" class="btn btn-success mt-4">Download Updated Dataset</a>
+        <a href="{% url 'download_csv' %}" class="btn btn-outline-primary mt-4 w-100">Download Updated Dataset</a>
       </form>
     </div>
 
