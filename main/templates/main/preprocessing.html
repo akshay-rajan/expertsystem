@@ -200,26 +200,26 @@
             
             
     // Populate the column for selection 
-    function generatecolumns(null_columns,featureSelectionDiv,selection) {
+    function generatecolumns(columns,SelectionDiv,selection) {
         
 
         // Clear any existing checkboxes
-        featureSelectionDiv.innerHTML = '';
+        SelectionDiv.innerHTML = '';
 
-        // Iterate over the null_columns array
-        null_columns.forEach(column => {
+        // Iterate over the columns array
+        columns.forEach(column => {
 
             // Create a new checkbox input element
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
-            checkbox.id = column; // Set the checkbox id to the column name
+            checkbox.id = column + "_" + selection; // Set the checkbox id to the column name
             checkbox.value = column; // Set the checkbox value to the column name
             checkbox.className = "form-check-input"; // Add Bootstrap class for styling
             checkbox.name = selection; //feature selection or encoding selection
 
             // Create a label for the checkbox
             const label = document.createElement("label");
-            label.htmlFor = column; // Link the label to the checkbox
+            label.htmlFor = column + "_" + selection; // Link the label to the checkbox
             label.textContent = column; // Set the label text to the column name
             label.className = "form-check-label"; // Add Bootstrap class for styling
 
@@ -230,7 +230,7 @@
             checkboxDiv.appendChild(label);
 
             // Append the checkbox div to the feature selection div
-            featureSelectionDiv.appendChild(checkboxDiv);
+            SelectionDiv.appendChild(checkboxDiv);
         });
     }
 
