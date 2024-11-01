@@ -97,7 +97,7 @@
 
     <!-- Buttons Section (Right Column) -->
     <div class="col-lg-2 d-flex flex-column p-2 align-items-end">
-      <button type="button" class="btn btn-primary mb-auto w-100" id="missing_value_section-btn" onclick="showSection('missing_value_section')">Missing Value</button>
+      <button type="button" class="btn btn-primary mb-auto w-100" id="missing_value_section-btn" onclick="showSection('missing_value_section')" data-bs-toggle="popover" data-bs-title="Fill Missing Values" data-bs-content="Fill missing values in the data with mean, median or mode. Otherwise drop the rows.">Missing Value</button>
       <button type="button" class="btn btn-primary mb-auto w-100" id="encoding_section-btn" onclick="showSection('encoding_section')">Encoding</button>
       <button type="button" class="btn btn-primary mb-auto w-100" id="scaling_section-btn" onclick="showSection('scaling_section')">Scaling</button>
     </div>
@@ -106,5 +106,7 @@
 {% endblock %}
 
 {% block script %}
+<script src="https://unpkg.com/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
 <script src="{% static 'main/js/prep.js' %}"></script>
 {% endblock %}

@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
   showSection("missing_value_section");
+
+  // Enable Bootstrap popovers
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 });
 
 document.getElementById('file').addEventListener('change',preview_data);
