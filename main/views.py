@@ -9,6 +9,7 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from sklearn.cluster import KMeans
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -872,17 +873,27 @@ def fill_missing_values(request):
         if not missing_value_strategy or not selected_columns:
             return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
         
-        # Apply missing value handling logic
-        if missing_value_strategy and selected_columns:            
-            for col in selected_columns:
-                if data[col].dtype != 'object':  # Ensure column is numerical
-                    if missing_value_strategy == 'mean':
-                        data[col].fillna(data[col].mean(), inplace=True)
-                    elif missing_value_strategy == 'median':
-                        data[col].fillna(data[col].median(), inplace=True)
-                    elif missing_value_strategy == 'drop':
-                        data.dropna(subset=selected_columns, inplace=True)
+        else:
             
+
+    
+            # Handle "drop" strategy separately
+            if missing_value_strategy == 'drop':
+                data.dropna(subset=selected_columns, inplace=True)
+            else:
+                # Loop through each column in selected_columns
+                for col in selected_columns:
+                    # Determine imputer strategy based on column type and missing_value_strategy
+                    if data[col].dtype != 'object' :
+                        imputer = SimpleImputer(missing_values=np.nan,strategy=missing_value_strategy)
+                    elif missing_value_strategy == 'most_frequent':                        
+                        imputer = SimpleImputer(missing_values=None,strategy='most_frequent')
+                    else:
+                        raise ValueError(f"Unsupported missing_value_strategy '{missing_value_strategy}' for column '{col}'")
+
+                    # Apply the imputer to the column
+                    data[[col]] = imputer.fit_transform(data[[col]])
+   
         # Save the updated data back to the database
         file_model.save_file(file_model.filename, data)
         request.session['file'] = str(file_model.file_id)
@@ -925,7 +936,7 @@ def encoding(request):
 
         # Apply missing value handling logic
         if encoding_strategy == 'onehot' and encoding_columns:
-            data = pd.get_dummies(data, columns=encoding_columns)
+            data = pd.get_dummies(data, columns=encoding_columns,dtype=int)
         elif encoding_strategy == 'label' and encoding_columns:
             le = LabelEncoder()
             for col in encoding_columns:
