@@ -742,6 +742,9 @@ def download_model(request):
     
     return response
 
+def test(request):
+    return render(request, 'main/temp.html')
+
 # ? API Endpoints
 @csrf_exempt
 def predict(request):

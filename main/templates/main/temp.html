@@ -1,0 +1,100 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Sample Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <h1 class="display-3 title">Sample Results</h1>
+
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th>Accuracy</th>
+          <td class="table-success">0.85</td>
+        </tr>
+        <tr>
+          <th>Precision</th>
+          <td class="table-warning">0.65</td>
+        </tr>
+        <tr>
+          <th>Recall</th>
+          <td class="table-success">0.92</td>
+        </tr>
+        <tr>
+          <th>F1 Score</th>
+          <td class="table-success">0.78</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="#" class="link">
+        <button class="btn btn-primary btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <div class="prediction mt-4 mb-4">
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed display-3" type="button" data-toggle="collapse" data-target="#predictionForm" aria-expanded="true" aria-controls="predictionForm">
+              Predict
+            </button>
+          </h5>
+        </div>
+    
+        <div id="predictionForm" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <div class="form-group">
+              <form>
+                <table class="d-flex justify-content-center w-100">
+                  <tbody class="w-100">
+                    <tr class="d-flex">
+                      <td class="w-25"><label for="feature1">Feature 1:</label></td>
+                      <td class="w-50"><input type="text" class="form-control" id="feature1" placeholder="Enter value"></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="w-25"><label for="feature2">Feature 2:</label></td>
+                      <td class="w-50"><input type="text" class="form-control" id="feature2" placeholder="Enter value"></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
+                  <button type="submit" class="btn btn-primary m-2">Predict</button>
+                </div>
+                <div id="prediction-result" class="alert alert-success d-none m-2">Prediction Result: [Sample Result]</div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <thead class="thead">
+          <th>Actual Values</th>
+          <td>Value 1</td>
+          <td>Value 2</td>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Predicted Values</th>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

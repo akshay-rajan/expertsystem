@@ -23,6 +23,7 @@ urlpatterns = [
     path('clustering/hierarchical_clustering/', views.hierarchical_clustering, name='hierarchical_clustering'),
     path('samples/', views.samples, name='samples'),
     path('download-model/', views.download_model, name='download_model'),
+    path('test/', views.test, name='test'),
     path('predict', views.predict, name='predict'),
     path('save_file/', views.save_file, name='save_file'),
     path('get_file/', views.get_file, name='get_file'),
