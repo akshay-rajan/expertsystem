@@ -435,9 +435,6 @@ a:focus {
 }
 
 /* ! Results */
-#predictionForm {
-  transition: all 2s ease!important; /* For a smooth transition */
-}
 .evaluation a {
   text-decoration: none!important;
 }
@@ -451,6 +448,9 @@ a:focus {
 .pred-right {
   width: 100%;
   max-width: 60vw;
+}
+.prediction .btn-primary {
+  height: 40px!important;
 }
 /* ! Others */
 .error-404 {
