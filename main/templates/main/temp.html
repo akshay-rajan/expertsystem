@@ -39,43 +39,24 @@
   </div>
 
   <div class="prediction mt-4 mb-4">
-    <div class="accordion" id="accordionExample">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <button class="btn btn-link collapsed display-3" type="button" data-toggle="collapse" data-target="#predictionForm" aria-expanded="true" aria-controls="predictionForm">
-              Predict
-            </button>
-          </h5>
+    <div class="container d-flex justify-content-between">
+        <div class="left pred-left">
+            <h3 class="m-2" id="predict-title">Predict</h3>
+            <div class="h4 m-2 mr-4">Use the trained model to make predictions of the output based on the input features.</div>
         </div>
-    
-        <div id="predictionForm" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body">
-            <div class="form-group">
-              <form>
-                <table class="d-flex justify-content-center w-100">
-                  <tbody class="w-100">
-                    <tr class="d-flex">
-                      <td class="w-25"><label for="feature1">Feature 1:</label></td>
-                      <td class="w-50"><input type="text" class="form-control" id="feature1" placeholder="Enter value"></td>
-                    </tr>
-                    <tr class="d-flex">
-                      <td class="w-25"><label for="feature2">Feature 2:</label></td>
-                      <td class="w-50"><input type="text" class="form-control" id="feature2" placeholder="Enter value"></td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
-                  <button type="submit" class="btn btn-primary m-2">Predict</button>
+        <div class="right pred-right">
+            <form>
+                <div class="form-group">
+                    <label for="feature1">Feature 1:</label>
+                    <input type="text" class="form-control" id="feature1" placeholder="Enter value">
                 </div>
-                <div id="prediction-result" class="alert alert-success d-none m-2">Prediction Result: [Sample Result]</div>
-              </form>
-            </div>
-          </div>
+                <div class="form-group">
+                    <label for="feature2">Feature 2:</label>
+                    <input type="text" class="form-control" id="feature2" placeholder="Enter value">
+                </div>
+                <button type="submit" class="btn btn-block btn-outline-primary">Predict</button>
+            </form>            
         </div>
-        
-      </div>
     </div>
   </div>
 
@@ -85,10 +66,62 @@
           <th>Actual Values</th>
           <td>Value 1</td>
           <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 1</td>
+          <td>Value 2</td>
       </thead>
       <tbody>
         <tr>
           <th>Predicted Values</th>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
+          <td>Predicted 1</td>
+          <td>Predicted 2</td>
           <td>Predicted 1</td>
           <td>Predicted 2</td>
         </tr>

@@ -441,7 +441,17 @@ a:focus {
 .evaluation a {
   text-decoration: none!important;
 }
-
+#predict-title {
+  color: var(--secondary-color)!important;
+  font-size: 50px;
+}
+.pred-left {
+  max-width: 40vw;
+}
+.pred-right {
+  width: 100%;
+  max-width: 60vw;
+}
 /* ! Others */
 .error-404 {
   color: var(--secondary-color)!important;
