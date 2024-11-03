@@ -3,7 +3,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Enable Bootstrap popovers
   const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
+    const popover = new bootstrap.Popover(popoverTriggerEl);
+
+    // Show popover on mouseover
+    popoverTriggerEl.addEventListener('mouseover', () => {
+        popover.show();
+    });
+
+    // Hide popover on mouseout
+    popoverTriggerEl.addEventListener('mouseout', () => {
+        popover.hide();
+    });
+
+    return popover;
+});
+
 });
 
 document.getElementById('file').addEventListener('change',preview_data);
