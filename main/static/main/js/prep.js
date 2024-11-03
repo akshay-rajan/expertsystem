@@ -292,3 +292,40 @@ function showSection(sectionId) {
   // Show the selected section
   document.getElementById(sectionId).style.display = "block";
 }
+
+function toggleGuide() {
+  Swal.fire({
+    title: 'Preprocessing Guide',
+    html: `
+      <h3>Missing Value Techniques</h3>
+      <p>When dealing with missing values, consider the following techniques:</p>
+      <ul>
+        <li><strong>Remove Rows:</strong> Delete rows with missing values if they are few and won't bias your analysis.</li>
+        <li><strong>Mean/Median Imputation:</strong> Replace missing values with the mean or median of the column.</li>
+        <li><strong>Forward/Backward Fill:</strong> Use the previous or next value to fill in missing data.</li>
+        <li><strong>Prediction Models:</strong> Use regression or other models to predict and fill in missing values.</li>
+      </ul>
+      
+      <h3>Encoding Strategies</h3>
+      <p>Choose an encoding method based on the type of categorical data:</p>
+      <ul>
+        <li><strong>Label Encoding:</strong> Assign a unique integer to each category (suitable for ordinal data).</li>
+        <li><strong>One-Hot Encoding:</strong> Create binary columns for each category (suitable for nominal data).</li>
+        <li><strong>Binary Encoding:</strong> Combines label and one-hot encoding, useful for high cardinality.</li>
+      </ul>
+  
+      <h3>Normalization Methods</h3>
+      <p>Normalize your data to ensure consistent scaling:</p>
+      <ul>
+        <li><strong>Min-Max Scaling:</strong> Scale features to a range of [0, 1]. Useful for algorithms sensitive to scales.</li>
+        <li><strong>Z-Score Normalization:</strong> Scale data based on the mean and standard deviation, useful for normally distributed data.</li>
+        <li><strong>Robust Scaling:</strong> Uses the median and interquartile range, good for data with outliers.</li>
+      </ul>
+    `,
+    showCloseButton: true,
+    focusConfirm: false,
+    icon: 'info',
+    confirmButtonText: 'Got it!',
+  });
+  
+}
