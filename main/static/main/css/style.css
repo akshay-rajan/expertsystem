@@ -15,6 +15,8 @@ body {
   background-color: var(--secondary-color)!important;
   border: none!important;
   border-radius: 3px!important;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1)!important;
 }
 .btn-primary:hover {
   background-color: var(--dark-color)!important;
@@ -435,11 +437,90 @@ a:focus {
 }
 
 /* ! Results */
-#predictionForm {
-  transition: all 2s ease!important; /* For a smooth transition */
-}
 .evaluation a {
   text-decoration: none!important;
+}
+#predict-title {
+  color: var(--secondary-color)!important;
+  font-size: 50px;
+}
+.pred-left {
+  max-width: 40vw;
+}
+.pred-right {
+  width: 100%;
+  max-width: 60vw;
+}
+.prediction button {
+  height: 50px!important;
+  border-radius: 15px!important;
+}
+
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+              7px 7px 20px 0px rgba(0,0,0,.1),
+              4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+.predict-btn {
+  width: 130px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: var(--secondary-color);
+  background: linear-gradient(0deg, var(--secondary-color) 0%, var(--secondary-color) 100%);
+  outline: none;
+}
+
+.predict-btn:hover {
+  color: var(--secondary-color);
+  background: transparent;
+  box-shadow: none;
+}
+
+.predict-btn:before,
+.predict-btn:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: var(--secondary-color);
+  box-shadow: -1px -1px 5px 0px #fff,
+              7px 7px 20px 0px #0003,
+              4px 4px 5px 0px #0002;
+  transition: 400ms ease all;
+}
+
+.predict-btn:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+
+.predict-btn:hover:before,
+.predict-btn:hover:after {
+  width: 100%;
+  transition: 800ms ease all;
+}
+.predict-btn:focus {
+  outline: none;  
 }
 
 /* ! Others */

@@ -93,45 +93,25 @@
   </div>
 
   <div class="prediction mt-4 mb-4">
-    <div class="accordion" id="accordionExample">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <button class="btn btn-link collapsed display-3" type="button" data-toggle="collapse" data-target="#predictionForm" aria-expanded="true" aria-controls="predictionForm">
-              Predict
-            </button>
-          </h5>
-        </div>
-    
-        <div id="predictionForm" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body">
-            <div class="form-group">
-              <form onsubmit="return makePrediction(event)">
-                <table class="d-flex justify-content-center w-100">
-                  <tbody class="w-100">
-                    {% for feature in features %}
-                    <tr class="d-flex">
-                      <td class="w-25">
-                        <label for="{{ feature }}">{{ feature }}:</label>
-                      </td>
-                      <td class="w-50">
-                        <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                
-                <input type="hidden" name="target" value={{ target }}>
-                <div class="w-100 d-flex justify-content-end mt-4 mr-4 mb-4">
-                  <button class="btn btn-primary m-2">Predict</button>
-                </div>
-                <div id="prediction-result" class="alert alert-success d-none m-2"></div>
-              </form>
-            </div>
+    <div class="container d-flex justify-content-between">
+      <div class="left pred-left">
+        <h3 class="m-2" id="predict-title">Predict</h3>
+        <div class="h4 m-2 mr-4">Use this trained model to generate predictions based on the input features you provide.</div>
+      </div>
+      <div class="right pred-right">
+        <form onsubmit="return makePrediction(event)">
+          {% for feature in features %}
+          <div class="form-group">
+            <label for="{{ feature }}">{{ feature }}:</label>
+            <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
           </div>
-        </div>
-        
+          {% endfor %}
+          <input type="hidden" name="target" value={{ target }}>
+          <div class="w-100 d-flex justify-content-between mt-4 mr-4 mb-4">
+            <button type="submit" class="custom-btn predict-btn mt-2">Predict</button>
+            <div id="prediction-result" class="alert alert-success d-none"></div>
+          </div>
+        </form>            
       </div>
     </div>
   </div>
