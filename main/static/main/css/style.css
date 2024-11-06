@@ -427,6 +427,16 @@ a:focus {
   border-radius: 0;
   background-color: var(--primary-color)!important;
 }
+.dropdown-menu a {
+  color: var(--secondary-color)!important;
+  background-color: var(--primary-color)!important;
+  border: none;
+  border-radius: 0;
+}
+.dropdown-menu a:hover {
+  color: var(--primary-color)!important;
+  background-color: var(--secondary-color)!important;
+}
 
 /* ! Sampling */
 .sample-card:hover {
