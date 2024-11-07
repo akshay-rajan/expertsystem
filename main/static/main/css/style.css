@@ -102,6 +102,49 @@ body {
   background-color: var(--primary-color)!important;
   color: var(--secondary-color)!important;
 }
+.start-btn {
+  width: 200px; 
+  text-align: center;
+  padding: 4px 0; 
+  margin-top: 25px;
+  color: var(--secondary-color); 
+  background-color: var(--primary-color); 
+  border-radius: 55px; 
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border: none;
+  z-index: 1;
+}
+
+.start-btn:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  background-color: var(--dark-color);
+  border-radius: 55px;
+  transition: all 0.3s ease;
+}
+
+.start-btn:hover {
+  color: var(--primary-color)!important;
+}
+
+.start-btn:hover:after {
+  left: 0;
+  width: 100%;
+}
+
+.start-btn:active {
+  background-color: var(--primary-color)!important;
+  color: var(--secondary-color)!important;
+}
 
 .div-2 {
   height: 60vh;
