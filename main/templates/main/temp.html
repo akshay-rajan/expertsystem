@@ -1,81 +1,73 @@
 {% extends "main/layout.html" %}
 {% load static %}
 
-{% block title %}Sample Results{% endblock %}
+{% block title %}Input Datasets{% endblock %}
 
 {% block body %}
-<div class="fade-in">
-  <h1 class="display-3 title">Sample Results</h1>
+<div class="fade-in page">
+  <div class="container d-flex">
+    <div>
+      <h1 class='display-3 title'>Input Datasets</h1>
+      <div>
+        <form id="ml-form" method="get" enctype="multipart/form-data" class="form form-group mt-3">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="dataset">Upload Dataset</label>
+            <input type="file" name="dataset" id="dataset" class="form-control-file" />
+          </div>
 
-  <div class="evaluation">
-    <h3 class="m-2">Evaluation Metrics</h3>
-    <table class="table table-bordered table-hover">
-      <tbody>
-        <tr>
-          <th>Accuracy</th>
-          <td class="table-success">0.85</td>
-        </tr>
-        <tr>
-          <th>Precision</th>
-          <td class="table-warning">0.65</td>
-        </tr>
-        <tr>
-          <th>Recall</th>
-          <td class="table-success">0.92</td>
-        </tr>
-        <tr>
-          <th>F1 Score</th>
-          <td class="table-success">0.78</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="d-flex justify-content-end mt-4 mb-4">
-      <a href="#" class="link">
-        <button class="btn btn-primary btn-block">
-          Download Trained Model
-        </button>
-      </a>
+          <div class="form-group">
+            <label for="feature1">Feature 1:</label>
+            <input type="text" class="form-control" id="feature1" value="10" placeholder="Enter value">
+          </div>
+          <div class="form-group">
+            <label for="feature2">Feature 2:</label>
+            <input type="text" class="form-control" id="feature2" value="20" placeholder="Enter value">
+          </div>
+
+          <div class="form-group">
+            <label for="target">Target:</label>
+            <select name="target" id="target" class="form-control">
+              <option value="target1" selected>Target 1</option>
+              <option value="target2">Target 2</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Next</button>
+          
+          <div class="fade-in">
+            <div class="form-group">
+              <label for="param1">Parameter 1:</label>
+              <input type="text" class="form-control" id="param1" value="value1">
+            </div>
+            <div class="form-group">
+              <label for="param2">Parameter 2:</label>
+              <input type="text" class="form-control" id="param2" value="value2">
+            </div>
+            <button type="submit" id="build-btn" class="btn btn-primary">
+              Build
+            </button>
+          </div>
+        </form>
+        <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <div class="right justify-content-center" id="canvas-1"></div>  
     </div>
   </div>
 
-  <div class="prediction mt-4 mb-4">
-    <div class="container d-flex justify-content-between">
-        <div class="left pred-left">
-            <h3 class="m-2" id="predict-title">Predict</h3>
-            <div class="h4 m-2 mr-4">Use the trained model to make predictions of the output based on the input features.</div>
-        </div>
-        <div class="right pred-right">
-            <form>
-                <div class="form-group">
-                    <label for="feature1">Feature 1:</label>
-                    <input type="text" class="form-control" id="feature1" placeholder="Enter value">
-                </div>
-                <div class="form-group">
-                    <label for="feature2">Feature 2:</label>
-                    <input type="text" class="form-control" id="feature2" placeholder="Enter value">
-                </div>
-                <button type="submit" class="btn btn-primary">Predict</button>
-            </form>            
-        </div>
+  <div class="container d-flex">
+    <div class="d-flex">
+      <div class="left justify-content-center" id="canvas-2"></div>  
     </div>
   </div>
-
-  <div class="table-responsive">
-    <table class="table table-bordered table-info">
-      <thead class="thead">
-          <th>Actual Values</th>
-          <td>Value 1</td>
-          <td>Value 2</td>
-      </thead>
-      <tbody>
-        <tr>
-          <th>Predicted Values</th>
-          <td>Predicted 1</td>
-          <td>Predicted 2</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src={% static "main/js/input.js" %}></script>
 {% endblock %}
