@@ -555,7 +555,30 @@ def svm(request):
                 'name': 'C',
                 'type': 'text',
             },
-        }
+        },
+        'optional_parameters': [
+            {
+                'name': 'param1',
+                'type': 'text',
+                'field': 'input',  # or 'select'
+                'selected_value': 'default_value',
+                'options': []
+            },
+            {
+                'name': 'param2',
+                'type': 'text',
+                'field': 'input',
+                'selected_value': 'another_value',
+                'options': []
+            },
+            {
+                'name': 'param3',
+                'type': 'select',
+                'field': 'select',
+                'selected_value': 'Option 1',
+                'options': ['Option 1', 'Option 2', 'Option 3']
+            }
+        ]
     })
 
 def kmeans(request):
