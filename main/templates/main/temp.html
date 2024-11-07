@@ -34,7 +34,35 @@
           </div>
 
           <button type="submit" class="btn btn-primary">Next</button>
-          
+
+          <!-- Collapsible Section for Optional Parameters -->
+          <div id="accordion" class="mt-4 mb-4">
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
+                    Optional
+                  </button>
+                </h5>
+              </div>
+
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <!-- Input fields for optional parameters -->
+                  <div class="mb-3">
+                    <label for="param1" class="form-label">Parameter 1</label>
+                    <input type="text" class="form-control" id="param1" placeholder="Enter parameter 1">
+                  </div>
+                  <div class="mb-3">
+                    <label for="param2" class="form-label">Parameter 2</label>
+                    <input type="text" class="form-control" id="param2" placeholder="Enter parameter 2">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Build Button Section -->
           <div class="fade-in">
             <div class="form-group">
               <label for="param1">Parameter 1:</label>
