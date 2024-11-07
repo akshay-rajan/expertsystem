@@ -1,5 +1,4 @@
-# EXPERT SYSTEM
-
+![alt text](./others/screenshot.png)
 
 Machine Learning is a vast and complex field that requires a lot of dedication and time to master. 
 However, the complexity of ML algorithms and the necessity for programming skills create
