@@ -128,8 +128,13 @@ The server will start at http://127.0.0.1:8000/ .
 
 ---
 
+<a href="https://github.com/akshay-rajan/expertsystem/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=akshay-rajan/expertsystem" />
+</a>
+
 > **Akshay R**,
 >**Deepu Joseph**,
 >*Semester 3, Masters in Computer Applications*,
 >*College of Enginnering, Trivandrum*
 >(*2023-2025*)
+
