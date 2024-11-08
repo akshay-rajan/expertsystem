@@ -55,6 +55,7 @@ function handleFileUpload(event) {
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       $('#hyperparameter-div').removeClass('d-none');
+      $('.optional-div').removeClass('d-none');
     })
     .catch(error => {
       // Reactivate file input field

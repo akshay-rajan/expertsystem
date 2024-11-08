@@ -667,10 +667,12 @@ def hierarchical_clustering(request):
         
         features = request.POST.getlist('features')                
         n_clusters = int(request.POST.get('n_clusters'))
+        linkage_method = request.POST.get('linkage_method', 'ward')
         
         X = df[features]
 
-        model = AgglomerativeClustering(n_clusters=n_clusters)
+        model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage_method)
+        print(linkage_method)
         labels = model.fit_predict(X)
         
         centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
@@ -705,11 +707,11 @@ def hierarchical_clustering(request):
     
     return render(request, 'main/input_clustering.html', {
         'hyperparameters': {
-            1: {
-                'name': 'n_clusters',
-                'type': 'number',
-            }
-        }
+            1: {'name': 'n_clusters', 'type': 'number'},
+        },
+        'optional_parameters': [
+            {'field': 'select', 'name': 'linkage_method', 'type': 'text', 'options': ['ward', 'complete', 'average', 'single'], 'default': 'ward'},
+        ]
     })
     
 # ? Other Views
