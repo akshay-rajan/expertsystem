@@ -77,58 +77,52 @@ def clustering(request):
             {'name': 'Hierarchical Clustering', 'url': 'hierarchical_clustering',},
         ]
     })
-
+    
 def linear_regression(request):
     """
     Enable user to input training and testing sets
     Build a Linear Regression model
     Display the results and allow the user to download the model
     """
-    # On submission of the datasets
     if request.method == 'POST':
-        # ! Data Processing
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-                        
-        # Features and Target selection
+
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        fit_intercept = request.POST.get('fit_intercept', 'true') == 'true'
+        
         X, y = df[features], df[target]
-
-        # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        # ! Model Building
-        model = LinearRegression()
+
+        model = LinearRegression(fit_intercept=fit_intercept)
         model.fit(X_train, y_train)
-        
-        # ! Model Evaluation
+
         y_pred = model.predict(X_test)
-        # MSE, RMSE, MAE, R2
         metrics = regression_evaluation(y_test, y_pred)
-        
-        # Construct the line equation for the model
         intercept = model.intercept_
         coefficients = model.coef_
         equation = construct_line(intercept, coefficients, X, target)
-        
-        # Store the model in the database and save the model ID in the session
+
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
-        
+        request.session['model'] = str(ml_model.model_id)
+
         return render(request, 'main/linear_regression.html', {
             'actual': y_test[:100],
-            'predicted': format_predictions(y_pred), # Round to 3 decimal places, show only 100
+            'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
             'line': equation,
         })
-        
-    # Render the Input Form
-    return render(request, 'main/input.html')
+
+    return render(request, 'main/input.html', {
+        'optional_parameters': [
+            {'field': 'checkbox', 'name': 'fit_intercept', 'type': 'checkbox', 'default': 'true'},
+        ]
+    })
     
 def lasso(request):
     """Implement Lasso Regression"""
@@ -141,26 +135,24 @@ def lasso(request):
         features = request.POST.getlist('features')
         target = request.POST.get('target')
         alpha = float(request.POST.get('alpha'))
-                
+        max_iter = int(request.POST.get('max_iter', 1000))
+        tol = float(request.POST.get('tol', 1e-4))
+        
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = Lasso(alpha=alpha)
+        model = Lasso(alpha=alpha, max_iter=max_iter, tol=tol)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
-        
         coeff = pd.Series(model.coef_, index=features)
-
         intercept = model.intercept_
-        coefficients = model.coef_
-        equation = construct_line(intercept, coefficients, X, target)
-        
+        equation = construct_line(intercept, model.coef_, X, target)
         metrics = regression_evaluation(y_test, y_pred)
         
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
+        request.session['model'] = str(ml_model.model_id)
         
         return render(request, 'main/lasso.html', {
             'coefficients': coeff,
@@ -171,49 +163,47 @@ def lasso(request):
             'metrics': metrics,
             'line': equation,
         })
-        
+    
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'name': 'alpha',
-                'type': 'text',
-            }
-        }
+            1: {'name': 'alpha', 'type': 'text'},
+        },
+        'optional_parameters': [
+            {'name': 'max_iter', 'type': 'number', 'default': 1000},
+            {'name': 'tol', 'type': 'text', 'default': 1e-4},
+        ]
     })
     
 def ridge(request):
     """Implement Ridge Regression"""
-    
+
     if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-        
+
         features = request.POST.getlist('features')
         target = request.POST.get('target')
         alpha = float(request.POST.get('alpha'))
-                
+        max_iter = int(request.POST.get('max_iter', 1000))
+        tol = float(request.POST.get('tol', 1e-4))
+
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        alpha = float(request.POST.get('alpha'))
-                        
-        model = Ridge(alpha=alpha)
-        model.fit(X_train, y_train)
-        
-        y_pred = model.predict(X_test)
-        
-        coeff = pd.Series(model.coef_, index=features)
 
+        model = Ridge(alpha=alpha, max_iter=max_iter, tol=tol)
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_test)
+        coeff = pd.Series(model.coef_, index=features)
         intercept = model.intercept_
-        coefficients = model.coef_
-        equation = construct_line(intercept, coefficients, X, target)
-        
+        equation = construct_line(intercept, model.coef_, X, target)
         metrics = regression_evaluation(y_test, y_pred)
-        
+
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
-        
+        request.session['model'] = str(ml_model.model_id)
+
         return render(request, 'main/ridge.html', {
             'coefficients': coeff,
             'actual': y_test[:100],
@@ -223,77 +213,91 @@ def ridge(request):
             'metrics': metrics,
             'line': equation,
         })
-    
+
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'name': 'alpha',
-                'type': 'text',
-            }
-        }
+            1: {'name': 'alpha', 'type': 'text'},
+        },
+        'optional_parameters': [
+            {'name': 'max_iter', 'type': 'number', 'default': 1000},
+            {'name': 'tol', 'type': 'text', 'default': 1e-4},
+        ]
     })
     
 def decision_tree_regression(request):
     """Decision Tree Regressor"""
-    
+
     if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-        
+
         features = request.POST.getlist('features')
         target = request.POST.get('target')
-        
+        max_depth = request.POST.get('max_depth', None)
+        min_samples_split = int(request.POST.get('min_samples_split', 2))
+
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        model = DecisionTreeRegressor(random_state=42)
+
+        if not max_depth:
+            model = DecisionTreeRegressor(min_samples_split=min_samples_split, random_state=42)
+        else:
+            model = DecisionTreeRegressor(max_depth=int(max_depth), min_samples_split=min_samples_split, random_state=42)
         model.fit(X_train, y_train)
-        
+
         y_pred = model.predict(X_test)
-        
         metrics = regression_evaluation(y_test, y_pred)
-        
+
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
-        
+        request.session['model'] = str(ml_model.model_id)
+
         return render(request, 'main/decision_tree_regression.html', {
             'actual': y_test[:100],
             'predicted': format_predictions(y_pred),
             'features': features,
             'target': target,
             'metrics': metrics,
-        })        
-    
-    return render(request, 'main/input.html')
+        })
+
+    return render(request, 'main/input.html', {
+        'optional_parameters': [
+            {'field': 'input', 'name': 'max_depth', 'type': 'number'},
+            {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
+        ]
+    })
     
 def random_forest_regression(request):
-    """Random Forest Regressor"""
-    
-    if request.method == "POST":
+    """Random Forest Regression"""
+
+    if request.method == 'POST':
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-        
+
         features = request.POST.getlist('features')
         target = request.POST.get('target')
         n_estimators = int(request.POST.get('n_estimators'))
-                
+        max_depth = request.POST.get('max_depth', None)
+        min_samples_split = int(request.POST.get('min_samples_split', 2))
+
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        model = RandomForestRegressor(n_estimators=n_estimators, random_state=42)
+
+        if not max_depth:
+            model = RandomForestRegressor(n_estimators=n_estimators, min_samples_split=min_samples_split, random_state=42)
+        else:
+            model = RandomForestRegressor(n_estimators=n_estimators, max_depth=int(max_depth), min_samples_split=min_samples_split, random_state=42)
         model.fit(X_train, y_train)
-        
+
         y_pred = model.predict(X_test)
-        
         metrics = regression_evaluation(y_test, y_pred)
-        
+
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
-        
+        request.session['model'] = str(ml_model.model_id)
+
         return render(request, 'main/random_forest_regression.html', {
             'actual': y_test[:100],
             'predicted': format_predictions(y_pred),
@@ -301,14 +305,15 @@ def random_forest_regression(request):
             'target': target,
             'metrics': metrics,
         })
-    
+
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'name': 'n_estimators',
-                'type': 'number',
-            },
-        }
+            1: {'name': 'n_estimators', 'type': 'number'},
+        },
+        'optional_parameters': [
+            {'field': 'input', 'name': 'max_depth', 'type': 'number'},
+            {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
+        ]
     })
     
 def knn(request):
@@ -351,40 +356,13 @@ def knn(request):
     
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'name': 'n_neighbors',
-                'type': 'number',
-            },
+            1: {'name': 'n_neighbors', 'type': 'number'},
         },
         'optional_parameters': [
-            {
-                'field': 'select',
-                'name': 'weights',
-                'type': 'text',
-                'options': ['uniform', 'distance'],
-                'default': 'uniform',
-            },
-            {
-                'field': 'select',
-                'name': 'algorithm',
-                'type': 'text',
-                'options': ['auto', 'ball_tree', 'kd_tree', 'brute'],
-                'default': 'auto',
-            },
-            {
-                'field': 'select',
-                'name': 'metric',
-                'type': 'text',
-                'options': ['minkowski', 'euclidean', 'manhattan', 'cosine', 'hamming'],
-                'default': 'minkowski',
-            },
-            {
-                'field': 'select',
-                'name': 'p',
-                'type': 'number',
-                'options': [1, 2],
-                'default': 2,
-            }
+            {'field': 'select', 'name': 'weights', 'type': 'text', 'options': ['uniform', 'distance'], 'default': 'uniform'},
+            {'field': 'select', 'name': 'algorithm', 'type': 'text', 'options': ['auto', 'ball_tree', 'kd_tree', 'brute'], 'default': 'auto'},
+            {'field': 'select', 'name': 'metric', 'type': 'text', 'options': ['minkowski', 'euclidean', 'manhattan', 'cosine', 'hamming'], 'default': 'minkowski'},
+            {'field': 'select', 'name': 'p', 'type': 'number', 'options': [1, 2], 'default': 2}
         ]
     })
 
@@ -426,26 +404,9 @@ def logistic_regression(request):
     
     return render(request, 'main/input.html', {
         'optional_parameters': [
-            {
-                'field': 'select',
-                'name': 'solver',
-                'type': 'text',
-                'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
-                'default': 'lbfgs',
-            },
-            {
-                'field': 'select',
-                'name': 'penalty',
-                'type': 'text',
-                'options': ['l2', 'None', 'elasticnet', 'l1'],
-                'default': 'l2',
-            },
-            {
-                'field': 'input',
-                'name': 'C',
-                'type': 'number',
-                'default': 1.0,
-            },
+            {'field': 'select', 'name': 'solver', 'type': 'text', 'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'default': 'lbfgs'},
+            {'field': 'select', 'name': 'penalty', 'type': 'text', 'options': ['l2', 'None', 'elasticnet', 'l1'], 'default': 'l2'},
+            {'field': 'input', 'name': 'C', 'type': 'number', 'default': 1.0},
         ]
     })
 
@@ -488,12 +449,7 @@ def naive_bayes(request):
     
     return render(request, 'main/input.html', {
         'optional_parameters': [
-            {
-                'field': 'input',
-                'name': 'var_smoothing',
-                'type': 'text',
-                'default': 1e-9,
-            },
+            {'field': 'input', 'name': 'var_smoothing', 'type': 'text', 'default': 1e-9},
         ]
     })
 
@@ -539,18 +495,8 @@ def decision_tree(request):
     
     return render(request, 'main/input.html', {
         'optional_parameters': [
-            {
-                'field': 'input',
-                'name': 'max_depth',
-                'type': 'number',
-                'default': None,
-            },
-            {
-                'field': 'input',
-                'name': 'min_samples_split',
-                'type': 'number',
-                'default': 2,
-            },
+            {'field': 'input', 'name': 'max_depth', 'type': 'number'},
+            {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
         ]
     })
 
@@ -599,24 +545,11 @@ def random_forest(request):
     
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'name': 'n_estimators',
-                'type': 'number',
-            },
+            1: {'name': 'n_estimators', 'type': 'number'},
         },
         'optional_parameters': [
-            {
-                'field': 'input',
-                'name': 'max_depth',
-                'type': 'number',
-                'default': None,
-            },
-            {
-                'field': 'input',
-                'name': 'min_samples_split',
-                'type': 'number',
-                'default': 2,
-            },
+            {'field': 'input', 'name': 'max_depth', 'type': 'number'},
+            {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
         ]
     })
 
@@ -659,32 +592,12 @@ def svm(request):
 
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {
-                'field': 'select',
-                'name': 'kernel',
-                'type': 'text',
-                'options': ['linear', 'poly', 'rbf', 'sigmoid'],
-                'default': 'rbf'
-            },
-            2: {
-                'name': 'C',
-                'type': 'number',
-                'default': 1.0
-            },
+            1: {'field': 'select', 'name': 'kernel', 'type': 'text', 'options': ['linear', 'poly', 'rbf', 'sigmoid'], 'default': 'rbf'},
+            2: {'name': 'C', 'type': 'number', 'default': 1.0},
         },
         'optional_parameters': [
-            {
-                'name': 'gamma',
-                'type': 'select',
-                'field': 'select',
-                'options': ['scale', 'auto'],
-                'default': 'scale'
-            },
-            {
-                'name': 'degree',
-                'type': 'number',
-                'default': 3,
-            }
+            {'name': 'gamma', 'type': 'select', 'field': 'select', 'options': ['scale', 'auto'], 'default': 'scale'},
+            {'name': 'degree', 'type': 'number', 'default': 3}
         ]
     })
 

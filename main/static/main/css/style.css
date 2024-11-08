@@ -481,6 +481,13 @@ a:focus {
   background-color: var(--secondary-color)!important;
 }
 
+/* Select checkboxes */
+.optional-div input[type="checkbox"] {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+
 /* ! Sampling */
 .sample-card:hover {
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
