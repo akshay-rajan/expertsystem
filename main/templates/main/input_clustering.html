@@ -14,7 +14,7 @@
     <div>
       <h1 class='display-3 title'>Input Datasets</h1>
       <div>
-        <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
+        <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()" autocomplete="off">
           {% csrf_token %}
           <div class="form-group">
             <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />

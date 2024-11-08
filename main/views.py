@@ -321,13 +321,17 @@ def knn(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        
         n_neighbors = int(request.POST.get('n_neighbors'))
-        weights = request.POST.get('weights')
+        weights = request.POST.get('weights', 'uniform') 
+        algorithm = request.POST.get('algorithm', 'auto')
+        metric = request.POST.get('metric', 'minkowski')
+        p = int(request.POST.get('p', 2))        
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights)
+        model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, algorithm=algorithm, metric=metric, p=p)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -360,6 +364,27 @@ def knn(request):
                 'options': ['uniform', 'distance'],
                 'default': 'uniform',
             },
+            {
+                'field': 'select',
+                'name': 'algorithm',
+                'type': 'text',
+                'options': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                'default': 'auto',
+            },
+            {
+                'field': 'select',
+                'name': 'metric',
+                'type': 'text',
+                'options': ['minkowski', 'euclidean', 'manhattan', 'cosine', 'hamming'],
+                'default': 'minkowski',
+            },
+            {
+                'field': 'select',
+                'name': 'p',
+                'type': 'number',
+                'options': [1, 2],
+                'default': 2,
+            }
         ]
     })
 
