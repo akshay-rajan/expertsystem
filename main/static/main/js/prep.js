@@ -103,6 +103,7 @@ function generateTable(jsonData, null_columns) {
   
   // Append the new table to the container
   container.appendChild(table);
+  //show the info button
   $('#data-info').removeClass('d-none');
 }      
         
@@ -363,13 +364,8 @@ function toggleInfo() {
   })
   .then(response => response.json())
   .then(data => {
-    if (data.error) {
-      alert(data.error);
-    } else {
-      // data_summary=JSON.parse(data.data_summary)        
-      console.log(data);
-      
-    }
+    console.log(data);
+    // generateDataTable(data)
   })
   .catch(error => {
     console.error('Error:', error);
@@ -377,72 +373,41 @@ function toggleInfo() {
   
 }
 
-function generateDataTable(dataSummary) {
-  // Create a table element
-  const table = document.createElement('table');
-  table.classList.add('data-summary-table');
-  
-  // Create a table header row
-  const headerRow = document.createElement('tr');
-  
-  // Define the headers of the table
-  const headers = ['Metric', 'Column Names / Values'];
-  headers.forEach(header => {
-      const th = document.createElement('th');
-      th.textContent = header;
-      headerRow.appendChild(th);
-  });
-  table.appendChild(headerRow);
-  
-  // Add rows for 'columns' (list of column names)
-  const columnsRow = document.createElement('tr');
-  const columnsCell = document.createElement('td');
-  columnsCell.colSpan = 2;
-  columnsCell.textContent = dataSummary.columns.join(', ');
-  columnsRow.appendChild(columnsCell);
-  table.appendChild(columnsRow);
-  
-  // Add rows for missing values
-  addKeyValueRow(table, 'Missing Values', dataSummary.missing_values);
-  
-  // Add rows for mean values
-  addKeyValueRow(table, 'Mean', dataSummary.mean);
-  
-  // Add rows for median values
-  addKeyValueRow(table, 'Median', dataSummary.median);
-  
-  // Add description stats
-  addKeyValueRow(table, 'Description', dataSummary.description);
-  
-  // Add the 'info' section
-  const infoRow = document.createElement('tr');
-  const infoCell = document.createElement('td');
-  infoCell.colSpan = 2;
-  infoCell.textContent = dataSummary.info;
-  infoRow.appendChild(infoCell);
-  table.appendChild(infoRow);
-  
-  // Append the table to the DOM (for example, inside a div with id "data-table-container")
+function generateInfoTable(jsonData) {
   const container = document.getElementById('data-table-container');
-  container.innerHTML = '';  // Clear any existing content
-  container.appendChild(table);
-}
 
-// Helper function to add key-value rows to the table
-function addKeyValueRow(table, label, data) {
-  Object.keys(data).forEach(key => {
-      const row = document.createElement('tr');
-      
-      // Label cell
-      const labelCell = document.createElement('td');
-      labelCell.textContent = `${label} (${key})`;
-      row.appendChild(labelCell);
-      
-      // Value cell
-      const valueCell = document.createElement('td');
-      valueCell.textContent = data[key];
-      row.appendChild(valueCell);
-      
-      table.appendChild(row);
+  // Clear existing content in the container
+  container.innerHTML = '';
+
+  const table = document.createElement('table');
+  table.className = 'table table-bordered table-hover table-striped';
+  const headerRow = document.createElement('tr');
+
+  // Create table headers
+  Object.keys(jsonData[0]).forEach(key => {
+    const th = document.createElement('th');
+    th.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Capitalize first letter
+    // Add the bg-warning class if the key is in null_columns
+    if (null_columns.includes(key)) {
+      th.classList.add('bg-warning');
+    }
+    headerRow.appendChild(th);
   });
-}
+
+  table.appendChild(headerRow);
+
+  // Create table rows
+  jsonData.forEach(item => {
+    const row = document.createElement('tr');
+    Object.values(item).forEach(value => {
+      const td = document.createElement('td');
+      td.innerText = value;
+      row.appendChild(td);
+    });
+    table.appendChild(row);
+  });
+  
+  // Append the new table to the container
+  container.appendChild(table);
+  
+}  

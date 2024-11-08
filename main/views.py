@@ -1072,19 +1072,16 @@ def data_details(request):
     
     # Load the data using your custom method (assuming it's returning a pandas DataFrame)
     data = file_model.load_file()
+    data.replace(np.nan, None, inplace=True)
     
     if data.empty:
         return HttpResponse("No data available", status=400)
 
     # Generate the summary statistics
-    data_summary = {
-        'columns': list(data.columns),
-        'missing_values': data.isnull().sum().to_dict(),  # Missing values per column
-        'mean': data.mean(numeric_only=True).to_dict(),  # Mean of numeric columns
-        'median': data.median(numeric_only=True).to_dict(),  # Median of numeric columns
-        'description': data.describe(include='all').to_dict(),  # Summary statistics for all columns
-    }
-
+    data_summary =data.isnull().sum().to_dict()  # Missing values per column
+  
+ 
+    print(data_summary)
     # Get detailed info about the DataFrame (data types, non-null counts, memory usage, etc.)
     # buffer = []
     # data.info(buf=buffer)  # Store the info in the buffer
@@ -1092,8 +1089,7 @@ def data_details(request):
     # print(info)
     # # Add info to the summary
     # data_summary['info'] = info
-    print(data_summary)
 
-
+   
     # Return data summary as JSON response
     return JsonResponse(data_summary)
