@@ -61,7 +61,7 @@
             {% endif %}
 
             {% if optional_parameters %}
-            <div id="optional-div" class="optional-parameters d-none mt-4 mb-4">
+            <div id="accordion" class="optional-div optional-parameters d-none mt-4 mb-4">
               <div class="card">
                 <div class="card-header" id="headingOne">
                   <h5 class="mb-0">
@@ -83,7 +83,7 @@
               </div>
             </div>
             {% endif %}
-
+            
             <button type="submit" id="build-btn" class="btn btn-primary d-none">
               <div class="d-none" id="build-btn-div1">
                 Build
@@ -93,7 +93,8 @@
               </div>
             </button>
           </div>
-    
+          
+          
         </form>
         <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
       </div>
