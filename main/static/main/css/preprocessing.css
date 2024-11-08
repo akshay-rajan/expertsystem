@@ -10,3 +10,11 @@
     position: relative;
 }
 
+.custom-popup {
+    font-size: 16px; /* Increase font size */
+    text-align: left; /* Align text to the left */
+  }
+  .custom-popup .swal2-html-container {
+    font-size: 16px; /* Optional: to ensure the HTML content font size is consistent */
+  }
+

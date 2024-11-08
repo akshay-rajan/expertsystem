@@ -1058,3 +1058,36 @@ def download_csv(request):
     else:
         # Handle case where session data is not available
         return HttpResponse("No data available", status=400)
+
+def data_details(request):
+    """Display data statistics such as missing values, mean, median, etc."""
+   
+    # Get file_id from session
+    file_id = request.session.get('file', None)
+    if not file_id:
+        return HttpResponse("No file ID found in session", status=400)
+    
+    # Retrieve the data file object
+    file_model = get_object_or_404(DataFile, file_id=file_id)
+    
+    # Load the data using your custom method (assuming it's returning a pandas DataFrame)
+    data = file_model.load_file()
+    
+    if data.empty:
+        return HttpResponse("No data available", status=400)
+
+    # Calculate various statistics
+    data_summary = {
+        'columns': list(data.columns),
+        'missing_values': data.isnull().sum().to_dict(),  # Missing values per column
+        'mean': data.mean(numeric_only=True).to_dict(),  # Mean of numeric columns
+        'median': data.median(numeric_only=True).to_dict(),  # Median of numeric columns
+        'description': data.describe(include='all').to_dict(),  # Summary statistics for all columns
+    }
+
+    # Option 1: Return as JSON (can be used for API response)
+    if request.is_ajax():  # Check if it's an AJAX request (to return JSON)
+        return JsonResponse(data_summary)
+
+    # Option 2: Return as HTML (for rendering in a template)
+    return render(request, 'data_details.html', {'data_summary': data_summary})
