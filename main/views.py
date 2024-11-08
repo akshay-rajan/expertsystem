@@ -398,11 +398,15 @@ def logistic_regression(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        solver = request.POST.get('solver', 'lbfgs')
+        penalty = request.POST.get('penalty', 'l2')
+        if penalty == 'none': penalty = None
+        C = float(request.POST.get('C', 1.0))
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = LogisticRegression()
+        model = LogisticRegression(solver=solver, penalty=penalty, C=C)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -420,7 +424,30 @@ def logistic_regression(request):
             'metrics': metrics,
         })
     
-    return render(request, 'main/input.html')
+    return render(request, 'main/input.html', {
+        'optional_parameters': [
+            {
+                'field': 'select',
+                'name': 'solver',
+                'type': 'text',
+                'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
+                'default': 'lbfgs',
+            },
+            {
+                'field': 'select',
+                'name': 'penalty',
+                'type': 'text',
+                'options': ['l2', 'None', 'elasticnet', 'l1'],
+                'default': 'l2',
+            },
+            {
+                'field': 'input',
+                'name': 'C',
+                'type': 'number',
+                'default': 1.0,
+            },
+        ]
+    })
 
 def naive_bayes(request):
     """Gaussian Naive Bayes Classifier"""
@@ -432,11 +459,12 @@ def naive_bayes(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        var_smoothing = float(request.POST.get('var_smoothing', 1e-9))
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = GaussianNB()
+        model = GaussianNB(var_smoothing=var_smoothing)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -458,7 +486,16 @@ def naive_bayes(request):
             'metrics': metrics,
         })
     
-    return render(request, 'main/input.html')
+    return render(request, 'main/input.html', {
+        'optional_parameters': [
+            {
+                'field': 'input',
+                'name': 'var_smoothing',
+                'type': 'text',
+                'default': 1e-9,
+            },
+        ]
+    })
 
 def decision_tree(request):
     """Decision Tree Classifier"""
@@ -470,11 +507,16 @@ def decision_tree(request):
         
         features = request.POST.getlist('features')
         target = request.POST.get('target')
+        max_depth = request.POST.get('max_depth', None)
+        min_samples_split = int(request.POST.get('min_samples_split', 2))
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = DecisionTreeClassifier(random_state=42)
+        if not max_depth:
+            model = DecisionTreeClassifier(min_samples_split=min_samples_split, random_state=42)
+        else:
+            model = DecisionTreeClassifier(max_depth=int(max_depth), min_samples_split=min_samples_split, random_state=42)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -495,7 +537,22 @@ def decision_tree(request):
             'tree': graph_json,
         })
     
-    return render(request, 'main/input.html')
+    return render(request, 'main/input.html', {
+        'optional_parameters': [
+            {
+                'field': 'input',
+                'name': 'max_depth',
+                'type': 'number',
+                'default': None,
+            },
+            {
+                'field': 'input',
+                'name': 'min_samples_split',
+                'type': 'number',
+                'default': 2,
+            },
+        ]
+    })
 
 def random_forest(request):
     """Random Forest Classifier"""
@@ -508,11 +565,16 @@ def random_forest(request):
         features = request.POST.getlist('features')
         target = request.POST.get('target')
         n_estimators = int(request.POST.get('n_estimators'))
+        max_depth = request.POST.get('max_depth', None)
+        min_samples_split = int(request.POST.get('min_samples_split', 2))
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
+        if not max_depth:
+            model = RandomForestClassifier(n_estimators=n_estimators, min_samples_split=min_samples_split, random_state=42)
+        else:
+            model = RandomForestClassifier(n_estimators=n_estimators, max_depth=int(max_depth), min_samples_split=min_samples_split, random_state=42)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -541,9 +603,23 @@ def random_forest(request):
                 'name': 'n_estimators',
                 'type': 'number',
             },
-        }
+        },
+        'optional_parameters': [
+            {
+                'field': 'input',
+                'name': 'max_depth',
+                'type': 'number',
+                'default': None,
+            },
+            {
+                'field': 'input',
+                'name': 'min_samples_split',
+                'type': 'number',
+                'default': 2,
+            },
+        ]
     })
-       
+
 def svm(request):
     """Build SVM model and evaluate it"""
 
