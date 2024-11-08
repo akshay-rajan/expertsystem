@@ -545,31 +545,34 @@ def random_forest(request):
     })
        
 def svm(request):
-    """Support Vector Machine"""
-    
+    """Build SVM model and evaluate it"""
+
     if request.method == "POST":
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-        
+
         features = request.POST.getlist('features')
         target = request.POST.get('target')
-        kernel = request.POST.get('kernel')
-        C = float(request.POST.get('C'))
-        
+
+        kernel = request.POST.get('kernel', 'rbf')
+        C = float(request.POST.get('C', 1.0))
+        gamma = request.POST.get('gamma', 'scale')
+        degree = int(request.POST.get('degree', 3))
+
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        model = SVC(kernel=kernel, C=C, random_state=42)
+
+        model = SVC(kernel=kernel, C=C, gamma=gamma, degree=degree, random_state=42)
         model.fit(X_train, y_train)
-        
+
         y_pred = model.predict(X_test)
         metrics = classification_evaluation(y_test, y_pred)
-        
+
         ml_model = MLModel()
         ml_model.save_model(model)
-        request.session['model'] = str(ml_model.model_id)        
-        
+        request.session['model'] = str(ml_model.model_id)
+
         return render(request, 'main/svm.html', {
             'actual': y_test[:100],
             'predicted': y_pred[:100],
@@ -577,7 +580,7 @@ def svm(request):
             'target': target,
             'metrics': metrics,
         })
-    
+
     return render(request, 'main/input.html', {
         'hyperparameters': {
             1: {
@@ -585,33 +588,26 @@ def svm(request):
                 'name': 'kernel',
                 'type': 'text',
                 'options': ['linear', 'poly', 'rbf', 'sigmoid'],
+                'default': 'rbf'
             },
             2: {
                 'name': 'C',
-                'type': 'text',
+                'type': 'number',
+                'default': 1.0
             },
         },
         'optional_parameters': [
             {
-                'name': 'param1',
-                'type': 'text',
-                'field': 'input',  # or 'select'
-                'selected_value': 'default_value',
-                'options': []
-            },
-            {
-                'name': 'param2',
-                'type': 'text',
-                'field': 'input',
-                'selected_value': 'another_value',
-                'options': []
-            },
-            {
-                'name': 'param3',
+                'name': 'gamma',
                 'type': 'select',
                 'field': 'select',
-                'selected_value': 'Option 1',
-                'options': ['Option 1', 'Option 2', 'Option 3']
+                'options': ['scale', 'auto'],
+                'default': 'scale'
+            },
+            {
+                'name': 'degree',
+                'type': 'number',
+                'default': 3,
             }
         ]
     })
