@@ -111,7 +111,7 @@ body {
   background-color: var(--primary-color); 
   border-radius: 55px; 
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   position: relative;
   display: inline-block;
   outline: none;
@@ -129,7 +129,7 @@ body {
   z-index: -1;
   background-color: var(--dark-color);
   border-radius: 55px;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .start-btn:hover {
