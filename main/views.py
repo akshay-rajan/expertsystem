@@ -322,11 +322,12 @@ def knn(request):
         features = request.POST.getlist('features')
         target = request.POST.get('target')
         n_neighbors = int(request.POST.get('n_neighbors'))
+        weights = request.POST.get('weights')
                 
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        model = KNeighborsClassifier(n_neighbors=n_neighbors)
+        model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights)
         model.fit(X_train, y_train)
         
         y_pred = model.predict(X_test)
@@ -350,7 +351,16 @@ def knn(request):
                 'name': 'n_neighbors',
                 'type': 'number',
             },
-        }
+        },
+        'optional_parameters': [
+            {
+                'field': 'select',
+                'name': 'weights',
+                'type': 'text',
+                'options': ['uniform', 'distance'],
+                'default': 'uniform',
+            },
+        ]
     })
 
 def logistic_regression(request):
