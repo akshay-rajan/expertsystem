@@ -838,6 +838,8 @@ def preprocessing(request):
             null_columns = data.columns[data.isnull().any()]
             non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
 
+            
+
             # Prepare the data preview for rendering
             json_data = data.head(20).to_json(orient='records')
             headers = data.columns.tolist()
