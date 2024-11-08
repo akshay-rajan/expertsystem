@@ -103,6 +103,7 @@ function generateTable(jsonData, null_columns) {
   
   // Append the new table to the container
   container.appendChild(table);
+  $('#data-info').removeClass('d-none');
 }      
         
 // Populate the column for selection 
@@ -332,4 +333,116 @@ function toggleGuide() {
     width: '80%', // Adjust width of the alert box (increase the size)
   });
   
+}
+
+
+function toggleInfo() {
+  Swal.fire({
+    
+    html: `
+    <div id="data-table-container"></div>
+
+    `,
+    showCloseButton: true,
+    focusConfirm: false,
+    icon: 'info',
+    confirmButtonText: 'Got it!',
+    customClass: {
+      popup: 'custom-popup', // Adding a custom class for styling
+      htmlContainer: 'custom-html' // If you want to style just the HTML content specifically
+    },
+    width: '80%', // Adjust width of the alert box (increase the size)
+  });
+
+  fetch('preprocessing/scaling/data_details/', {
+    // method: 'POST',
+    // headers: {
+    //   'Content-Type': 'application/json',
+    //   'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+    // },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      alert(data.error);
+    } else {
+      // data_summary=JSON.parse(data.data_summary)        
+      console.log(data);
+      
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  
+}
+
+function generateDataTable(dataSummary) {
+  // Create a table element
+  const table = document.createElement('table');
+  table.classList.add('data-summary-table');
+  
+  // Create a table header row
+  const headerRow = document.createElement('tr');
+  
+  // Define the headers of the table
+  const headers = ['Metric', 'Column Names / Values'];
+  headers.forEach(header => {
+      const th = document.createElement('th');
+      th.textContent = header;
+      headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+  
+  // Add rows for 'columns' (list of column names)
+  const columnsRow = document.createElement('tr');
+  const columnsCell = document.createElement('td');
+  columnsCell.colSpan = 2;
+  columnsCell.textContent = dataSummary.columns.join(', ');
+  columnsRow.appendChild(columnsCell);
+  table.appendChild(columnsRow);
+  
+  // Add rows for missing values
+  addKeyValueRow(table, 'Missing Values', dataSummary.missing_values);
+  
+  // Add rows for mean values
+  addKeyValueRow(table, 'Mean', dataSummary.mean);
+  
+  // Add rows for median values
+  addKeyValueRow(table, 'Median', dataSummary.median);
+  
+  // Add description stats
+  addKeyValueRow(table, 'Description', dataSummary.description);
+  
+  // Add the 'info' section
+  const infoRow = document.createElement('tr');
+  const infoCell = document.createElement('td');
+  infoCell.colSpan = 2;
+  infoCell.textContent = dataSummary.info;
+  infoRow.appendChild(infoCell);
+  table.appendChild(infoRow);
+  
+  // Append the table to the DOM (for example, inside a div with id "data-table-container")
+  const container = document.getElementById('data-table-container');
+  container.innerHTML = '';  // Clear any existing content
+  container.appendChild(table);
+}
+
+// Helper function to add key-value rows to the table
+function addKeyValueRow(table, label, data) {
+  Object.keys(data).forEach(key => {
+      const row = document.createElement('tr');
+      
+      // Label cell
+      const labelCell = document.createElement('td');
+      labelCell.textContent = `${label} (${key})`;
+      row.appendChild(labelCell);
+      
+      // Value cell
+      const valueCell = document.createElement('td');
+      valueCell.textContent = data[key];
+      row.appendChild(valueCell);
+      
+      table.appendChild(row);
+  });
 }

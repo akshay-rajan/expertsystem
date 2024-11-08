@@ -1076,7 +1076,7 @@ def data_details(request):
     if data.empty:
         return HttpResponse("No data available", status=400)
 
-    # Calculate various statistics
+    # Generate the summary statistics
     data_summary = {
         'columns': list(data.columns),
         'missing_values': data.isnull().sum().to_dict(),  # Missing values per column
@@ -1085,9 +1085,15 @@ def data_details(request):
         'description': data.describe(include='all').to_dict(),  # Summary statistics for all columns
     }
 
-    # Option 1: Return as JSON (can be used for API response)
-    if request.is_ajax():  # Check if it's an AJAX request (to return JSON)
-        return JsonResponse(data_summary)
+    # Get detailed info about the DataFrame (data types, non-null counts, memory usage, etc.)
+    # buffer = []
+    # data.info(buf=buffer)  # Store the info in the buffer
+    # info = "\n".join(buffer)  # Convert list to string
+    # print(info)
+    # # Add info to the summary
+    # data_summary['info'] = info
+    print(data_summary)
 
-    # Option 2: Return as HTML (for rendering in a template)
-    return render(request, 'data_details.html', {'data_summary': data_summary})
+
+    # Return data summary as JSON response
+    return JsonResponse(data_summary)
