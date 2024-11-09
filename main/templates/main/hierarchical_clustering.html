@@ -5,7 +5,14 @@
 
 {% block body %}
 <div class="fade-in">
-  <h1 class="display-3 title">Results</h1>
+  <div class="d-flex justify-content-between">
+    <h1 class="display-3 title">Results</h1>
+    <div class="code-div d-flex align-items-center">
+      <button class="view-code-btn text-center" id="show-code-btn">
+        <img src="{% static 'main/img/code.svg' %}" class="view-code-logo" alt="View Code">
+      </button>
+    </div>
+  </div>
   
   <div id="results">
     <div class="d-flex justify-content-center">
@@ -86,6 +93,38 @@
       </table>
     </div>
   </div>
+
+  <div class="source-code d-none"><pre><code class="language-python">
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.cluster import AgglomerativeClustering
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+    
+    # Load dataset from CSV file
+    data = pd.read_csv("data.csv")  # Replace 'data.csv' with the path to your CSV file
+    
+    # Inspect the dataset
+    print(data.head())
+    
+    # Feature selection
+    X = data[['feature1', 'feature2', 'feature3']]  # Example features
+    
+    # Normalize the data (important for Hierarchical Clustering)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Initialize the Hierarchical Clustering model
+    model = AgglomerativeClustering(n_clusters=3)  # n_clusters is the number of desired clusters
+    
+    # Fit the model
+    labels = model.fit_predict(X_scaled)
+    
+    # Plot the clusters
+    plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=labels, cmap='viridis')
+    plt.title("Hierarchical Clustering")
+    plt.show()
+  </code></pre></div>
 </div>
 {% endblock %}
 
