@@ -637,7 +637,6 @@ def hierarchical_clustering(request):
         X = df[features]
 
         model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage_method)
-        print(linkage_method)
         labels = model.fit_predict(X)
         
         centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
