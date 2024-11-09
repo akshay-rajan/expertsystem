@@ -162,7 +162,7 @@ def lasso(request):
     
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {'name': 'alpha', 'type': 'text'},
+            1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
         },
         'optional_parameters': [
             {'name': 'max_iter', 'type': 'number', 'default': 1000},
@@ -209,7 +209,7 @@ def ridge(request):
 
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {'name': 'alpha', 'type': 'text'},
+            1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
         },
         'optional_parameters': [
             {'name': 'max_iter', 'type': 'number', 'default': 1000},
