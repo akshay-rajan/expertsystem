@@ -65,6 +65,10 @@ body {
   border: 0.5px solid #0062cc!important;
 }
 
+.display-3 {
+  color: var(--secondary-color)!important;
+}
+
 /* ! Home */
 #home {
   height: 110vh;
@@ -216,6 +220,7 @@ body {
 
 #get-started {
   padding: 15vh!important;
+  padding-bottom: 0!important;
 }
 #get-started > div {
   color: var(--primary-color)!important;
@@ -296,7 +301,8 @@ body {
 
 .third {
   font-size: 18px;
-  min-height: 100vh;
+  min-height: 70vh;
+  margin-bottom: 20px;
 }
 .third .subtitle {
   width: 60%;
