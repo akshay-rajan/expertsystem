@@ -8,13 +8,11 @@
 
 {% block body %}
 <div class="fade-in">
-
+  
   <div class="d-flex align-items-center">
     <h2 class="m-2 mb-4 display-4" style="display: inline;">Preprocessing</h2>
     <button class="guide-button" onclick="toggleGuide()">?</button>
   </div>
-  
-  
   
   <div class="container">
     <div class="row">
@@ -51,7 +49,7 @@
                 </div>
             </div>
           </div>
-  
+
           <!-- Section: Encoding -->
           <div id="encoding_section" style="display: none;">
             <h4>Encoding Options</h4>
@@ -112,6 +110,17 @@
         <button type="button" class="btn btn-primary mb-auto w-100" id="missing_value_section-btn" onclick="showSection('missing_value_section')" data-bs-toggle="popover" data-bs-title="Fill Missing Values" data-bs-content="Fill missing values in the data with mean, median or mode. Otherwise drop the rows.">Missing Value</button>
         <button type="button" class="btn btn-primary mb-auto w-100" id="encoding_section-btn" onclick="showSection('encoding_section')" data-bs-toggle="popover" data-bs-title="Encoding" data-bs-content="Transform categorical variables into a numerical format using techniques like one-hot encoding or label encoding.">Encoding</button>
         <button type="button" class="btn btn-primary mb-auto w-100" id="scaling_section-btn" onclick="showSection('scaling_section')"  data-bs-toggle="popover" data-bs-title="Scaling" data-bs-content="Normalize or standardize your data to bring features onto a similar scale, improving model performance.">Scaling</button>
+      </div>
+
+      <a href="{% url 'download_csv' %}" class="btn btn-outline-primary mt-4 w-100">Download Updated Dataset</a>
+    </form>
+  </div>
+
+    <!-- Preview Table Section (Middle Column) -->
+    <div class="col-lg-6 col-md-6">
+      <button class="info-button d-none" id="data-info" onclick="toggleInfo()">?</button>
+      <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
+        <!-- JavaScript will render data here as table -->
       </div>
     </div>
   </div>

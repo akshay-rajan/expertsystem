@@ -32,6 +32,8 @@ urlpatterns = [
     path('preprocessing/encoding/', views.encoding, name='encoding'),
     path('preprocessing/scaling/', views.scaling, name='scaling'),
     path('download_csv/', views.download_csv, name='download_csv'),
+    path('preprocessing/scaling/data_details/', views.data_details, name='data_details'),
+    
 ]
 
 if settings.DEBUG:

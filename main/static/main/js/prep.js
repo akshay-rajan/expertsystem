@@ -103,6 +103,8 @@ function generateTable(jsonData, null_columns) {
   
   // Append the new table to the container
   container.appendChild(table);
+  // Show the info button
+  $('#data-info').removeClass('d-none');
 }      
         
 // Populate the column for selection 
@@ -333,3 +335,159 @@ function toggleGuide() {
   });
   
 }
+
+function toggleInfo() {
+  Swal.fire({
+    title: 'Data Details',
+    html: `<div id="data-table-container"></div>`,  // The div where the table will be inserted
+    showCloseButton: true,
+    focusConfirm: false,
+    confirmButtonText: 'Close',
+    customClass: {
+      popup: 'custom-popup',  // Custom class for the popup
+      htmlContainer: 'table-info-container'  // Custom class for HTML content inside popup
+    },
+    width: '80%',  // Adjust width of the alert box (increase the size)
+  });
+
+  fetch('preprocessing/scaling/data_details/', {
+    // method: 'POST',  // Uncomment if needed for your request
+    // headers: {
+    //   'Content-Type': 'application/json',
+    //   'X-CSRFToken': getCookie('csrftoken'),  // Add CSRF token if required
+    // },
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Build the table for column-wise details
+    let tableHtml = '<table class="table table-bordered table-striped">';
+    tableHtml += '<thead><tr><th>Column Name</th><th>Data Type</th><th>Non-null Count</th><th>Missing Values</th></tr></thead>';
+    tableHtml += '<tbody>';
+
+    // Loop through columns in the data and create table rows
+    for (let col in data.data_types) {
+      tableHtml += `
+        <tr>
+          <td>${col}</td>
+          <td>${data.data_types[col]}</td>
+          <td>${data.non_null_counts[col]}</td>
+          <td>${data.missing_values[col]}</td>
+        </tr>
+      `;
+    }
+
+    tableHtml += '</tbody>';
+    tableHtml += '</table>';
+
+    // Render the column table inside the Swal popup
+    document.getElementById('data-table-container').innerHTML = tableHtml;
+
+    // Append additional information (Shape, Memory Usage, Numeric Summary, and Data Info)
+    let additionalInfoHtml = `
+      <h5>Dataset Shape</h5>
+      <ul>
+        <li><strong>Rows:</strong> ${data.shape[0]}</li>
+        <li><strong>Columns:</strong> ${data.shape[1]}</li>
+      </ul>
+      
+      <h5>Memory Usage</h5>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr><th>Column Name</th><th>Memory Usage</th></tr>
+        </thead>
+        <tbody>
+          ${Object.keys(data.memory_usage).map(col => {
+            return `
+              <tr>
+                <td>${col}</td>
+                <td>${data.memory_usage[col]}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+      
+      <h5>Numeric Summary</h5>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Column Name</th>
+            <th>Count</th>
+            <th>Mean</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Standard Deviation</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.keys(data.numeric_summary).map(col => {
+            return `
+              <tr>
+                <td>${col}</td>
+                <td>${data.numeric_summary[col].count}</td>
+                <td>${data.numeric_summary[col].mean}</td>
+                <td>${data.numeric_summary[col].min}</td>
+                <td>${data.numeric_summary[col].max}</td>
+                <td>${data.numeric_summary[col].std}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+      
+      <h5>Data Info</h5>
+      <div class="data-info-box">
+        <pre>${data.data_info}</pre>
+      </div>
+    `;
+
+    // Append the additional information below the table
+    document.getElementById('data-table-container').innerHTML += additionalInfoHtml;
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+
+
+
+function generateInfoTable(jsonData) {
+  const container = document.getElementById('data-table-container');
+
+  // Clear existing content in the container
+  container.innerHTML = '';
+
+  const table = document.createElement('table');
+  table.className = 'table table-bordered table-hover table-striped';
+  const headerRow = document.createElement('tr');
+
+  // Create table headers
+  Object.keys(jsonData[0]).forEach(key => {
+    const th = document.createElement('th');
+    th.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Capitalize first letter
+    // Add the bg-warning class if the key is in null_columns
+    if (null_columns.includes(key)) {
+      th.classList.add('bg-warning');
+    }
+    headerRow.appendChild(th);
+  });
+
+  table.appendChild(headerRow);
+
+  // Create table rows
+  jsonData.forEach(item => {
+    const row = document.createElement('tr');
+    Object.values(item).forEach(value => {
+      const td = document.createElement('td');
+      td.innerText = value;
+      row.appendChild(td);
+    });
+    table.appendChild(row);
+  });
+  
+  // Append the new table to the container
+  container.appendChild(table);
+  
+}  
