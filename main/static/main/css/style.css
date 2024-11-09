@@ -581,27 +581,3 @@ a:focus {
   color: var(--secondary-color)!important;
   text-align: center;
 }
-
-/* ! Preprocessing */
-.info-button {
-  position: absolute;  /* Position it absolutely within the parent */
-  top: 10px;           /* Adjust to move the button from the top */
-  right: 10px;         /* Adjust to move the button from the right */
-  background-color: white;
-  color: #0056b3;      /* Text color */
-  border: 1px solid #0056b3; /* Border color */
-  border-radius: 5px;   /* Optional: makes the button round */
-  padding: 10px;        /* Adjust the padding */
-  font-size: 18px;      /* Adjust font size */
-  cursor: pointer;     /* Pointer cursor for the button */
-}
-.info-button:hover {
-  background-color: #0056b3; /* Darker background color on hover */
-  color: white;             /* White text color on hover */
-}
-.info-button:focus {
-  outline: none; /* Remove the outline on focus */
-}
-.swal2-close {
-  outline: none!important;
-}

@@ -103,7 +103,7 @@ function generateTable(jsonData, null_columns) {
   
   // Append the new table to the container
   container.appendChild(table);
-  //show the info button
+  // Show the info button
   $('#data-info').removeClass('d-none');
 }      
         
@@ -336,38 +336,59 @@ function toggleGuide() {
   
 }
 
-
 function toggleInfo() {
   Swal.fire({
-    html: `<div id="data-table-container"></div>`,
+    html: `<div id="data-table-container"></div>`,  // The div where the table will be inserted
     showCloseButton: true,
     focusConfirm: false,
     icon: 'info',
     confirmButtonText: 'Got it!',
     customClass: {
-      popup: 'custom-popup', // Adding a custom class for styling
-      htmlContainer: 'custom-html' // If you want to style just the HTML content specifically
+      popup: 'custom-popup',  // Custom class for the popup
+      htmlContainer: 'custom-html'  // Custom class for HTML content inside popup
     },
-    width: '80%', // Adjust width of the alert box (increase the size)
+    width: '80%',  // Adjust width of the alert box (increase the size)
   });
 
   fetch('preprocessing/scaling/data_details/', {
-    // method: 'POST',
+    // method: 'POST',  // Uncomment if needed for your request
     // headers: {
     //   'Content-Type': 'application/json',
-    //   'X-CSRFToken': getCookie('csrftoken'),  // Use a helper function to get CSRF token
+    //   'X-CSRFToken': getCookie('csrftoken'),  // Add CSRF token if required
     // },
   })
   .then(response => response.json())
   .then(data => {
     console.log(data);
-    console.log("Helloooooooooooo");
+
+    // Build the table HTML
+    let tableHtml = '<table class="table table-bordered table-striped">';
+    tableHtml += '<thead><tr><th>Column Name</th><th>Data Type</th><th>Non-null Count</th><th>Missing Values</th></tr></thead>';
+    tableHtml += '<tbody>';
+
+    // Loop through columns in the data and create table rows
+    for (let col in data.data_types) {
+      tableHtml += `
+        <tr>
+          <td>${col}</td>
+          <td>${data.data_types[col]}</td>
+          <td>${data.non_null_counts[col]}</td>
+          <td>${data.missing_values[col]}</td>
+        </tr>
+      `;
+    }
+
+    tableHtml += '</tbody>';
+    tableHtml += '</table>';
+
+    // Render the table inside the Swal popup
+    document.getElementById('data-table-container').innerHTML = tableHtml;
   })
   .catch(error => {
     console.error('Error:', error);
   });
-  
 }
+
 
 function generateInfoTable(jsonData) {
   const container = document.getElementById('data-table-container');

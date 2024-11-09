@@ -1,3 +1,4 @@
+import io
 import csv
 import json
 import pickle
@@ -1060,36 +1061,42 @@ def download_csv(request):
         return HttpResponse("No data available", status=400)
 
 def data_details(request):
-    """Display data statistics such as missing values, mean, median, etc."""
+    """Display data statistics"""
    
     # Get file_id from session
     file_id = request.session.get('file', None)
     if not file_id:
-        return HttpResponse("No file ID found in session", status=400)
+        return HttpResponse("No file found!", status=400)
     
     # Retrieve the data file object
     file_model = get_object_or_404(DataFile, file_id=file_id)
     
     # Load the data using your custom method (assuming it's returning a pandas DataFrame)
     data = file_model.load_file()
-    data.replace(np.nan, None, inplace=True)
+    data.replace(np.nan, None, inplace=True)  # Replace NaN values with None
     
     if data.empty:
         return HttpResponse("No data available", status=400)
 
-    # Generate the summary statistics
-    data_summary =data.isnull().sum().to_dict()  # Missing values per column
-  
- 
-    print(data_summary)
-    # Get detailed info about the DataFrame (data types, non-null counts, memory usage, etc.)
-    # buffer = []
-    # data.info(buf=buffer)  # Store the info in the buffer
-    # info = "\n".join(buffer)  # Convert list to string
-    # print(info)
-    # # Add info to the summary
-    # data_summary['info'] = info
+    # Generate summary statistics
+    data_summary = {
+        "shape": data.shape,  # Number of rows and columns
+        "columns": data.columns.tolist(),  # List of column names
+        "data_types": {col: str(dtype) for col, dtype in data.dtypes.items()},  # Convert dtypes to strings
+        "non_null_counts": data.notnull().sum().to_dict(),  # Non-null counts for each column
+        "missing_values": data.isnull().sum().to_dict(),  # Missing values per column
+        "memory_usage": data.memory_usage(deep=True).to_dict(),  # Memory usage for each column
+    }
 
-   
+    # Descriptive statistics for numeric columns
+    numeric_summary = data.describe().to_dict()
+    data_summary["numeric_summary"] = numeric_summary
+
+    # Optionally, add info about the DataFrame (detailed info like data types, non-null counts)
+    buffer = io.StringIO()  # Create an in-memory string buffer
+    data.info(buf=buffer)  # Capture the data info in the buffer
+    data_info = buffer.getvalue()  # Get the string from the buffer
+    data_summary['data_info'] = data_info  # Add data info to the summary
+
     # Return data summary as JSON response
     return JsonResponse(data_summary)
