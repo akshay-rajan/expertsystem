@@ -178,14 +178,11 @@ def ridge(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
 
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        alpha = float(request.POST.get('alpha'))
-        max_iter = int(request.POST.get('max_iter', 1000))
-        tol = float(request.POST.get('tol', 1e-4))
+        features, target, test_size, alpha, max_iter, tol = get_input(request.POST, 'alpha', ('max_iter', 1000), ('tol', 1e-4))
+        alpha, max_iter, tol = float(alpha), int(max_iter), float(tol)
 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
         model = Ridge(alpha=alpha, max_iter=max_iter, tol=tol)
         model.fit(X_train, y_train)
@@ -228,13 +225,11 @@ def decision_tree_regression(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
 
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        max_depth = request.POST.get('max_depth', None)
-        min_samples_split = int(request.POST.get('min_samples_split', 2))
+        features, target, test_size, max_depth, min_samples_split = get_input(request.POST, ('max_depth', None), ('min_samples_split', 2))
+        min_samples_split = int(min_samples_split)
 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
         if not max_depth:
             model = DecisionTreeRegressor(min_samples_split=min_samples_split, random_state=42)
@@ -272,14 +267,11 @@ def random_forest_regression(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
 
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        n_estimators = int(request.POST.get('n_estimators'))
-        max_depth = request.POST.get('max_depth', None)
-        min_samples_split = int(request.POST.get('min_samples_split', 2))
+        features, target, test_size, n_estimators, max_depth, min_samples_split = get_input(request.POST, 'n_estimators', ('max_depth', None), ('min_samples_split', 2))
+        n_estimators, min_samples_split = int(n_estimators), int(min_samples_split)
 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
         if not max_depth:
             model = RandomForestRegressor(n_estimators=n_estimators, min_samples_split=min_samples_split, random_state=42)
@@ -320,17 +312,11 @@ def knn(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        
-        n_neighbors = int(request.POST.get('n_neighbors'))
-        weights = request.POST.get('weights', 'uniform') 
-        algorithm = request.POST.get('algorithm', 'auto')
-        metric = request.POST.get('metric', 'minkowski')
-        p = int(request.POST.get('p', 2))        
+        features, target, test_size, n_neighbors, weights, algorithm, metric, p = get_input(request.POST, 'n_neighbors', 'weights', 'algorithm', 'metric', 'p')
+        n_neighbors, p = int(n_neighbors), int(p)
                 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, algorithm=algorithm, metric=metric, p=p)
         model.fit(X_train, y_train)
@@ -370,15 +356,12 @@ def logistic_regression(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        solver = request.POST.get('solver', 'lbfgs')
-        penalty = request.POST.get('penalty', 'l2')
+        features, target, test_size, solver, penalty, C = get_input(request.POST, 'solver', 'penalty', 'C')
         if penalty == 'none': penalty = None
-        C = float(request.POST.get('C', 1.0))
+        C = float(C)
                 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         model = LogisticRegression(solver=solver, penalty=penalty, C=C)
         model.fit(X_train, y_train)
@@ -414,12 +397,11 @@ def naive_bayes(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        var_smoothing = float(request.POST.get('var_smoothing', 1e-9))
+        features, target, test_size, var_smoothing = get_input(request.POST, 'var_smoothing')
+        var_smoothing = float(var_smoothing)
                 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         model = GaussianNB(var_smoothing=var_smoothing)
         model.fit(X_train, y_train)
@@ -457,13 +439,11 @@ def decision_tree(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        max_depth = request.POST.get('max_depth', None)
-        min_samples_split = int(request.POST.get('min_samples_split', 2))
+        features, target, test_size, max_depth, min_samples_split = get_input(request.POST, ('max_depth', None), ('min_samples_split', 2))
+        min_samples_split = int(min_samples_split)
                 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         if not max_depth:
             model = DecisionTreeClassifier(min_samples_split=min_samples_split, random_state=42)
@@ -503,15 +483,12 @@ def random_forest(request):
         file_id = request.session.get('file', None)
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
-        
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        n_estimators = int(request.POST.get('n_estimators'))
-        max_depth = request.POST.get('max_depth', None)
-        min_samples_split = int(request.POST.get('min_samples_split', 2))
+
+        features, target, test_size, n_estimators, max_depth, min_samples_split = get_input(request.POST, 'n_estimators', ('max_depth', None), ('min_samples_split', 2))
+        n_estimators, min_samples_split = int(n_estimators), int(min_samples_split)
                 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         if not max_depth:
             model = RandomForestClassifier(n_estimators=n_estimators, min_samples_split=min_samples_split, random_state=42)
@@ -557,16 +534,11 @@ def svm(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
 
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-
-        kernel = request.POST.get('kernel', 'rbf')
-        C = float(request.POST.get('C', 1.0))
-        gamma = request.POST.get('gamma', 'scale')
-        degree = int(request.POST.get('degree', 3))
+        features, target, test_size, kernel, C, gamma, degree = get_input(request.POST, 'kernel', 'C', 'gamma', 'degree')
+        C, degree = float(C), int(degree)
 
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
         model = SVC(kernel=kernel, C=C, gamma=gamma, degree=degree, random_state=42)
         model.fit(X_train, y_train)
@@ -589,7 +561,7 @@ def svm(request):
     return render(request, 'main/input.html', {
         'hyperparameters': {
             1: {'field': 'select', 'name': 'kernel', 'type': 'text', 'options': ['linear', 'poly', 'rbf', 'sigmoid'], 'default': 'rbf'},
-            2: {'name': 'C', 'type': 'number', 'default': 1.0},
+            2: {'name': 'C', 'type': 'text', 'default': 1.0},
         },
         'optional_parameters': [
             {'name': 'gamma', 'type': 'select', 'field': 'select', 'options': ['scale', 'auto'], 'default': 'scale'},
@@ -646,10 +618,7 @@ def kmeans(request):
     
     return render(request, 'main/input_clustering.html', {
         'hyperparameters': {
-            1: {
-                'name': 'n_clusters',
-                'type': 'number',
-            }
+            1: {'name': 'n_clusters', 'type': 'number'}
         }
     })
     
