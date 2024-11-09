@@ -13,8 +13,10 @@ class Command(BaseCommand):
         cutoff = datetime.now(timezone.utc) - timedelta(minutes=5)
         # Fetch and delete the old models
         old_models = MLModel.objects.filter(created_at__lt=cutoff)
+        count = old_models.count()
         old_models.delete()
         # Delete the old files
         old_files = DataFile.objects.filter(uploaded_at__lt=cutoff)
+        count += old_files.count()
         old_files.delete()
-        self.stdout.write(self.style.SUCCESS(f"Deleted models and files older than {cutoff}"))
+        self.stdout.write(self.style.SUCCESS(f"Deleted {count} files older than {cutoff}"))
