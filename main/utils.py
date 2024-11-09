@@ -11,6 +11,15 @@ from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_ab
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
+def get_input(request_post, *args):
+    """Get the parameters entered by the user"""
+    
+    inputs = (request_post.getlist('features'), request_post.get('target'), float(request_post.get('testsize')))
+    for arg in args:
+        inputs += (request_post.get(arg),)
+    
+    return inputs
+
 def construct_line(intercept, coefficients, X, target):
     """Given the coefficients and intercept, construct the line equation as a string"""
     equation = f"{target} = {intercept:.2f}"
@@ -55,6 +64,7 @@ def classification_evaluation(y_test, y_pred):
         'recall': round(recall, 2),
         'f1': round(f1, 2)
     }
+
 
 def plot_feature_importances(features, importances, indices):
     """Plot the feature importances for Random Forest""", 

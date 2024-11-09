@@ -21,7 +21,7 @@ from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
-from .utils import construct_line, format_predictions, regression_evaluation, classification_evaluation
+from .utils import get_input, construct_line, format_predictions, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
 from .models import MLModel, DataFile
 
@@ -89,12 +89,11 @@ def linear_regression(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
 
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        fit_intercept = request.POST.get('fit_intercept', 'true') == 'true'
+        features, target, test_size, fit_intercept = get_input(request.POST, 'fit_intercept')
+        fit_intercept = fit_intercept == 'true'
         
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
         model = LinearRegression(fit_intercept=fit_intercept)
         model.fit(X_train, y_train)
@@ -132,14 +131,10 @@ def lasso(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')
-        target = request.POST.get('target')
-        alpha = float(request.POST.get('alpha'))
-        max_iter = int(request.POST.get('max_iter', 1000))
-        tol = float(request.POST.get('tol', 1e-4))
+        features, target, test_size, alpha, max_iter, tol = get_input(request.POST, 'max_iter', 'tol')
         
         X, y = df[features], df[target]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
         
         model = Lasso(alpha=alpha, max_iter=max_iter, tol=tol)
         model.fit(X_train, y_train)
