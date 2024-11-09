@@ -617,6 +617,27 @@ a:focus {
 #show-code-btn:focus {
   outline: none;
 }
+.code-copy {
+  margin-left: 10px;
+  background-color: var(--primary-color);
+  border: none;
+  outline: none;
+  width: 30px;
+  height: 30px;
+}
+.code-copy img {
+  width: 25px;
+  height: 25px;
+}
+.code-copy:hover {
+  color: white;
+}
+.code-copy:focus {
+  outline: none;
+}
+.swal-wide {
+  width: 90vw!important;
+}
 
 /* ! Others */
 .error-404 {

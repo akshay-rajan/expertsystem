@@ -45,15 +45,39 @@ async function makePrediction(event) {
 
 // ! Display source code of the algorithm
 $('#show-code-btn').click(() => {
+  // Get the inner HTML of the source code div
   const sourceCode = document.querySelector('.source-code').innerHTML;
 
   Swal.fire({
     title: '<div class="text-left">Source Code</div>',
-    html: sourceCode,
+    html: `${sourceCode}`,
+    customClass: {
+      popup: 'swal-wide',
+      confirmButton: 'btn btn-primary'
+    },
     showCloseButton: true,
-    showConfirmButton: false,
+    showConfirmButton: true,
+    confirmButtonText: 'Copy', // Set default button text to "Copy Code"
     didOpen: () => {
-      Prism.highlightAll();
+      Prism.highlightAll(); // Highlight syntax
+    },
+    preConfirm: () => {
+      // Copy the code to the clipboard when confirm button is clicked
+      const tempElement = document.createElement("textarea");
+      tempElement.value = document.querySelector('.source-code').innerText; // Plain text version of code
+      document.body.appendChild(tempElement);
+      tempElement.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempElement);
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Show success message after copying
+      Swal.fire({
+        title: 'Copied!',
+        timer: 800,
+        showConfirmButton: false
+      });
     }
   });
 });
