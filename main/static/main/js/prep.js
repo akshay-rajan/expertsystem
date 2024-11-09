@@ -338,14 +338,14 @@ function toggleGuide() {
 
 function toggleInfo() {
   Swal.fire({
+    title: 'Data Details',
     html: `<div id="data-table-container"></div>`,  // The div where the table will be inserted
     showCloseButton: true,
     focusConfirm: false,
-    icon: 'info',
-    confirmButtonText: 'Got it!',
+    confirmButtonText: 'Close',
     customClass: {
       popup: 'custom-popup',  // Custom class for the popup
-      htmlContainer: 'custom-html'  // Custom class for HTML content inside popup
+      htmlContainer: 'table-info-container'  // Custom class for HTML content inside popup
     },
     width: '80%',  // Adjust width of the alert box (increase the size)
   });
@@ -359,9 +359,7 @@ function toggleInfo() {
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data);
-
-    // Build the table HTML
+    // Build the table for column-wise details
     let tableHtml = '<table class="table table-bordered table-striped">';
     tableHtml += '<thead><tr><th>Column Name</th><th>Data Type</th><th>Non-null Count</th><th>Missing Values</th></tr></thead>';
     tableHtml += '<tbody>';
@@ -381,13 +379,78 @@ function toggleInfo() {
     tableHtml += '</tbody>';
     tableHtml += '</table>';
 
-    // Render the table inside the Swal popup
+    // Render the column table inside the Swal popup
     document.getElementById('data-table-container').innerHTML = tableHtml;
+
+    // Append additional information (Shape, Memory Usage, Numeric Summary, and Data Info)
+    let additionalInfoHtml = `
+      <h5>Dataset Shape</h5>
+      <ul>
+        <li><strong>Rows:</strong> ${data.shape[0]}</li>
+        <li><strong>Columns:</strong> ${data.shape[1]}</li>
+      </ul>
+      
+      <h5>Memory Usage</h5>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr><th>Column Name</th><th>Memory Usage</th></tr>
+        </thead>
+        <tbody>
+          ${Object.keys(data.memory_usage).map(col => {
+            return `
+              <tr>
+                <td>${col}</td>
+                <td>${data.memory_usage[col]}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+      
+      <h5>Numeric Summary</h5>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Column Name</th>
+            <th>Count</th>
+            <th>Mean</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Standard Deviation</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.keys(data.numeric_summary).map(col => {
+            return `
+              <tr>
+                <td>${col}</td>
+                <td>${data.numeric_summary[col].count}</td>
+                <td>${data.numeric_summary[col].mean}</td>
+                <td>${data.numeric_summary[col].min}</td>
+                <td>${data.numeric_summary[col].max}</td>
+                <td>${data.numeric_summary[col].std}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+      
+      <h5>Data Info</h5>
+      <div class="data-info-box">
+        <pre>${data.data_info}</pre>
+      </div>
+    `;
+
+    // Append the additional information below the table
+    document.getElementById('data-table-container').innerHTML += additionalInfoHtml;
+
   })
   .catch(error => {
     console.error('Error:', error);
   });
 }
+
+
 
 
 function generateInfoTable(jsonData) {

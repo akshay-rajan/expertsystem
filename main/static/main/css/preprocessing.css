@@ -40,3 +40,17 @@
 .swal2-close {
   outline: none!important;
 }
+
+.table-info-container {
+  position: relative;
+  display: inline-block;
+  text-align: left!important;
+}
+
+.data-info-box {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
