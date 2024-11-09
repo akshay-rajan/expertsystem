@@ -1,101 +1,125 @@
 {% extends "main/layout.html" %}
 {% load static %}
 
-{% block title %}Input Datasets{% endblock %}
+{% block title %}Results{% endblock %}
 
 {% block body %}
-<div class="fade-in page">
-  <div class="container d-flex">
-    <div>
-      <h1 class='display-3 title'>Input Datasets</h1>
-      <div>
-        <form id="ml-form" method="get" enctype="multipart/form-data" class="form form-group mt-3">
-          {% csrf_token %}
+<div class="fade-in">
+  <h1 class="display-3 title">Results</h1>
+  <div id="results">
+    <div class="d-flex justify-content-center">
+      <h4 class="display-6 p-3">
+        {{ line }}
+      </h4>
+    </div>
+  </div>
+
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+            <th>Mean Absolute Error</th>
+            <td class="
+            {% if metrics.mae < 0.3 %}
+              table-success
+            {% elif metrics.mae < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mae }}</td>
+          </tr>
+          <tr>  
+            <th>Mean Squared Error</th>
+            <td class="
+            {% if metrics.mse < 0.2 %}
+              table-success
+            {% elif metrics.mse < 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mse }}</td>
+          </tr>
+          <tr>
+            <th>Root Mean Squared Error</th>
+            <td class="
+            {% if metrics.rmse < 0.3 %}
+              table-success
+            {% elif metrics.rmse < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.rmse }}</td>
+          </tr>
+          <tr>
+            <th>R<sup>2</sup> Score</th>
+            <td class="
+            {% if metrics.r2 > 0.75 %}
+              table-success
+            {% elif metrics.r2 > 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.r2 }}</td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{% url 'download_model' %}" class="link">
+        <button class="btn btn-primary btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+  
+  <div class="prediction mt-4 mb-4">
+    <div class="container d-flex justify-content-between">
+      <div class="left pred-left">
+        <h3 class="m-2" id="predict-title">Predict</h3>
+        <div class="h4 m-2 mr-4">Use this trained model to generate predictions based on the input features you provide.</div>
+      </div>
+      <div class="right pred-right">
+        <form onsubmit="return makePrediction(event)">
+          {% for feature in features %}
           <div class="form-group">
-            <label for="dataset">Upload Dataset</label>
-            <input type="file" name="dataset" id="dataset" class="form-control-file" />
+            <label for="{{ feature }}">{{ feature }}:</label>
+            <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
           </div>
-
-          <div class="form-group">
-            <label for="feature1">Feature 1:</label>
-            <input type="text" class="form-control" id="feature1" value="10" placeholder="Enter value">
+          {% endfor %}
+          <input type="hidden" name="target" value={{ target }}>
+          <div class="w-100 d-flex justify-content-between mt-4 mr-4 mb-4">
+            <button type="submit" class="custom-btn predict-btn mt-2">Predict</button>
+            <div id="prediction-result" class="alert alert-success d-none"></div>
           </div>
-          <div class="form-group">
-            <label for="feature2">Feature 2:</label>
-            <input type="text" class="form-control" id="feature2" value="20" placeholder="Enter value">
-          </div>
-
-          <div class="form-group">
-            <label for="target">Target:</label>
-            <select name="target" id="target" class="form-control">
-              <option value="target1" selected>Target 1</option>
-              <option value="target2">Target 2</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Next</button>
-
-          <!-- Collapsible Section for Optional Parameters -->
-          <div id="accordion" class="mt-4 mb-4">
-            <div class="card">
-              <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
-                    Optional
-                  </button>
-                </h5>
-              </div>
-
-              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                  <!-- Input fields for optional parameters -->
-                  <div class="mb-3">
-                    <label for="param1" class="form-label">Parameter 1</label>
-                    <input type="text" class="form-control" id="param1" placeholder="Enter parameter 1">
-                  </div>
-                  <div class="mb-3">
-                    <label for="param2" class="form-label">Parameter 2</label>
-                    <input type="text" class="form-control" id="param2" placeholder="Enter parameter 2">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Build Button Section -->
-          <div class="fade-in">
-            <div class="form-group">
-              <label for="param1">Parameter 1:</label>
-              <input type="text" class="form-control" id="param1" value="value1">
-            </div>
-            <div class="form-group">
-              <label for="param2">Parameter 2:</label>
-              <input type="text" class="form-control" id="param2" value="value2">
-            </div>
-            <button type="submit" id="build-btn" class="btn btn-primary">
-              Build
-            </button>
-          </div>
-        </form>
-        <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
+        </form>            
       </div>
     </div>
-
-    <div class="d-flex">
-      <div class="right justify-content-center" id="canvas-1"></div>  
-    </div>
   </div>
 
-  <div class="container d-flex">
-    <div class="d-flex">
-      <div class="left justify-content-center" id="canvas-2"></div>  
-    </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <thead class="thead">
+        <th>Actual Values</th>
+        {% for value in actual %}
+        <td>{{ value }}</td>
+        {% endfor %}
+      </thead>
+      <tbody>
+        <tr>
+          <th>Predicted Values</th>
+          {% for value in predicted %}
+          <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
   </div>
+  
+
 </div>
-{% endblock %}
-
-{% block script %}
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src={% static "main/js/input.js" %}></script>
 {% endblock %}
