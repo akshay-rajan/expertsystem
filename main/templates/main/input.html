@@ -14,10 +14,23 @@
     <div>
       <h1 class='display-3 title'>Input Datasets</h1>
       <div>
-        <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()">
+        <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()" autocomplete="off">
           {% csrf_token %}
           <div class="form-group">
-            <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+            <div class="d-flex justify-content-between">
+              <div>
+                <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+              </div>
+              <div class="form-group d-none" id="train-test-split">
+                <select name="testsize" id="testsize" class="form-control">
+                  <option value="0.2" selected>80% Train, 20% Test</option>
+                  <option value="0.25">75% Train, 25% Test</option>
+                  <option value="0.3">70% Train, 30% Test</option>
+                  <option value="0.4">60% Train, 40% Test</option>
+                  <option value="0.5">50% Train, 50% Test</option>
+                </select>
+              </div>
+            </div>
           </div>
           <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
             Next
@@ -46,20 +59,53 @@
                     <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control dropdown">
                       <option value="" selected disabled>Select</option>
                       {% for option in param.options %}
-                        <option value="{{ option }}">{{ option }}</option>
+                        <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
                       {% endfor %}
                     </select>
                   </div>
                 {% else %}
                   <div class="form-group" id="{{ param.name }}-div">
                     <label for="{{ param.name }}">{{ param.name }}:</label>
-                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter">
+                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter" value="{{ param.default }}">
                   </div>
                 {% endif %}
               {% endfor %}
             </div>
             {% endif %}
 
+            {% if optional_parameters %}
+              <div id="accordion" class="optional-div optional-parameters d-none mt-4 mb-4">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
+                        Advanced
+                      </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    {% for param in optional_parameters %}
+                      <div class="mb-3" id="{{ param.name }}-div">
+                        <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
+                        {% if param.field == "select" %}
+                          <select id="{{ param.name }}" name="{{ param.name }}" class="form-control">
+                            <option value="" selected disabled>Select</option>
+                          {% for option in param.options %}
+                            <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
+                          {% endfor %}
+                        </select>
+                      {% else %}
+                        <input type="{{ param.type }}" class="form-control" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
+                      {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            
             <button type="submit" id="build-btn" class="btn btn-primary d-none">
               <div class="d-none" id="build-btn-div1">
                 Build
@@ -69,7 +115,8 @@
               </div>
             </button>
           </div>
-    
+          
+          
         </form>
         <div id="alert" class="alert alert-danger mt-4 d-none bg-gradient"></div>
       </div>

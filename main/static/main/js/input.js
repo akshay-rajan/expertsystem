@@ -7,56 +7,74 @@ function handleFileUpload(event) {
   event.preventDefault();
   const fileInput = document.getElementById('dataset');
   const file = fileInput.files[0];
+  
   if (file) {
-    
     $('#upload-btn').addClass('d-none');
     $('#build-btn').removeClass('d-none');
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const content = e.target.result;
-      const columns = extractColumns(content, file.name);
-      // Populate checkboxes
-      populateFeatureCheckboxes(columns);
-      // Populate target dropdown
-      populateTargetDropdown(columns);
-      // Enable hyperparameter input
+
+    // Save file to the server
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/save_file/', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': getCSRFToken()
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      fileInput.disabled = true;
+      
+      // Fetch formatted data from the server after file upload is successful
+      return fetch('/get_file/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        }
+      });
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Populate Checkboxes
+      populateFeatureCheckboxes(data.columns);
+      // Populate Dropdown
+      populateTargetDropdown(data.columns);
+      // Plot heatmap with correlation matrix
+      const correlationMatrix = data.correlation_matrix;
+      plotHeatMap(formatCorrelationMatrix(correlationMatrix));      
+      // Append tick icon (removes upload field)
+      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      // Display Train-Test Split Dropdown
+      $('#train-test-split').removeClass('d-none');
       $('#hyperparameter-div').removeClass('d-none');
-      // Parse data and plot heatmap
-      const { data, correlationMatrix } = parseData(content, file.name);
-      plotHeatMap(correlationMatrix);
-    };
-    if (file.name.endsWith('.csv')) {
-      reader.readAsText(file);
-    } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-      reader.readAsBinaryString(file);
-    }
+      $('.optional-div').removeClass('d-none');
+    })
+    .catch(error => {
+      // Reactivate file input field
+      fileInput.disabled = false;
+      // Alert user and reload page
+      alert('An error occurred while uploading the file. Please try again.');
+      location.reload();
+      console.error('Could not store file: ', error);
+    });
   }
 }
 
-// Activate the build button after the heatmap is plotted
-function activateBuildButton() {
-  $('#build-btn-div1').removeClass('d-none');
-  $('#build-btn-div2').addClass('d-none');
-}
-
-function extractColumns(content, fileName) {
-  let columns = [];
-  if (fileName.endsWith('.csv')) {
-    const lines = content.split('\n');
-    if (lines.length > 0) {
-      columns = lines[0].split(',');
-    }
-  } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-    const workbook = XLSX.read(content, { type: 'binary' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    if (json.length > 0) {
-      columns = json[0];
-    }
-  }
-  return columns;
+function getCSRFToken() {
+  const cookieValue = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : '';
 }
 
 function populateFeatureCheckboxes(columns) {
@@ -153,53 +171,6 @@ function validateForm() {
 function displayLoader() {
   $('.page').addClass('d-none');
   $('.loader').addClass('d-flex');
-}
-
-function parseData(content, fileName) {
-  let data = [];
-  if (fileName.endsWith('.csv')) {
-    const lines = content.split('\n');
-    const headers = lines[0].split(',');
-    for (let i = 1; i < lines.length; i++) {
-      const row = lines[i].split(',');
-      if (row.length === headers.length) {
-        let obj = {};
-        headers.forEach((header, index) => {
-          obj[header] = parseFloat(row[index]);
-        });
-        data.push(obj);
-      }
-    }
-  } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-    const workbook = XLSX.read(content, { type: 'binary' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    data = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-  }
-
-  // Calculate correlation matrix
-  const headers = Object.keys(data[0]);
-  const correlationMatrix = [];
-  for (let i = 0; i < headers.length; i++) {
-    for (let j = 0; j < headers.length; j++) {
-      const x = headers[i];
-      const y = headers[j];
-      const correlation = calculateCorrelation(data, x, y);
-      correlationMatrix.push({ group: x, variable: y, value: correlation });
-    }
-  }
-  return { data, correlationMatrix };
-}
-
-function calculateCorrelation(data, x, y) {
-  const xValues = data.map(d => d[x]);
-  const yValues = data.map(d => d[y]);
-  const n = xValues.length;
-  const xMean = d3.mean(xValues);
-  const yMean = d3.mean(yValues);
-  const numerator = d3.sum(xValues.map((xi, i) => (xi - xMean) * (yValues[i] - yMean)));
-  const denominator = Math.sqrt(d3.sum(xValues.map(xi => Math.pow(xi - xMean, 2))) * d3.sum(yValues.map(yi => Math.pow(yi - yMean, 2))));
-  return numerator / denominator;
 }
 
 // ! Heatmap
@@ -316,103 +287,123 @@ function plotHeatMap(data) {
     activateBuildButton();
 }
 
-// ! Scatter Plot
-function plotCorrelogram(data, correlationMatrix) {
-  return; // ! Disable correlogram for now 
-  // Extract unique variables from the data
-  var allVar = [...new Set(correlationMatrix.map(d => d.group))];
-  var numVar = allVar.length;
-
-  // Dimension of the whole chart. Only one size since it has to be square
-  var marginWhole = {top: 10, right: 10, bottom: 10, left: 10},
-      sizeWhole = 640 - marginWhole.left - marginWhole.right;
-
-  // Create the svg area
-  var svg = d3.select("#canvas-2")
-    .append("svg")
-      .attr("width", sizeWhole + marginWhole.left + marginWhole.right)
-      .attr("height", sizeWhole + marginWhole.top + marginWhole.bottom)
-    .append("g")
-      .attr("transform", "translate(" + marginWhole.left + "," + marginWhole.top + ")");
-
-  // Now I can compute the size of a single chart
-  var mar = 20;
-  var size = sizeWhole / numVar;
-
-  // Create a scale: gives the position of each pair each variable
-  var position = d3.scalePoint()
-    .domain(allVar)
-    .range([0, sizeWhole - size]);
-
-  // Color scale: give me a value, I return a color
-  var color = d3.scaleSequential()
-    .interpolator(d3.interpolateGnBu)
-    .domain([-1, 1]);
-
-  // Add charts
-  for (var i in allVar) {
-    for (var j in allVar) {
-      // Get current variable name
-      var var1 = allVar[i];
-      var var2 = allVar[j];
-
-      // If var1 == var2 I'm on the diagonal, I skip that
-      if (var1 === var2) { continue; }
-
-      // Filter data for the current pair of variables
-      var filteredData = data.map(d => ({ x: d[var1], y: d[var2] }));
-
-      // Add X Scale of each graph
-      var xextent = d3.extent(filteredData, function(d) { return +d.x; });
-      var x = d3.scaleLinear()
-        .domain(xextent).nice()
-        .range([0, size - 2 * mar]);
-
-      // Add Y Scale of each graph
-      var yextent = d3.extent(filteredData, function(d) { return +d.y; });
-      var y = d3.scaleLinear()
-        .domain(yextent).nice()
-        .range([size - 2 * mar, 0]);
-
-      // Add a 'g' at the right position
-      var tmp = svg
-        .append('g')
-        .attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
-
-      // Add X and Y axis in tmp
-      tmp.append("g")
-        .attr("transform", "translate(0," + (size - mar * 2) + ")")
-        .call(d3.axisBottom(x).ticks(3));
-      tmp.append("g")
-        .call(d3.axisLeft(y).ticks(3));
-
-      // Add circles
-      tmp.selectAll("myCircles")
-        .data(filteredData)
-        .enter()
-        .append("circle")
-          .attr("cx", function(d) { return x(+d.x); })
-          .attr("cy", function(d) { return y(+d.y); })
-          .attr("r", 3)
-          .attr("fill", function(d) { return color(d3.mean([d.x, d.y])); });
+// Format Correlation Matrix for d3.js
+function formatCorrelationMatrix(matrix) {
+  let formattedData = [];
+  for (let group in matrix) {
+    for (let variable in matrix[group]) {
+      formattedData.push({
+        group: group,
+        variable: variable,
+        value: matrix[group][variable]
+      });
     }
   }
-
-  // Add variable names = diagonal
-  for (var i in allVar) {
-    for (var j in allVar) {
-      // If var1 == var2 I'm on the diagonal, otherwise I skip
-      if (i != j) { continue; }
-      // Add text
-      var var1 = allVar[i];
-      var var2 = allVar[j];
-      svg.append('g')
-        .attr("transform", "translate(" + position(var1) + "," + position(var2) + ")")
-        .append('text')
-          .attr("x", size / 2)
-          .attr("y", size / 2)
-          .text(var1)
-          .attr("text-anchor", "middle");
-    }
-  }
+  return formattedData;
 }
+
+// Activate the build button after the heatmap is plotted
+function activateBuildButton() {
+  $('#build-btn-div1').removeClass('d-none');
+  $('#build-btn-div2').addClass('d-none');
+}
+
+// ! Scatter Plot
+// function plotCorrelogram(data, correlationMatrix) {
+//   // Extract unique variables from the data
+//   var allVar = [...new Set(correlationMatrix.map(d => d.group))];
+//   var numVar = allVar.length;
+
+//   // Dimension of the whole chart. Only one size since it has to be square
+//   var marginWhole = {top: 10, right: 10, bottom: 10, left: 10},
+//       sizeWhole = 640 - marginWhole.left - marginWhole.right;
+
+//   // Create the svg area
+//   var svg = d3.select("#canvas-2")
+//     .append("svg")
+//       .attr("width", sizeWhole + marginWhole.left + marginWhole.right)
+//       .attr("height", sizeWhole + marginWhole.top + marginWhole.bottom)
+//     .append("g")
+//       .attr("transform", "translate(" + marginWhole.left + "," + marginWhole.top + ")");
+
+//   // Now I can compute the size of a single chart
+//   var mar = 20;
+//   var size = sizeWhole / numVar;
+
+//   // Create a scale: gives the position of each pair each variable
+//   var position = d3.scalePoint()
+//     .domain(allVar)
+//     .range([0, sizeWhole - size]);
+
+//   // Color scale: give me a value, I return a color
+//   var color = d3.scaleSequential()
+//     .interpolator(d3.interpolateGnBu)
+//     .domain([-1, 1]);
+
+//   // Add charts
+//   for (var i in allVar) {
+//     for (var j in allVar) {
+//       // Get current variable name
+//       var var1 = allVar[i];
+//       var var2 = allVar[j];
+
+//       // If var1 == var2 I'm on the diagonal, I skip that
+//       if (var1 === var2) { continue; }
+
+//       // Filter data for the current pair of variables
+//       var filteredData = data.map(d => ({ x: d[var1], y: d[var2] }));
+
+//       // Add X Scale of each graph
+//       var xextent = d3.extent(filteredData, function(d) { return +d.x; });
+//       var x = d3.scaleLinear()
+//         .domain(xextent).nice()
+//         .range([0, size - 2 * mar]);
+
+//       // Add Y Scale of each graph
+//       var yextent = d3.extent(filteredData, function(d) { return +d.y; });
+//       var y = d3.scaleLinear()
+//         .domain(yextent).nice()
+//         .range([size - 2 * mar, 0]);
+
+//       // Add a 'g' at the right position
+//       var tmp = svg
+//         .append('g')
+//         .attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
+
+//       // Add X and Y axis in tmp
+//       tmp.append("g")
+//         .attr("transform", "translate(0," + (size - mar * 2) + ")")
+//         .call(d3.axisBottom(x).ticks(3));
+//       tmp.append("g")
+//         .call(d3.axisLeft(y).ticks(3));
+
+//       // Add circles
+//       tmp.selectAll("myCircles")
+//         .data(filteredData)
+//         .enter()
+//         .append("circle")
+//           .attr("cx", function(d) { return x(+d.x); })
+//           .attr("cy", function(d) { return y(+d.y); })
+//           .attr("r", 3)
+//           .attr("fill", function(d) { return color(d3.mean([d.x, d.y])); });
+//     }
+//   }
+
+//   // Add variable names = diagonal
+//   for (var i in allVar) {
+//     for (var j in allVar) {
+//       // If var1 == var2 I'm on the diagonal, otherwise I skip
+//       if (i != j) { continue; }
+//       // Add text
+//       var var1 = allVar[i];
+//       var var2 = allVar[j];
+//       svg.append('g')
+//         .attr("transform", "translate(" + position(var1) + "," + position(var2) + ")")
+//         .append('text')
+//           .attr("x", size / 2)
+//           .attr("y", size / 2)
+//           .text(var1)
+//           .attr("text-anchor", "middle");
+//     }
+//   }
+// }

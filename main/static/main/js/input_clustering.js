@@ -7,54 +7,70 @@ function handleFileUpload(event) {
   event.preventDefault();
   const fileInput = document.getElementById('dataset');
   const file = fileInput.files[0];
+
   if (file) {
-    
     $('#upload-btn').addClass('d-none');
     $('#build-btn').removeClass('d-none');
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const content = e.target.result;
-      const columns = extractColumns(content, file.name);
-      // Populate checkboxes
-      populateFeatureCheckboxes(columns);
-      // Enable hyperparameter input
+    // Save file to the server
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/save_file/', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': getCSRFToken()
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      fileInput.disabled = true;
+      
+      // Fetch formatted data from the server after file upload is successful
+      return fetch('/get_file/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        }
+      });
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Populate Checkboxes
+      populateFeatureCheckboxes(data.columns);
+      // Plot heatmap with correlation matrix
+      const correlationMatrix = data.correlation_matrix;
+      plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+      // Append tick icon (removes upload field)
+      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       $('#hyperparameter-div').removeClass('d-none');
-      // Parse data and plot heatmap
-      const { data, correlationMatrix } = parseData(content, file.name);
-      plotHeatMap(correlationMatrix);
-    };
-    if (file.name.endsWith('.csv')) {
-      reader.readAsText(file);
-    } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-      reader.readAsBinaryString(file);
-    }
+      $('.optional-div').removeClass('d-none');
+    })
+    .catch(error => {
+      // Reactivate file input field
+      fileInput.disabled = false;
+      // Alert user and reload page
+      alert('An error occurred while uploading the file. Please try again.');
+      location.reload();
+      console.error('Could not store file: ', error);
+    });
   }
 }
 
-// Activate the build button after the heatmap is plotted
-function activateBuildButton() {
-  $('#build-btn-div1').removeClass('d-none');
-  $('#build-btn-div2').addClass('d-none');
-}
-
-function extractColumns(content, fileName) {
-  let columns = [];
-  if (fileName.endsWith('.csv')) {
-    const lines = content.split('\n');
-    if (lines.length > 0) {
-      columns = lines[0].split(',');
-    }
-  } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-    const workbook = XLSX.read(content, { type: 'binary' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    if (json.length > 0) {
-      columns = json[0];
-    }
-  }
-  return columns;
+function getCSRFToken() {
+  const cookieValue = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : '';
 }
 
 function populateFeatureCheckboxes(columns) {
@@ -113,57 +129,9 @@ function validateForm() {
   return true;
 }
 
-// Display loading spinner on form submission
 function displayLoader() {
   $('.page').addClass('d-none');
   $('.loader').addClass('d-flex');
-}
-
-function parseData(content, fileName) {
-  let data = [];
-  if (fileName.endsWith('.csv')) {
-    const lines = content.split('\n');
-    const headers = lines[0].split(',');
-    for (let i = 1; i < lines.length; i++) {
-      const row = lines[i].split(',');
-      if (row.length === headers.length) {
-        let obj = {};
-        headers.forEach((header, index) => {
-          obj[header] = parseFloat(row[index]);
-        });
-        data.push(obj);
-      }
-    }
-  } else if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-    const workbook = XLSX.read(content, { type: 'binary' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    data = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-  }
-
-  // Calculate correlation matrix
-  const headers = Object.keys(data[0]);
-  const correlationMatrix = [];
-  for (let i = 0; i < headers.length; i++) {
-    for (let j = 0; j < headers.length; j++) {
-      const x = headers[i];
-      const y = headers[j];
-      const correlation = calculateCorrelation(data, x, y);
-      correlationMatrix.push({ group: x, variable: y, value: correlation });
-    }
-  }
-  return { data, correlationMatrix };
-}
-
-function calculateCorrelation(data, x, y) {
-  const xValues = data.map(d => d[x]);
-  const yValues = data.map(d => d[y]);
-  const n = xValues.length;
-  const xMean = d3.mean(xValues);
-  const yMean = d3.mean(yValues);
-  const numerator = d3.sum(xValues.map((xi, i) => (xi - xMean) * (yValues[i] - yMean)));
-  const denominator = Math.sqrt(d3.sum(xValues.map(xi => Math.pow(xi - xMean, 2))) * d3.sum(yValues.map(yi => Math.pow(yi - yMean, 2))));
-  return numerator / denominator;
 }
 
 // ! Heatmap
@@ -278,4 +246,28 @@ function plotHeatMap(data) {
     .text("Correlation between each pair of features.");
 
     activateBuildButton();
+}
+
+function formatCorrelationMatrix(matrix) {
+  let formattedData = [];
+  for (let group in matrix) {
+    for (let variable in matrix[group]) {
+      formattedData.push({
+        group: group,
+        variable: variable,
+        value: matrix[group][variable]
+      });
+    }
+  }
+  return formattedData;
+}
+
+function activateBuildButton() {
+  $('#build-btn-div1').removeClass('d-none');
+  $('#build-btn-div2').addClass('d-none');
+}
+
+function activateBuildButton() {
+  $('#build-btn-div1').removeClass('d-none');
+  $('#build-btn-div2').addClass('d-none');
 }

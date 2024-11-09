@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/prism.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css" rel="stylesheet">
+    {% block style %}{% endblock %}
 
     <link rel="icon" href="{% static 'main/img/favicon_es.png' %}">
   </head>
@@ -27,6 +30,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'index' %}">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'preprocessing' %}">Preprocessing</a>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Algorithms
@@ -38,7 +44,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'samples' %}">Samples</a>
+            <a class="nav-link" href="{% url 'samples' %}">Sample Datasets</a>
           </li>
         </ul>
       </div>
@@ -84,6 +90,14 @@
                 <li class="nav-item mb-2"><a href="clustering/hierarchical_clustering/" class="nav-link p-0 text-muted">Hierarchical</a></li>
               </ul>
             </div>
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Preprocessing</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Encoding</a></li>
+                <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Missing Values</a></li>
+                <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Scaling</a></li>
+              </ul>
+            </div>
           </div>
       
           <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
@@ -104,13 +118,14 @@
     <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'main/js/main.js' %}"></script>
+    <script src="{% static 'main/js/custom.js' %}"></script>
+    <script src="{% static 'main/js/prism.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
     <script>
       $(document).ready(function() {
         $('.fade-in').fadeIn(500);
       });
     </script>
-    {% comment %} Library for Excel File Parsing {% endcomment %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     {% block script %}{% endblock %}
   </body>
   </html>

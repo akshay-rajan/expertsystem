@@ -1,0 +1,56 @@
+.guide-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+}
+
+.custom-popup {
+    font-size: 16px; /* Increase font size */
+    text-align: left; /* Align text to the left */
+  }
+.custom-popup .swal2-html-container {
+  font-size: 16px; /* Optional: to ensure the HTML content font size is consistent */
+}
+
+.info-button {
+  position: absolute;  /* Position it absolutely within the parent */
+  top: 10px;           /* Adjust to move the button from the top */
+  right: 10px;         /* Adjust to move the button from the right */
+  background-color: white;
+  color: #0056b3;      /* Text color */
+  border: 1px solid #0056b3; /* Border color */
+  border-radius: 5px;   /* Optional: makes the button round */
+  padding: 10px;        /* Adjust the padding */
+  font-size: 18px;      /* Adjust font size */
+  cursor: pointer;     /* Pointer cursor for the button */
+}
+.info-button:hover {
+  background-color: #0056b3; /* Darker background color on hover */
+  color: white;             /* White text color on hover */
+}
+.info-button:focus {
+  outline: none; /* Remove the outline on focus */
+}
+.swal2-close {
+  outline: none!important;
+}
+
+.table-info-container {
+  position: relative;
+  display: inline-block;
+  text-align: left!important;
+}
+
+.data-info-box {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}

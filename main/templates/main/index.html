@@ -30,10 +30,13 @@
           <a class="nav-link active" href="#">Home</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'preprocessing' %}">Preprocessing</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="#select-category">Algorithms</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'samples' %}">Samples</a>
+          <a class="nav-link" href="{% url 'samples' %}">Sample Datasets</a>
         </li>
       </ul>
     </div>
@@ -51,7 +54,7 @@
       </span>
       <div class="fade-in-3">
         <div class="d-flex">
-          <a href="#get-started" class="home-btn mr-2">Get Started!</a>
+          <a href="#get-started" class="start-btn">Get Started!</a>
         </div>
       </div>
     </div>
@@ -111,11 +114,26 @@
     </div>
   </div>
 
-  <div class="second p-4" id="get-started">
+  <div class="second p-4 pb-0 mb-0" id="get-started">
 
     <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
-        <h5 class="card-title">Start</h5>
+        <h5 class="card-title">Manage Data</h5>
+        <p class="card-text">Prepare your data for analysis with cleaning and pre-processing.</p>
+        <a href="{% url 'preprocessing' %}">
+          <button>
+            Preprocessing →
+          </button>
+        </a>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center card-right">
+        <img src="{% static 'main/img/preprocessing.png' %}" class="feature-card-img" alt="Learn">
+      </div>
+    </div>
+
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
+        <h5 class="card-title">Modelling</h5>
         <p class="card-text">Pick an algorithm and start building ML Models.</p>
         <a href="#select-category">
           <button>
@@ -128,10 +146,10 @@
       </div>
     </div>
 
-    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+    {% comment %} <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left  p-4">
         <h5 class="card-title">Introduction</h5>
-        <p class="card-text">Learn Machine Learning from scratch, from preprocessing to deployment.</p>
+        <p class="card-text">Learn everything about Machine Learning, from preprocessing to deployment.</p>
         <button disabled>Coming soon!</button>
       </div>
 
@@ -143,13 +161,13 @@
     <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4 flex-grow-1">
         <h5 class="card-title">Advanced Features</h5>
-        <p class="card-text">Data Cleanup, Pre-processing, Hyperparameter Tuning...</p>
+        <p class="card-text">Hyperparameter Tuning, Neural Networks, Dimensionality Reduction...</p>
         <button disabled>Coming soon!</button>
       </div>
       <div class="p-4 d-flex justify-content-center align-items-center card-right">
         <img src="{% static 'main/img/adv.png' %}" class="feature-card-img" alt="Learn">
       </div>
-    </div>
+    </div> {% endcomment %}
   </div>
   
   <div class="third d-flex flex-column justify-content-center" id="select-category">
@@ -283,6 +301,14 @@
             <ul class="nav flex-column">
               <li class="nav-item mb-2"><a href="clustering/kmeans/" class="nav-link p-0 text-muted">K Means</a></li>
               <li class="nav-item mb-2"><a href="clustering/hierarchical_clustering/" class="nav-link p-0 text-muted">Hierarchical</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Preprocessing</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Encoding</a></li>
+              <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Missing Values</a></li>
+              <li class="nav-item mb-2"><a href="preprocessing" class="nav-link p-0 text-muted">Scaling</a></li>
             </ul>
           </div>
         </div>

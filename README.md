@@ -1,5 +1,4 @@
-# EXPERT SYSTEM
-
+![alt text](./others/screenshot.png)
 
 Machine Learning is a vast and complex field that requires a lot of dedication and time to master. 
 However, the complexity of ML algorithms and the necessity for programming skills create
@@ -115,6 +114,10 @@ Install the requirements:
 ```bash
 pip install -r requirements.txt
 ```
+Run the database migrations:
+```bash
+python manage.py migrate
+```
 Start the Django server:
 ```bash
 python manage.py runserver
@@ -124,8 +127,13 @@ The server will start at http://127.0.0.1:8000/ .
 
 ---
 
+<a href="https://github.com/akshay-rajan/expertsystem/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=akshay-rajan/expertsystem" />
+</a>
+
 > **Akshay R**,
 >**Deepu Joseph**,
 >*Semester 3, Masters in Computer Applications*,
 >*College of Enginnering, Trivandrum*
 >(*2023-2025*)
+

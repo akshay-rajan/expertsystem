@@ -8,6 +8,10 @@ __pycache__/
 .DS_Store
 node_modules/
 
+# Database 
+*.sqlite3
+*.db
+
 # C extensions
 *.so
 

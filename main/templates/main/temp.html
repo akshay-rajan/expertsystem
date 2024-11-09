@@ -1,0 +1,174 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+<div class="fade-in">
+  <div class="d-flex justify-content-between">
+    <h1 class="display-3 title">Results</h1>
+    <div class="code-div d-flex align-items-center">
+      <button class="view-code-btn text-center" id="show-code-btn">
+        <img src="{% static 'main/img/code.svg' %}" class="view-code-logo" alt="View Code">
+      </button>
+    </div>
+  </div>
+  <div id="results">
+    <div class="d-flex justify-content-center">
+      <h4 class="display-6 p-3">
+        {{ line }}
+      </h4>
+    </div>
+  </div>
+
+  <div class="evaluation">
+    <h3 class="m-2">Evaluation Metrics</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+            <th>Mean Absolute Error</th>
+            <td class="
+            {% if metrics.mae < 0.3 %}
+              table-success
+            {% elif metrics.mae < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mae }}</td>
+          </tr>
+          <tr>  
+            <th>Mean Squared Error</th>
+            <td class="
+            {% if metrics.mse < 0.2 %}
+              table-success
+            {% elif metrics.mse < 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.mse }}</td>
+          </tr>
+          <tr>
+            <th>Root Mean Squared Error</th>
+            <td class="
+            {% if metrics.rmse < 0.3 %}
+              table-success
+            {% elif metrics.rmse < 0.7 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.rmse }}</td>
+          </tr>
+          <tr>
+            <th>R<sup>2</sup> Score</th>
+            <td class="
+            {% if metrics.r2 > 0.75 %}
+              table-success
+            {% elif metrics.r2 > 0.5 %}
+              table-warning
+            {% else %}
+              table-danger
+            {% endif %}
+            ">{{ metrics.r2 }}</td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-4 mb-4">
+      <a href="{% url 'download_model' %}" class="link">
+        <button class="btn btn-primary btn-block">
+          Download Trained Model
+        </button>
+      </a>
+    </div>
+  </div>
+  
+  <div class="prediction mt-4 mb-4">
+    <div class="container d-flex justify-content-between">
+      <div class="left pred-left">
+        <h3 class="m-2" id="predict-title">Predict</h3>
+        <div class="h4 m-2 mr-4">Use this trained model to generate predictions based on the input features you provide.</div>
+      </div>
+      <div class="right pred-right">
+        <form onsubmit="return makePrediction(event)">
+          {% for feature in features %}
+          <div class="form-group">
+            <label for="{{ feature }}">{{ feature }}:</label>
+            <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
+          </div>
+          {% endfor %}
+          <input type="hidden" name="target" value={{ target }}>
+          <div class="w-100 d-flex justify-content-between mt-4 mr-4 mb-4">
+            <button type="submit" class="custom-btn predict-btn mt-2">Predict</button>
+            <div id="prediction-result" class="alert alert-success d-none"></div>
+          </div>
+        </form>            
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-info">
+      <thead class="thead">
+        <th>Actual Values</th>
+        {% for value in actual %}
+        <td>{{ value }}</td>
+        {% endfor %}
+      </thead>
+      <tbody>
+        <tr>
+          <th>Predicted Values</th>
+          {% for value in predicted %}
+          <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<div class="source-code d-none"><pre><code class="language-python">
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Load dataset from CSV file
+data = pd.read_csv("data.csv")  # Replace 'data.csv' with the path to your CSV file
+
+# Inspect the dataset
+print(data.head())
+
+# Define feature variables (X) and target variable (y)
+# Replace 'feature1', 'feature2', ..., 'target' with actual column names
+X = data[['feature1', 'feature2', 'feature3']]  # Example features
+y = data['target']  # Example target
+
+# Split the data into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize the linear regression model
+model = LinearRegression()
+
+# Train the model on the training data
+model.fit(X_train, y_train)
+
+# Predict target values for the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model using evaluation metrics
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = mean_squared_error(y_test, y_pred, squared=False)  # Root Mean Squared Error
+r2 = r2_score(y_test, y_pred)
+
+# Print evaluation metrics
+print("Mean Absolute Error (MAE):", mae)
+print("Mean Squared Error (MSE):", mse)
+print("Root Mean Squared Error (RMSE):", rmse)
+print("R^2 Score:", r2)
+</code></pre></div>
+
+</div>
+{% endblock %}
