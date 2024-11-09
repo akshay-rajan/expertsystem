@@ -56,6 +56,8 @@ function handleFileUpload(event) {
       plotHeatMap(formatCorrelationMatrix(correlationMatrix));      
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      // Display Train-Test Split Dropdown
+      $('#train-test-split').removeClass('d-none');
       $('#hyperparameter-div').removeClass('d-none');
       $('.optional-div').removeClass('d-none');
     })

@@ -17,7 +17,20 @@
         <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()" autocomplete="off">
           {% csrf_token %}
           <div class="form-group">
-            <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+            <div class="d-flex justify-content-between">
+              <div>
+                <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+              </div>
+              <div class="form-group d-none" id="train-test-split">
+                <select name="testsize" id="testsize" class="form-control">
+                  <option value="0.2" selected>80% Train, 20% Test</option>
+                  <option value="0.25">75% Train, 25% Test</option>
+                  <option value="0.3">70% Train, 30% Test</option>
+                  <option value="0.4">60% Train, 40% Test</option>
+                  <option value="0.5">50% Train, 50% Test</option>
+                </select>
+              </div>
+            </div>
           </div>
           <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
             Next
@@ -36,7 +49,6 @@
                 {% comment %} Dropdown will be populated here {% endcomment %}
               </select>
             </div>
-            <input name="testsize" id="testsize" hidden class="form-control" value="0.2">
             
             {% if hyperparameters %}
             <div class="hyperparameters d-none" id="hyperparameter-div">
