@@ -594,6 +594,27 @@ a:focus {
   outline: none;  
 }
 
+.view-code-logo {
+  width: 25px;
+  height: 25px;
+}
+
+#show-code-btn {
+  color: var(--secondary-color);
+  background-color: white;
+  border: 1px solid var(--secondary-color);
+  padding: 5px 10px;
+  margin: 0 20px 0 0;
+  border-radius: 50%;
+}
+#show-code-btn:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+#show-code-btn:focus {
+  outline: none;
+}
+
 /* ! Others */
 .error-404 {
   color: var(--secondary-color)!important;
