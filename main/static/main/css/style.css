@@ -73,6 +73,10 @@ body {
   background-color: var(--secondary-color)!important;
   color: var(--primary-color)!important;
 }
+.swal2-close {
+  border: none!important;
+  outline: none!important;
+}
 
 /* ! Home */
 #home {

@@ -42,3 +42,24 @@ async function makePrediction(event) {
     predictionResult.innerHTML = error.message;
   }
 }
+
+// ! Display source code of the algorithm
+$('#show-code-btn').click(() => {
+  console.log('Show source code button clicked');
+  // Source code you want to display
+  const sourceCode = `<pre><code>
+  function helloWorld() {
+      console.log("Hello, World!");
+  }
+  </code></pre>`;
+
+  // SweetAlert configuration to display the source code
+  Swal.fire({
+    title: 'Source Code',
+    html: sourceCode,  // Use 'html' instead of 'text' to render HTML tags
+    icon: 'info',
+    showCloseButton: true,
+    focusConfirm: false,
+    confirmButtonText: 'Close'
+  });
+});
