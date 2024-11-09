@@ -339,11 +339,7 @@ function toggleGuide() {
 
 function toggleInfo() {
   Swal.fire({
-    
-    html: `
-    <div id="data-table-container"></div>
-
-    `,
+    html: `<div id="data-table-container"></div>`,
     showCloseButton: true,
     focusConfirm: false,
     icon: 'info',
@@ -365,7 +361,7 @@ function toggleInfo() {
   .then(response => response.json())
   .then(data => {
     console.log(data);
-    // generateDataTable(data)
+    console.log("Helloooooooooooo");
   })
   .catch(error => {
     console.error('Error:', error);
