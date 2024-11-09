@@ -15,8 +15,15 @@ def get_input(request_post, *args):
     """Get the parameters entered by the user"""
     
     inputs = (request_post.getlist('features'), request_post.get('target'), float(request_post.get('testsize')))
+    
     for arg in args:
-        inputs += (request_post.get(arg),)
+        if isinstance(arg, tuple):
+            param_name, default_value = arg
+            value = request_post.get(param_name, default_value)
+        else:
+            param_name = arg
+            value = request_post.get(param_name)
+        inputs += (value,)
     
     return inputs
 

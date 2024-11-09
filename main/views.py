@@ -131,7 +131,8 @@ def lasso(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features, target, test_size, alpha, max_iter, tol = get_input(request.POST, 'max_iter', 'tol')
+        features, target, test_size, alpha, max_iter, tol = get_input(request.POST, 'alpha', ('max_iter', 1000), ('tol', 1e-4))
+        alpha, max_iter, tol = float(alpha), int(max_iter), float(tol)
         
         X, y = df[features], df[target]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
