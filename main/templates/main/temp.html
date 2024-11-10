@@ -125,50 +125,12 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://unpkg.com/svg-gauge@1.0.4/dist/gauge.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Common gauge configuration with a blue color
-    const gaugeConfig = {
-      max: 100,
-      dialStartAngle: -90,
-      dialEndAngle: -90.001,
-      color: function(value) {
-        if (value < 0) {
-          return "#ef4655";
-        }else if (value < 25) {
-          return "#f7aa38";
-        }else if (value < 50) {
-          return "#fffa50";
-        } else {
-          return "#00bfa5";
-        }
-      },
-      label: function(value) {
-        return value.toFixed(2);
-      }
-    };
-
-    // Initialize each gauge with hardcoded metric values
-    var gaugeAccuracy = Gauge(document.getElementById("gauge-accuracy"), {
-      ...gaugeConfig,
-      value: 95.00  // Hardcoded accuracy value
-    });
-
-    var gaugePrecision = Gauge(document.getElementById("gauge-precision"), {
-      ...gaugeConfig,
-      value: 52.75  // Hardcoded precision value
-    });
-
-    var gaugeRecall = Gauge(document.getElementById("gauge-recall"), {
-      ...gaugeConfig,
-      value: 18.50  // Hardcoded recall value
-    });
-
-    var gaugeF1 = Gauge(document.getElementById("gauge-f1"), {
-      ...gaugeConfig,
-      value: 10  // Hardcoded F1 score
-    });
+    initializeGauge("gauge-accuracy", 1.5);
+    initializeGauge("gauge-precision", 0.5621);
+    initializeGauge("gauge-recall", 0.4853);
+    initializeGauge("gauge-f1", 0.2522);
   });
 </script>
 {% endblock %}

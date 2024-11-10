@@ -91,3 +91,36 @@ $('#show-code-btn').click(() => {
     }
   });
 });
+
+// Gauge for metrics
+function colorPicker(value, lowRange, midLowRange, midHighRange, highRange, direction) {
+  value *= direction;
+  if (value <= lowRange) {
+    return "#ef4655"; // Red for low range
+  } else if (value <= midLowRange) {
+    return "#f7aa38"; // Orange for mid-low range
+  } else if (value <= midHighRange) {
+    return "#fffa50"; // Yellow for mid-high range
+  } else {
+    return "#00bfa5"; // Green for high range
+  }
+}
+function initializeGauge(elementId, originalValue) {
+  const gaugeConfig = {
+    max: 1,
+    dialStartAngle: -90,
+    dialEndAngle: -90.001,
+    color: function(value) {
+      // Use rangeColorPicker with specific ranges
+      return colorPicker(value, 0.25, 0.50, 0.75, 0.100, 1);
+    },
+    label: function(value) {
+      return `${(value * 100).toFixed(2)}%`;
+    }
+  };
+  Gauge(document.getElementById(elementId), {
+    ...gaugeConfig,
+    value: originalValue,
+    originalValue: originalValue
+  });
+}
