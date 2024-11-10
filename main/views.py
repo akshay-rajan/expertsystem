@@ -632,12 +632,16 @@ def hierarchical_clustering(request):
         df = file_model.load_file()
         
         features = request.POST.getlist('features')                
-        n_clusters = int(request.POST.get('n_clusters'))
+        n_clusters = request.POST.get('n_clusters', None)
         linkage_method = request.POST.get('linkage_method', 'ward')
         
         X = df[features]
 
-        model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage_method)
+        if n_clusters:
+            model = AgglomerativeClustering(n_clusters=int(n_clusters), linkage=linkage_method)
+        else:
+            model = AgglomerativeClustering(linkage=linkage_method)
+                
         labels = model.fit_predict(X)
         
         centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
@@ -649,7 +653,7 @@ def hierarchical_clustering(request):
         # ? Plotting the Dendrogram
         plot_json = None
         if (len(features) >= 2):
-            linked = linkage(X_data, 'ward') # Using Ward linkage method
+            linked = linkage(X_data, linkage_method)
             plot_json = plot_dendrogram(linked, df.index)
         
         cluster_plot = plot_clusters(X_data, labels, centroids, features, 0, 1)
@@ -674,10 +678,8 @@ def hierarchical_clustering(request):
         })
     
     return render(request, 'main/input_clustering.html', {
-        'hyperparameters': {
-            1: {'name': 'n_clusters', 'type': 'number'},
-        },
         'optional_parameters': [
+            {'name': 'n_clusters', 'type': 'number'},
             {'field': 'select', 'name': 'linkage_method', 'type': 'text', 'options': ['ward', 'complete', 'average', 'single'], 'default': 'ward'},
         ]
     })
