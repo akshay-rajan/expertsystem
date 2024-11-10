@@ -735,6 +735,18 @@ def samples(request):
             "file": "big_mart_sales.csv",
             "type": "CSV",
             "note": "Uncleaned (Large)"
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance.csv",
+            "type": "CSV",
+            "note": "Uncleaned"
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance_processed.csv",
+            "type": "CSV",
+            "note": "For Regression"            
         }
     ]
     return render(request, 'main/samples.html', {
