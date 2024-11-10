@@ -23,7 +23,7 @@ from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import get_input, construct_line, format_predictions, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters
 from .models import MLModel, DataFile
 
 
@@ -600,7 +600,7 @@ def kmeans(request):
 
         plot_json = None
         if (len(features) >= 2):
-            plot_json = plot_kmeans_clusters(X_data, labels, centroids, features, 0, 1)
+            plot_json = plot_clusters(X_data, labels, centroids, features, 0, 1)
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
@@ -652,6 +652,8 @@ def hierarchical_clustering(request):
             linked = linkage(X_data, 'ward') # Using Ward linkage method
             plot_json = plot_dendrogram(linked, df.index)
         
+        cluster_plot = plot_clusters(X_data, labels, centroids, features, 0, 1)
+        
         ml_model = MLModel()
         ml_model.save_model(model)
         request.session['model'] = str(ml_model.model_id)        
@@ -668,6 +670,7 @@ def hierarchical_clustering(request):
                 'silhouette_score': silhouette,
             },
             'dendrogram': plot_json,
+            'cluster_plot': cluster_plot,
         })
     
     return render(request, 'main/input_clustering.html', {

@@ -145,8 +145,8 @@ def plot_dendrogram(linkage_matrix, labels):
     fig.update_layout(title='Dendrogram', template='plotly_white', width=1000, height=600)
     return json.dumps(fig, cls=PlotlyJSONEncoder)
 
-def plot_kmeans_clusters(X, labels, centroids, features, x_feature, y_feature):
-    """Plot KMeans clusters and centroids using Plotly"""
+def plot_clusters(X, labels, centroids, features, x_feature, y_feature):
+    """Plot clusters and centroids using Plotly"""
     
     # Create a scatter plot for the data points
     fig = go.Figure()
