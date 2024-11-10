@@ -639,6 +639,28 @@ a:focus {
   width: 90vw!important;
 }
 
+.gauge-container {
+  position: relative;
+  width: 150px; /* Adjust width and height based on your gauge size */
+  height: 150px;
+  color: #0062cc;
+}
+
+.gauge-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.gauge-container .gauge-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px; /* Adjust font size */
+  color: #007bff;  /* Same blue color as the gauge */
+}
+
 /* ! Others */
 .error-404 {
   color: var(--secondary-color)!important;

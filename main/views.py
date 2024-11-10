@@ -663,7 +663,7 @@ def hierarchical_clustering(request):
         request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/hierarchical_clustering.html', {
-            'k': n_clusters,
+            'k': centroids.shape[0],
             'X': X_data[:100],
             'features': features,
             'target': "Cluster",
