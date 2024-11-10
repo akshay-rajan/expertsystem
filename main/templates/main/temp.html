@@ -17,20 +17,20 @@
   <div class="evaluation">
     <h3 class="m-2">Evaluation Metrics</h3>
     <div class="evaluation-gauges d-flex justify-content-center flex-wrap">
-      <div id="gauge-accuracy" class="gauge-container">
-        <span class="label">Accuracy</span>
+      <div id="gauge-mae" class="gauge-container">
+        <span class="label">Mean Absolute Error</span>
       </div>
       
-      <div id="gauge-precision" class="gauge-container">
-        <span class="label">Precision</span>
+      <div id="gauge-mse" class="gauge-container">
+        <span class="label">Mean Squared Error</span>
       </div>
       
-      <div id="gauge-recall" class="gauge-container">
-        <span class="label">Recall</span>
+      <div id="gauge-rmse" class="gauge-container">
+        <span class="label">Root Mean Squared Error</span>
       </div>
       
-      <div id="gauge-f1" class="gauge-container">
-        <span class="label">F1 Score</span>
+      <div id="gauge-r2" class="gauge-container">
+        <span class="label">R<sup>2</sup> Score</span>
       </div>      
     </div>
     <div class="d-flex justify-content-end mt-4 mb-4">
@@ -127,10 +127,10 @@
 {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    initializeGauge("gauge-accuracy", 1.5);
-    initializeGauge("gauge-precision", 0.5621);
-    initializeGauge("gauge-recall", 0.4853);
-    initializeGauge("gauge-f1", 0.2222);
+    initializeRegressionGauge("gauge-mae", 0.1521, true);
+    initializeRegressionGauge("gauge-mse", -0.21, true);
+    initializeRegressionGauge("gauge-rmse", 1.4853, true);
+    initializeRegressionGauge("gauge-r2", 0.9222, false);
   });
 </script>
 {% endblock %}

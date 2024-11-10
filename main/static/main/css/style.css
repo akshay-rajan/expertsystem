@@ -654,14 +654,14 @@ a:focus {
 
 .gauge-container .label {
   position: absolute;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 70%);
   text-align: center;
   width: 100%;
   margin-left: 50%;
   font-size: 20px;
   color: #007bff;
   text-align: center;
-  bottom: -10px; /* Adjust distance from the bottom if necessary */
+  bottom: -10px;
 }
 
 .gauge-container .value-text {
