@@ -91,3 +91,65 @@ $('#show-code-btn').click(() => {
     }
   });
 });
+
+// ! Gauges for Evaluation Metrics
+function colorPicker(value, a, b, c) {
+  if (value <= a) {
+    return "#ef4655"; // Red for low range
+  } else if (value <= b) {
+    return "#f7aa38"; // Orange for mid-low range
+  } else if (value <= c) {
+    return "#fffa50"; // Yellow for mid-high range
+  } else {
+    return "#00bfa5"; // Green for high range
+  }
+}
+function initializeGauge(elementId, originalValue) {
+  const gaugeConfig = {
+    max: 100,
+    dialStartAngle: -90,
+    dialEndAngle: -90.001,
+    color: function(value) {
+      // Use rangeColorPicker with specific ranges
+      return colorPicker(value, 25, 50, 75, 100);
+    },
+    label: function(value) {
+      return `${value.toFixed(2)}%`;
+    }
+  };
+  Gauge(document.getElementById(elementId), {
+    ...gaugeConfig,
+    value: originalValue,
+  });
+}
+function reverseColorPicker(value, a, b, c) {
+  if (value <= a) {
+    return "#00bfa5"; // Green for low range
+  } else if (value <= b) {
+    return "#fffa50"; // Yellow for mid-low range
+  } else if (value <= c) {
+    return "#f7aa38"; // Orange for mid-high range
+  } else {
+    return "#ef4655"; // Red for high range
+  }
+}
+function initializeRegressionGauge(elementId, originalValue, reversed) {
+  const gaugeConfig = {
+    max: 1,
+    dialStartAngle: -90,
+    dialEndAngle: -90.001,
+    color: function(value) {
+      return reversed ? reverseColorPicker(originalValue, 0.25, 0.5, 0.75) : colorPicker(originalValue, 0.25, 0.5, 0.75);
+    },
+    label: function() {
+      // Display the original value in the label, regardless of gauge's max value
+      return `${originalValue.toFixed(4)}`;
+    },
+  };
+  // Set the gauge value to capped max if originalValue exceeds max
+  const displayValue = Math.min(originalValue, gaugeConfig.max);
+  Gauge(document.getElementById(elementId), {
+    ...gaugeConfig,
+    value: 1 - displayValue
+  });
+}

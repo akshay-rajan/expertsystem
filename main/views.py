@@ -23,7 +23,7 @@ from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import get_input, construct_line, format_predictions, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_kmeans_clusters
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters
 from .models import MLModel, DataFile
 
 
@@ -163,7 +163,7 @@ def lasso(request):
     
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
+            1: {'name': 'alpha', 'type': 'text', 'default': 0.1},
         },
         'optional_parameters': [
             {'name': 'max_iter', 'type': 'number', 'default': 1000},
@@ -600,7 +600,7 @@ def kmeans(request):
 
         plot_json = None
         if (len(features) >= 2):
-            plot_json = plot_kmeans_clusters(X_data, labels, centroids, features, 0, 1)
+            plot_json = plot_clusters(X_data, labels, centroids, features, 0, 1)
         
         return render(request, 'main/kmeans.html', {
             'k': n_clusters,
@@ -632,12 +632,16 @@ def hierarchical_clustering(request):
         df = file_model.load_file()
         
         features = request.POST.getlist('features')                
-        n_clusters = int(request.POST.get('n_clusters'))
+        n_clusters = request.POST.get('n_clusters', None)
         linkage_method = request.POST.get('linkage_method', 'ward')
         
         X = df[features]
 
-        model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage_method)
+        if n_clusters:
+            model = AgglomerativeClustering(n_clusters=int(n_clusters), linkage=linkage_method)
+        else:
+            model = AgglomerativeClustering(linkage=linkage_method)
+                
         labels = model.fit_predict(X)
         
         centroids = np.array([X[model.labels_ == i].mean(axis=0) for i in np.unique(model.labels_)])
@@ -649,15 +653,17 @@ def hierarchical_clustering(request):
         # ? Plotting the Dendrogram
         plot_json = None
         if (len(features) >= 2):
-            linked = linkage(X_data, 'ward') # Using Ward linkage method
+            linked = linkage(X_data, linkage_method)
             plot_json = plot_dendrogram(linked, df.index)
+        
+        cluster_plot = plot_clusters(X_data, labels, centroids, features, 0, 1)
         
         ml_model = MLModel()
         ml_model.save_model(model)
         request.session['model'] = str(ml_model.model_id)        
         
         return render(request, 'main/hierarchical_clustering.html', {
-            'k': n_clusters,
+            'k': centroids.shape[0],
             'X': X_data[:100],
             'features': features,
             'target': "Cluster",
@@ -668,13 +674,12 @@ def hierarchical_clustering(request):
                 'silhouette_score': silhouette,
             },
             'dendrogram': plot_json,
+            'cluster_plot': cluster_plot,
         })
     
     return render(request, 'main/input_clustering.html', {
-        'hyperparameters': {
-            1: {'name': 'n_clusters', 'type': 'number'},
-        },
         'optional_parameters': [
+            {'name': 'n_clusters', 'type': 'number'},
             {'field': 'select', 'name': 'linkage_method', 'type': 'text', 'options': ['ward', 'complete', 'average', 'single'], 'default': 'ward'},
         ]
     })
@@ -730,6 +735,18 @@ def samples(request):
             "file": "big_mart_sales.csv",
             "type": "CSV",
             "note": "Uncleaned (Large)"
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance.csv",
+            "type": "CSV",
+            "note": "Uncleaned"
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance_processed.csv",
+            "type": "CSV",
+            "note": "For Regression"            
         }
     ]
     return render(request, 'main/samples.html', {
@@ -1082,8 +1099,10 @@ def data_details(request):
     
     # Load the data using your custom method (assuming it's returning a pandas DataFrame)
     data = file_model.load_file()
-    data.replace(np.nan, None, inplace=True)  # Replace NaN values with None
+    # data.replace(np.nan, None, inplace=True)  # Replace NaN values with None
+    print(data)
     
+
     if data.empty:
         return HttpResponse("No data available", status=400)
 

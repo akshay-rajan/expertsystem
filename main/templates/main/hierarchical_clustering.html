@@ -69,6 +69,9 @@
     <div class="visual">
       <div id="plotly-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
     </div>
+    <div class="visual">
+      <div id="cluster-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
+    </div>
 
     <div class="table-responsive">
       <table class="table table-bordered table-info">
@@ -133,5 +136,8 @@
 <script type="text/javascript">
   var graph_data = {{ dendrogram | safe }};
   Plotly.newPlot('plotly-plot', graph_data);
+
+  var cluster_data = {{ cluster_plot | safe }};
+  Plotly.newPlot('cluster-plot', cluster_data);
 </script>
 {% endblock %}

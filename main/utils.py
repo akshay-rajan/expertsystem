@@ -53,10 +53,10 @@ def regression_evaluation(y_test, y_pred):
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     return {
-        'mse': round(mse, 2),
-        'rmse': round(rmse, 2),
-        'mae': round(mae, 2),
-        'r2': round(r2, 2)
+        'mse': round(mse, 4),
+        'rmse': round(rmse, 4),
+        'mae': round(mae, 4),
+        'r2': round(r2, 4)
     }
 
 def classification_evaluation(y_test, y_pred):
@@ -66,10 +66,10 @@ def classification_evaluation(y_test, y_pred):
     recall = recall_score(y_test, y_pred, average='weighted')
     f1 = f1_score(y_test, y_pred, average='weighted')
     return {
-        'accuracy': round(accuracy, 2),
-        'precision': round(precision, 2),
-        'recall': round(recall, 2),
-        'f1': round(f1, 2)
+        'accuracy': round(accuracy, 4) * 100,
+        'precision': round(precision, 4) * 100,
+        'recall': round(recall, 4) * 100,
+        'f1': round(f1, 4) * 100
     }
 
 
@@ -145,8 +145,8 @@ def plot_dendrogram(linkage_matrix, labels):
     fig.update_layout(title='Dendrogram', template='plotly_white', width=1000, height=600)
     return json.dumps(fig, cls=PlotlyJSONEncoder)
 
-def plot_kmeans_clusters(X, labels, centroids, features, x_feature, y_feature):
-    """Plot KMeans clusters and centroids using Plotly"""
+def plot_clusters(X, labels, centroids, features, x_feature, y_feature):
+    """Plot clusters and centroids using Plotly"""
     
     # Create a scatter plot for the data points
     fig = go.Figure()

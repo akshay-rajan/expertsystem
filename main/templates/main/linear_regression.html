@@ -23,58 +23,23 @@
 
   <div class="evaluation">
     <h3 class="m-2">Evaluation Metrics</h3>
-    <table class="table table-bordered table-hover">
-      <tbody>
-        <tr>
-            <th>Mean Absolute Error</th>
-            <td class="
-            {% if metrics.mae < 0.3 %}
-              table-success
-            {% elif metrics.mae < 0.7 %}
-              table-warning
-            {% else %}
-              table-danger
-            {% endif %}
-            ">{{ metrics.mae }}</td>
-          </tr>
-          <tr>  
-            <th>Mean Squared Error</th>
-            <td class="
-            {% if metrics.mse < 0.2 %}
-              table-success
-            {% elif metrics.mse < 0.5 %}
-              table-warning
-            {% else %}
-              table-danger
-            {% endif %}
-            ">{{ metrics.mse }}</td>
-          </tr>
-          <tr>
-            <th>Root Mean Squared Error</th>
-            <td class="
-            {% if metrics.rmse < 0.3 %}
-              table-success
-            {% elif metrics.rmse < 0.7 %}
-              table-warning
-            {% else %}
-              table-danger
-            {% endif %}
-            ">{{ metrics.rmse }}</td>
-          </tr>
-          <tr>
-            <th>R<sup>2</sup> Score</th>
-            <td class="
-            {% if metrics.r2 > 0.75 %}
-              table-success
-            {% elif metrics.r2 > 0.5 %}
-              table-warning
-            {% else %}
-              table-danger
-            {% endif %}
-            ">{{ metrics.r2 }}</td>
-          </tr>
-      </tbody>
-    </table>
+    <div class="evaluation-gauges d-flex justify-content-center flex-wrap">
+      <div id="gauge-mae" class="gauge-container">
+        <span class="label">Mean Absolute Error</span>
+      </div>
+      
+      <div id="gauge-mse" class="gauge-container">
+        <span class="label">Mean Squared Error</span>
+      </div>
+      
+      <div id="gauge-rmse" class="gauge-container">
+        <span class="label">Root Mean Squared Error</span>
+      </div>
+      
+      <div id="gauge-r2" class="gauge-container">
+        <span class="label">R<sup>2</sup> Score</span>
+      </div>      
+    </div>
     <div class="d-flex justify-content-end mt-4 mb-4">
       <a href="{% url 'download_model' %}" class="link">
         <button class="btn btn-primary btn-block">
@@ -170,4 +135,15 @@
     print("R^2 Score:", r2)
   </code></pre></div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    initializeRegressionGauge("gauge-mae", {{ metrics.mae }}, true);
+    initializeRegressionGauge("gauge-mse", {{ metrics.mse }}, true);
+    initializeRegressionGauge("gauge-rmse", {{ metrics.rmse }}, true);
+    initializeRegressionGauge("gauge-r2", {{ metrics.r2 }}, false);
+  });
+</script>
 {% endblock %}

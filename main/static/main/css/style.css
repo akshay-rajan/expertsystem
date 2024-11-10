@@ -639,6 +639,48 @@ a:focus {
   width: 90vw!important;
 }
 
+.gauge-container {
+  position: relative;
+  width: 150px; /* Adjust width and height based on your gauge size */
+  height: 150px;
+  color: #0062cc;
+}
+
+.gauge-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.gauge-container .label {
+  position: absolute;
+  transform: translate(-50%, 70%);
+  text-align: center;
+  width: 100%;
+  margin-left: 50%;
+  font-size: 20px;
+  color: #007bff;
+  text-align: center;
+  bottom: -10px;
+}
+
+.gauge-container .value-text {
+  font-size: 15px;
+  fill: var(--secondary-color);
+}
+
+.gauge-container > .gauge .dial {
+  stroke-width: 10;
+  stroke: rgba(0, 150, 255, 0.2);
+}
+.gauge-container > .gauge .value {
+  stroke-width: 10;
+}
+.evaluation-gauges div {
+  position: relative;
+  margin-bottom: 50px;
+}
+
 /* ! Others */
 .error-404 {
   color: var(--secondary-color)!important;
