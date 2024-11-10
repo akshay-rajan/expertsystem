@@ -66,10 +66,10 @@ def classification_evaluation(y_test, y_pred):
     recall = recall_score(y_test, y_pred, average='weighted')
     f1 = f1_score(y_test, y_pred, average='weighted')
     return {
-        'accuracy': round(accuracy, 2),
-        'precision': round(precision, 2),
-        'recall': round(recall, 2),
-        'f1': round(f1, 2)
+        'accuracy': round(accuracy, 4) * 100,
+        'precision': round(precision, 4) * 100,
+        'recall': round(recall, 4) * 100,
+        'f1': round(f1, 4) * 100
     }
 
 

@@ -107,15 +107,15 @@ function colorPicker(value, lowRange, midLowRange, midHighRange, highRange, dire
 }
 function initializeGauge(elementId, originalValue) {
   const gaugeConfig = {
-    max: 1,
+    max: 100,
     dialStartAngle: -90,
     dialEndAngle: -90.001,
     color: function(value) {
       // Use rangeColorPicker with specific ranges
-      return colorPicker(value, 0.25, 0.50, 0.75, 0.100, 1);
+      return colorPicker(value, 25, 50, 75, 100, 1);
     },
     label: function(value) {
-      return `${(value * 100).toFixed(2)}%`;
+      return `${value.toFixed(2)}%`;
     }
   };
   Gauge(document.getElementById(elementId), {
