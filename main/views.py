@@ -163,7 +163,7 @@ def lasso(request):
     
     return render(request, 'main/input.html', {
         'hyperparameters': {
-            1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
+            1: {'name': 'alpha', 'type': 'text', 'default': 0.1},
         },
         'optional_parameters': [
             {'name': 'max_iter', 'type': 'number', 'default': 1000},
