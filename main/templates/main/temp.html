@@ -127,10 +127,10 @@
 {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    initializeRegressionGauge("gauge-mae", 0.1521, true);
-    initializeRegressionGauge("gauge-mse", -0.21, true);
-    initializeRegressionGauge("gauge-rmse", 1.4853, true);
-    initializeRegressionGauge("gauge-r2", 0.9222, false);
+    initializeRegressionGauge("gauge-mae", {{ metrics.mae }}, true);
+    initializeRegressionGauge("gauge-mse", {{ metrics.mse }}, true);
+    initializeRegressionGauge("gauge-rmse", {{ metrics.rmse }}, true);
+    initializeRegressionGauge("gauge-r2", {{ metrics.r2 }}, false);
   });
 </script>
 {% endblock %}

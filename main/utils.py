@@ -53,10 +53,10 @@ def regression_evaluation(y_test, y_pred):
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     return {
-        'mse': round(mse, 2),
-        'rmse': round(rmse, 2),
-        'mae': round(mae, 2),
-        'r2': round(r2, 2)
+        'mse': round(mse, 4),
+        'rmse': round(rmse, 4),
+        'mae': round(mae, 4),
+        'r2': round(r2, 4)
     }
 
 def classification_evaluation(y_test, y_pred):
