@@ -1,1 +1,0 @@
-web gunicorn expert.wsgi:application --log-file -
