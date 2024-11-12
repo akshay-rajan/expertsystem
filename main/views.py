@@ -1099,9 +1099,6 @@ def data_details(request):
     
     # Load the data using your custom method (assuming it's returning a pandas DataFrame)
     data = file_model.load_file()
-    # data.replace(np.nan, None, inplace=True)  # Replace NaN values with None
-    print(data)
-    
 
     if data.empty:
         return HttpResponse("No data available", status=400)
