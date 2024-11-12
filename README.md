@@ -22,52 +22,26 @@ in just a few clicks.
 
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
 
-### Design
+### Flow
 
 ```mermaid
 flowchart LR
-    A(Start) --> B[Select Algorithm]
-    B --> C1[Classification]
-    B --> C2[Regression]
-    B --> C3[Clustering]
+    A(Start) --> B[Preprocessing]
 
-    C1 --> D0[KNN]
-    C1 --> D1[Logistic Regression]
-    C1 --> D2[Naive Bayes]
-    C1 --> D3[SVM]
-    C1 --> D4[Decision Tree]
-    C1 --> D5[Random Forest]
+    A --> D(Modelling)
+    B --> D
+    D --> E[Select Algorithm]
+    E --> F[Pick Features, Target etc.]
+    F --> G{Training}
+    G --> H[Evaluation]
+    G --> I[Prediction]
+    G --> J[View Code]
+    G --> K[Download Model]
 
-    C2 --> D6[Linear Regression]
-    C2 --> D7[Lasso Regression]
-    C2 --> D8[Ridge Regression]
-    C2 --> D9[Decision Tree]
-    C2 --> D10[Random Forest]
-
-    C3 --> D11[K Means]
-    C3 --> D12[Hierarchical]
-
-    D0 --> E(Upload Data)
-    D1 --> E(Upload Data)
-    D2 --> E(Upload Data)
-    D3 --> E(Upload Data)
-    D4 --> E(Upload Data)
-    D5 --> E(Upload Data)
-    D6 --> E(Upload Data)
-    D7 --> E(Upload Data)
-    D8 --> E(Upload Data)
-    D9 --> E(Upload Data)
-    D10 --> E(Upload Data)
-    D11 --> E(Upload Data)
-    D12 --> E(Upload Data)
-
-    E --> F(Feature Selection)
-    F --> G(Hyperparameter Selection)
-    G --> H(Modelling)
-    H --> I(Evaluation)
-    H --> J(Prediction)
-    I --> K(End)
-    J --> K(End)
+    H --> Z(End)
+    I --> Z
+    J --> Z
+    K --> Z    
 ```
 
 
