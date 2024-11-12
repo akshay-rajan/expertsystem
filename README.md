@@ -9,18 +9,18 @@ But what if we could remove this constraint and allow the users to build models 
 
 It provides a user-friendly interface where users can:
 
-1. Upload the data
-2. Clean and process it
-3. Select an algorithm
-4. Train the model
-5. Perform evaluations and predictions
+![Select Category](./others/screenshot2.png)
+![Select Algorithm](./others/classification.png)
+![Process Data](./others/preprocessing.png)
+![Upload Data](./others/screenshot3.png)
+
+And finally, see the 
+
+![Process Data](./others/screenshot4.png)
 
 in just a few clicks.
 
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
-
-With Expert System, Machine Learning is no longer limited to programmers and data scientists. 
-It is open to everyone who wants to harness the power of data and build intelligent systems.
 
 ### Design
 
@@ -71,12 +71,17 @@ flowchart LR
 ```
 
 
-### *Technologies*
+### *Technologies Used*
 
-1. *Django*
-2. *d3.js*
-3. *Scikit-learn*
-4. *Matplotlib*, *Pandas*, *Numpy* etc.
+![Static Badge](https://img.shields.io/badge/-Django-darkgreen?style=for-the-badge&logo=django)
+![Static Badge](https://img.shields.io/badge/-JavaScript-white?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-d3.js-orange?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-plotly.js-navy?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-Scikit_Learn-blue?style=for-the-badge&logo=scikit-learn)
+![Static Badge](https://img.shields.io/badge/-pandas-purple?style=for-the-badge&logo=pandas)
+![Static Badge](https://img.shields.io/badge/-numpy-cyan?style=for-the-badge&logo=numpy)
+![Static Badge](https://img.shields.io/badge/-prism.js-black?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-bootstrap-white?style=for-the-badge&logo=bootstrap)
 
 ### CI/CD Pipeline
 
