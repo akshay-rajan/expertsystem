@@ -800,6 +800,7 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt
 def save_file(request):
     """Save the uploaded file to the database as JSON"""
     if request.method == 'POST' and request.FILES.get('file'):
