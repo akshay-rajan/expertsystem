@@ -22,31 +22,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Create and start virtual environment
+      - name: Create and activate virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-      
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+          pip install -r requirements.txt
 
+      # Collect static files, ensuring virtual environment is activated
       - name: Collect static files
         run: |
           source venv/bin/activate
           python manage.py collectstatic --noinput
-        
+
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: |
+          source venv/bin/activate
+          zip release.zip ./* -r -x "venv/*"  # Exclude the virtual environment
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,7 +63,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
