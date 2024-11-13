@@ -79,3 +79,17 @@ jobs:
           app-name: 'expertsystem'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F72829EB566D4835B99A9783E0389B18 }}
+
+      - name: Create Django Admin User
+        run: |
+          source venv/bin/activate
+          python manage.py shell <<EOF
+          from django.contrib.auth.models import User
+          import os
+          if not User.objects.filter(username=os.environ.get("DJANGO_ADMIN_USERNAME")).exists():
+              User.objects.create_superuser(
+                  username=os.environ.get("DJANGO_ADMIN_USERNAME"),
+                  email=os.environ.get("DJANGO_ADMIN_EMAIL"),
+                  password=os.environ.get("DJANGO_ADMIN_PASSWORD")
+              )
+          EOF
