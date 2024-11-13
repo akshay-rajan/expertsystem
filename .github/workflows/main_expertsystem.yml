@@ -43,19 +43,19 @@ jobs:
           source venv/bin/activate
           python manage.py migrate
         
-          - name: Create Django Admin User
-          run: |
-            source venv/bin/activate
-            python manage.py shell <<EOF
-            from django.contrib.auth.models import User
-            if not User.objects.filter(username="${{ secrets.DJANGO_ADMIN_USERNAME }}").exists():
-                User.objects.create_superuser(
-                    username="${{ secrets.DJANGO_ADMIN_USERNAME }}",
-                    email="${{ secrets.DJANGO_ADMIN_EMAIL }}",
-                    password="${{ secrets.DJANGO_ADMIN_PASSWORD }}"
-                )
-            EOF
-            
+      - name: Create Django Admin User
+        run: |
+          source venv/bin/activate
+          python manage.py shell <<EOF
+          from django.contrib.auth.models import User
+          if not User.objects.filter(username="${{ secrets.DJANGO_ADMIN_USERNAME }}").exists():
+              User.objects.create_superuser(
+                  username="${{ secrets.DJANGO_ADMIN_USERNAME }}",
+                  email="${{ secrets.DJANGO_ADMIN_EMAIL }}",
+                  password="${{ secrets.DJANGO_ADMIN_PASSWORD }}"
+              )
+          EOF
+
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
