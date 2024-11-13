@@ -24,7 +24,8 @@ async function makePrediction(event) {
     const response = await fetch('/predict', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken(),
       },
       body: JSON.stringify({ input: inputData, model_path: modelPath })
     });
@@ -41,6 +42,16 @@ async function makePrediction(event) {
     predictionResult.classList.add('alert-danger');
     predictionResult.innerHTML = error.message;
   }
+}
+function getCSRFToken() {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith('csrftoken=')) {
+      return cookie.substring('csrftoken='.length, cookie.length);
+    }
+  }
+  return '';
 }
 
 // ! Display source code of the algorithm
