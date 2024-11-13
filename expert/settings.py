@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-t3p!)@%ga9(ddc)dad15(w87*3(ed%7)6wrb7bar+rii#ijh!p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['expertsystem.azurewebsites.net', 'expertsyst.me']
+ALLOWED_HOSTS = [
+    'expertsystem.azurewebsites.net', 
+    'expertsyst.me', 
+    # '127.0.0.1',
+]
 
 # Application definition
 
@@ -118,11 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
-# django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
