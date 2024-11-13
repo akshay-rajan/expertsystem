@@ -773,7 +773,6 @@ def test(request):
     return render(request, 'main/temp.html')
 
 # ? API Endpoints
-@csrf_exempt
 def predict(request):
     """Open an endpoint to predict using a saved model"""
     if request.method == "POST":
@@ -800,7 +799,6 @@ def predict(request):
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@csrf_exempt
 def save_file(request):
     """Save the uploaded file to the database as JSON"""
     if request.method == 'POST' and request.FILES.get('file'):
@@ -827,7 +825,6 @@ def save_file(request):
     
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@csrf_exempt
 def get_file(request):
     """Return the file content stored in the session"""
     if request.method == 'POST':
