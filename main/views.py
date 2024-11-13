@@ -827,6 +827,7 @@ def save_file(request):
     
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt
 def get_file(request):
     """Return the file content stored in the session"""
     if request.method == 'POST':
