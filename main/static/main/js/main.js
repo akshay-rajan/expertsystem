@@ -65,7 +65,7 @@ $('#show-code-btn').click(() => {
     customClass: {
       popup: 'swal-wide',
       confirmButton: 'copy-code-btn btn btn-primary d-flex justify-content-center align-items-center',
-      cancelButton: 'cancel-code-btn btn btn-secondary d-flex justify-content-center align-items-center'
+      cancelButton: 'cancel-code-btn btn btn-danger d-flex justify-content-center align-items-center'
     },
     showCloseButton: true,
     showConfirmButton: true,
@@ -93,12 +93,7 @@ $('#show-code-btn').click(() => {
     }
   }).then((result) => {
     if (result.isConfirmed) {
-      // Show success message after copying
-      Swal.fire({
-        title: 'Copied!',
-        timer: 700,
-        showConfirmButton: false
-      });
+      showInfoToast('Code copied to clipboard!');
     }
   });
 });
@@ -165,15 +160,19 @@ function initializeRegressionGauge(elementId, originalValue, reversed) {
   });
 }
 
-// ! Toasts and Alerts
+// ? Toasts and Alerts
 function showWarningToast(message) {
   Toastify({
     text: message,
-    duration: 3000,
+    duration: 2500,
     gravity: "bottom", // position at the top of the page
     position: "right", // right side of the page
+    close: false,
+    stopOnFocus: true,
+    pauseOnHover: true,
+    hideProgressBar: false,
     style: {
-      background: "linear-gradient(to right, #E66A1E, #F60015)", // customize the color
+      background: "linear-gradient(to right, #E66A1E, #F60015)",
       color: "#fff",
     }
   }).showToast();
@@ -191,4 +190,19 @@ function showError(title, message) {
   }).then(() => {
     location.reload();
   });
+}
+
+function showInfoToast(message) {
+  Toastify({
+    text: message,
+    duration: 2500,
+    gravity: "bottom", 
+    position: "right", 
+    stopOnFocus: true,
+    pauseOnHover: true,
+    style: {
+      background: "white",
+      color: "#0096ff",
+    }
+  }).showToast();
 }

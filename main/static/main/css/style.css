@@ -1,6 +1,6 @@
 :root {
   --primary-color: #ffffff;
-  --secondary-color: rgb(0, 150, 255);
+  --secondary-color: rgb(0, 150, 255); 
   --dark-color: rgb(0, 10, 102);
 }
 
@@ -686,3 +686,9 @@ a:focus {
   color: var(--secondary-color)!important;
   text-align: center;
 }
+
+/* 
+* Primary: #ffffff
+* Secondary: #0096ff
+* Dark: #000a66
+*/
