@@ -135,21 +135,32 @@ function populateTargetDropdown(columns) {
   });
 }
 
+function showToast(message) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: "top", // position at the top of the page
+    position: "right", // right side of the page
+    style: {
+      background: "linear-gradient(to right, #FF5F6D, #FFC371)", // customize the color
+      color: "#fff",
+    }
+  }).showToast();
+}
+
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
   const target = document.getElementById('target').value;
   const hyperparameters = $('.hyperparameter');
-  const alert = $('#alert');
+
   // Check if at least one feature is selected
   if (features.length === 0) {
-    alert.text('Please select at least one feature.');
-    alert.removeClass('d-none');
+    showToast('Please select at least one feature.');
     return false;
   }
   // Check if a target is selected
   if (!target) {
-    alert.text('Please select a target.');
-    alert.removeClass('d-none');
+    showToast('Please select a target.');
     return false;
   }
   // Validate each hyperparameter if present
@@ -158,14 +169,12 @@ function validateForm() {
     // Validate Select dropdown
     if (hyperparameters[i].tagName.toLowerCase() === 'select') {
       if (!value) {
-        alert.text(`Please select a value for ${hyperparameters[i].name}.`);
-        alert.removeClass('d-none');
+        showToast(`Please select a value for ${hyperparameters[i].name}.`);
         return false;
       }
     // Validate text input (number)
     } else if (isNaN(value) || value <= 0) {
-      alert.text(`Please enter a valid value for ${hyperparameters[i].name}.`);
-      alert.removeClass('d-none');
+      showToast(`Please enter a valid value for ${hyperparameters[i].name}.`);
       return false;
     }
   }
