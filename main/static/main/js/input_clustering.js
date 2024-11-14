@@ -61,8 +61,7 @@ function handleFileUpload(event) {
       // Reactivate file input field
       fileInput.disabled = false;
       // Alert user and reload page
-      alert('An error occurred while uploading the file. Please try again.');
-      location.reload();
+      showError('Upload Error!', 'An error occurred while uploading the file. Please try again.');
       console.error('Could not store file: ', error);
     });
   }
@@ -101,11 +100,9 @@ function populateFeatureCheckboxes(columns) {
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
   const hyperparameters = $('.hyperparameter');
-  const alert = $('#alert');
   // Check if at least one feature is selected
   if (features.length === 0) {
-    alert.text('Please select at least one feature.');
-    alert.removeClass('d-none');
+    showWarningToast('Please select at least one feature.');
     return false;
   }
   // Validate each hyperparameter
@@ -114,14 +111,12 @@ function validateForm() {
     // Validate Select dropdown
     if (hyperparameters[i].tagName.toLowerCase() === 'select') {
       if (!value) {
-        alert.text(`Please select a value for ${hyperparameters[i].name}.`);
-        alert.removeClass('d-none');
+        showWarningToast(`Please select a value for ${hyperparameters[i].name}.`);
         return false;
       }
     // Validate text input (number)
     } else if (isNaN(value) || value <= 0) {
-      alert.text(`Please enter a valid value for ${hyperparameters[i].name}.`);
-      alert.removeClass('d-none');
+      showWarningToast(`Please enter a valid value for ${hyperparameters[i].name}.`);
       return false;
     }
   }

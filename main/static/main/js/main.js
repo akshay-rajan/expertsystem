@@ -164,3 +164,31 @@ function initializeRegressionGauge(elementId, originalValue, reversed) {
     value: 1 - displayValue
   });
 }
+
+// ! Toasts and Alerts
+function showWarningToast(message) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: "bottom", // position at the top of the page
+    position: "right", // right side of the page
+    style: {
+      background: "linear-gradient(to right, #E66A1E, #F60015)", // customize the color
+      color: "#fff",
+    }
+  }).showToast();
+}
+
+function showError(title, message) {
+  Swal.fire({
+    title: title,
+    html: message,
+    icon: 'error',
+    confirmButtonText: 'Close',
+    customClass: {
+      confirmButton: 'btn btn-primary'
+    }
+  }).then(() => {
+    location.reload();
+  });
+}

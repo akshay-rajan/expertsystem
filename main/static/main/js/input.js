@@ -65,8 +65,7 @@ function handleFileUpload(event) {
       // Reactivate file input field
       fileInput.disabled = false;
       // Alert user and reload page
-      alert('An error occurred while uploading the file. Please try again.');
-      location.reload();
+      showError('Upload Error!', 'An error occurred while uploading the file. Please try again.');
       console.error('Could not store file: ', error);
     });
   }
@@ -135,19 +134,6 @@ function populateTargetDropdown(columns) {
   });
 }
 
-function showToast(message) {
-  Toastify({
-    text: message,
-    duration: 3000,
-    gravity: "top", // position at the top of the page
-    position: "right", // right side of the page
-    style: {
-      background: "linear-gradient(to right, #FF5F6D, #FFC371)", // customize the color
-      color: "#fff",
-    }
-  }).showToast();
-}
-
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
   const target = document.getElementById('target').value;
@@ -155,12 +141,12 @@ function validateForm() {
 
   // Check if at least one feature is selected
   if (features.length === 0) {
-    showToast('Please select at least one feature.');
+    showWarningToast('Please select at least one feature.');
     return false;
   }
   // Check if a target is selected
   if (!target) {
-    showToast('Please select a target.');
+    showWarningToast('Please select a target.');
     return false;
   }
   // Validate each hyperparameter if present
@@ -169,12 +155,12 @@ function validateForm() {
     // Validate Select dropdown
     if (hyperparameters[i].tagName.toLowerCase() === 'select') {
       if (!value) {
-        showToast(`Please select a value for ${hyperparameters[i].name}.`);
+        showWarningToast(`Please select a value for ${hyperparameters[i].name}.`);
         return false;
       }
     // Validate text input (number)
     } else if (isNaN(value) || value <= 0) {
-      showToast(`Please enter a valid value for ${hyperparameters[i].name}.`);
+      showWarningToast(`Please enter a valid value for ${hyperparameters[i].name}.`);
       return false;
     }
   }
