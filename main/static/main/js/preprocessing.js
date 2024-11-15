@@ -8,12 +8,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Show popover on mouseover
     popoverTriggerEl.addEventListener('mouseover', () => {
-        popover.show();
+      popover.show();
     });
 
     // Hide popover on mouseout
     popoverTriggerEl.addEventListener('mouseout', () => {
-        popover.hide();
+      popover.hide();
     });
 
     return popover;
@@ -21,7 +21,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-document.getElementById('file').addEventListener('change',preview_data);
+function handleChange(event) {
+  const file = event.target.files[0];
+  if (file) $('#upload-btn').prop('disabled', false);
+}
+
+function initiatePreprocessing(event) {
+  $('#upload-btn').addClass('d-none');
+  
+  const file = document.getElementById('file').files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Store the file in the server, display the feature selection section, and preview the data
+  preview_data(formData);
+}
 
 const featureSelectionDiv = document.getElementById("feature_selection");
 const encoding_selection = document.getElementById("encoding_selection");
@@ -30,18 +44,14 @@ const feat = "feature_selection";
 const enco = "encoding_selection";
 const scale = "scaling_selection";
 
-function preview_data(e) {
-  const file = e.target.files[0];
-  const formData = new FormData();
-  formData.append('file', file);
-    
+function preview_data(formData) {    
   let text, rows, headers, null_columns;
 
   fetch('/preprocessing', {
     method: 'POST',
     body: formData,
     headers: {
-      'X-CSRFToken': getCookie('csrftoken'), // Use a helper function to get CSRF token
+      'X-CSRFToken': getCSRFToken(),
     },
   })
   .then(response => {
@@ -49,20 +59,20 @@ function preview_data(e) {
   })
   .then(data => {
     if (data.error) {
-      alert(data.error);
+      showError('Error!', data.error);
     } else {
       text = JSON.parse(data.json_data);
       headers = data.headers;
       null_columns = data.null_columns;
       non_numerical_cols = data.non_numerical_cols;
-      generatecolumns(null_columns, featureSelectionDiv, feat); // generate columns for missing values     
-      generatecolumns(non_numerical_cols, encoding_selection, enco); // generate columns for encoding
-      generatecolumns(headers, scale_selection, scale); // generate columns for scaling
+      generatecolumns(null_columns, featureSelectionDiv, "feature_selection"); // generate columns for missing values     
+      generatecolumns(non_numerical_cols, encoding_selection, "encoding_selection"); // generate columns for encoding
+      generatecolumns(headers, scale_selection, "scaling_selection"); // generate columns for scaling
       generateTable(text, null_columns); // Append the generated table to the container
     }
   })
   .catch(error => {
-    console.error('Error:', error);
+    showError('Error!', 'An error occurred. Please try again.');
   });
 }
 
@@ -236,39 +246,39 @@ document.getElementById('encoding_strategybtn').addEventListener('click', encodi
 
 //scaling strategy
 function applyScalingStrategy() {
-const scalingStrategy = document.getElementById("scaling_strategy").value;
-const selectedColumns = Array.from(document.querySelectorAll('input[name="scaling_selection"]:checked'))
-  .map(input => input.value);
+  const scalingStrategy = document.getElementById("scaling_strategy").value;
+  const selectedColumns = Array.from(document.querySelectorAll('input[name="scaling_selection"]:checked'))
+    .map(input => input.value);
 
-fetch('/preprocessing/scaling/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-CSRFToken': getCookie('csrftoken'), 
-  },
-  body: JSON.stringify({
-    strategy: scalingStrategy,
-    columns: selectedColumns
-  }),
-})
-.then(response => response.json())
-.then(data => {
-  if (data.error) {
-    alert(data.error);
-  } else {
-    text=JSON.parse(data.json_data)        
-    headers=data.headers
-    null_columns=data.null_columns
-    non_numerical_cols=data.non_numerical_cols
-    generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
-    generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
-    generatecolumns(headers,scale_selection,scale)
-    generateTable(text,null_columns); // Append the generated table to the container
-  }
-})
-.catch(error => {
-    console.error('Error:', error);
-});
+  fetch('/preprocessing/scaling/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'), 
+    },
+    body: JSON.stringify({
+      strategy: scalingStrategy,
+      columns: selectedColumns
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      alert(data.error);
+    } else {
+      text=JSON.parse(data.json_data)        
+      headers=data.headers
+      null_columns=data.null_columns
+      non_numerical_cols=data.non_numerical_cols
+      generatecolumns(null_columns,featureSelectionDiv,feat)    //generate columns for missing values     
+      generatecolumns(non_numerical_cols,encoding_selection,enco)         //generate columns for encoding
+      generatecolumns(headers,scale_selection,scale)
+      generateTable(text,null_columns); // Append the generated table to the container
+    }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
 }
 
 // Call this function when the user applies the scaling strategy
@@ -449,9 +459,6 @@ function toggleInfo() {
     console.error('Error:', error);
   });
 }
-
-
-
 
 function generateInfoTable(jsonData) {
   const container = document.getElementById('data-table-container');

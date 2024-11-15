@@ -852,8 +852,13 @@ def preprocessing(request):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         try:
-            # Read the uploaded file into a DataFrame
-            data = pd.read_csv(uploaded_file)
+            # Read the uploaded file into a DataFrame, according to its extension
+            if uploaded_file.name.endswith('.csv'):
+                data = pd.read_csv(uploaded_file)
+            elif uploaded_file.name.endswith('.xls') or uploaded_file.name.endswith('.xlsx'):
+                data = pd.read_excel(uploaded_file)
+            else:
+                return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed.'}, status=400)
             
             # Store the initial dataset in the database
             file_model = DataFile()

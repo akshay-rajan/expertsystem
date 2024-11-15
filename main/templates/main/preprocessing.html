@@ -23,7 +23,10 @@
   
           <!-- Upload dataset section -->
           <div class="mb-4">
-              <input type="file" id="file" name="file" accept=".csv" class="form-control" required>
+            <div class="form-group">
+              <input type="file" id="file" name="file" accept=".csv" class="form-control" required onchange="handleChange(event)">
+            </div>
+            <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="initiatePreprocessing(event)">Next</button>
           </div>
   
           <!-- Section: Missing Values -->
@@ -120,5 +123,5 @@
 {% block script %}
 <script src="https://unpkg.com/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
-<script src="{% static 'main/js/prep.js' %}"></script>
+<script src="{% static 'main/js/preprocessing.js' %}"></script>
 {% endblock %}
