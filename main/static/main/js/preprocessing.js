@@ -184,7 +184,7 @@ function applyMissingValueStrategy() {
   .then(response => response.json())
   .then(data => {
     if (data.error) {
-      alert(data.error);
+      showWarningToast(data.error);
     } else {
       text=JSON.parse(data.json_data)        
       headers=data.headers
@@ -197,7 +197,7 @@ function applyMissingValueStrategy() {
     }
   })
   .catch(error => {
-    console.error('Error:', error);
+    showWarningToast(`An error occurred: ${error}`);
   });
 }
 document.getElementById('missing_value_strategybtn').addEventListener('click', applyMissingValueStrategy);
@@ -222,7 +222,7 @@ function encoding() {
   .then(response => response.json())
   .then(data => {
     if (data.error) {
-      alert(data.error);
+      showWarningToast(data.error);
     } else {
         
       text=JSON.parse(data.json_data)        
@@ -236,7 +236,7 @@ function encoding() {
     }
   })
   .catch(error => { 
-    console.error('Error:', error);
+    showWarningToast(`An error occurred: ${error}`);
   });
 }
 document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
@@ -261,7 +261,7 @@ function applyScalingStrategy() {
   .then(response => response.json())
   .then(data => {
     if (data.error) {
-      alert(data.error);
+      showWarningToast(data.error);
     } else {
       text=JSON.parse(data.json_data)        
       headers=data.headers
@@ -274,7 +274,7 @@ function applyScalingStrategy() {
     }
   })
   .catch(error => {
-      console.error('Error:', error);
+    showWarningToast(`An error occurred: ${error}`);
   });
 }
 document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
@@ -341,6 +341,7 @@ function toggleGuide() {
   
 }
 
+// Get data details and display in a table inside a SweetAlert modal
 function toggleInfo() {
   Swal.fire({
     title: 'Data Details',
@@ -451,45 +452,6 @@ function toggleInfo() {
 
   })
   .catch(error => {
-    console.error('Error:', error);
+    showWarningToast(`An error occurred: ${error}`);
   });
 }
-
-function generateInfoTable(jsonData) {
-  const container = document.getElementById('data-table-container');
-
-  // Clear existing content in the container
-  container.innerHTML = '';
-
-  const table = document.createElement('table');
-  table.className = 'table table-bordered table-hover table-striped';
-  const headerRow = document.createElement('tr');
-
-  // Create table headers
-  Object.keys(jsonData[0]).forEach(key => {
-    const th = document.createElement('th');
-    th.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Capitalize first letter
-    // Add the bg-warning class if the key is in null_columns
-    if (null_columns.includes(key)) {
-      th.classList.add('bg-warning');
-    }
-    headerRow.appendChild(th);
-  });
-
-  table.appendChild(headerRow);
-
-  // Create table rows
-  jsonData.forEach(item => {
-    const row = document.createElement('tr');
-    Object.values(item).forEach(value => {
-      const td = document.createElement('td');
-      td.innerText = value;
-      row.appendChild(td);
-    });
-    table.appendChild(row);
-  });
-  
-  // Append the new table to the container
-  container.appendChild(table);
-  
-}  
