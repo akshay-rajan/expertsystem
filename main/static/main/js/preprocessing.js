@@ -28,9 +28,11 @@ function initiatePreprocessing(event) {
   $('.sections').removeClass('d-none');
   $('.sections-btn').removeClass('d-none');
   
-  const file = document.getElementById('file').files[0];
+  const fileInput = document.getElementById('file');
+  const file = fileInput.files[0];
   const formData = new FormData();
   formData.append('file', file);
+  fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
 
   // Store the file in the server, display the feature selection section, and preview the data
   preview_data(formData);
@@ -117,7 +119,7 @@ function generateTable(jsonData, null_columns) {
 }      
         
 // Populate the column for selection 
-function generatecolumns(columns,SelectionDiv,selection) {
+function generatecolumns(columns, SelectionDiv, selection) {
   // Clear any existing checkboxes
   SelectionDiv.innerHTML = '';
 
@@ -198,11 +200,9 @@ function applyMissingValueStrategy() {
     console.error('Error:', error);
   });
 }
-
-// Call this function when the user applies the missing value strategy
 document.getElementById('missing_value_strategybtn').addEventListener('click', applyMissingValueStrategy);
 
-//Encoding strategy
+
 function encoding() {
   const strategy = document.getElementById("encoding_strategy").value;
   const selectedColumns = Array.from(document.querySelectorAll('input[name="encoding_selection"]:checked'))
@@ -239,11 +239,9 @@ function encoding() {
     console.error('Error:', error);
   });
 }
-
-// Call this function when the user applies the encoding strategy
 document.getElementById('encoding_strategybtn').addEventListener('click', encoding);
 
-//scaling strategy
+
 function applyScalingStrategy() {
   const scalingStrategy = document.getElementById("scaling_strategy").value;
   const selectedColumns = Array.from(document.querySelectorAll('input[name="scaling_selection"]:checked'))
@@ -279,8 +277,6 @@ function applyScalingStrategy() {
       console.error('Error:', error);
   });
 }
-
-// Call this function when the user applies the scaling strategy
 document.getElementById('scaling_strategybtn').addEventListener('click', applyScalingStrategy);
 
 // Function to control the visibility of sections
