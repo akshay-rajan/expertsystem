@@ -17,7 +17,7 @@
         <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()" autocomplete="off">
           {% csrf_token %}
           <div class="form-group">
-            <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+            <input type="file" name="dataset" id="dataset" class="form-control form-control-file" onchange="handleFileChange(event)" />
           </div>
           <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
             Next
@@ -60,7 +60,7 @@
                   <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                       <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
-                        Advanced
+                        Optional
                       </button>
                     </h5>
                 </div>

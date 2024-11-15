@@ -18,8 +18,8 @@
           {% csrf_token %}
           <div class="form-group">
             <div class="d-flex justify-content-between">
-              <div>
-                <input type="file" name="dataset" id="dataset" class="form-control-file" onchange="handleFileChange(event)" />
+              <div class="form-group">
+                <input type="file" name="dataset" id="dataset" class="form-control form-control-file" onchange="handleFileChange(event)" />
               </div>
               <div class="form-group d-none" id="train-test-split">
                 <select name="testsize" id="testsize" class="form-control">
@@ -79,7 +79,7 @@
                   <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                       <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
-                        Advanced
+                        Optional
                       </button>
                     </h5>
                 </div>
