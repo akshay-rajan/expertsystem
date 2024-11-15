@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-  showSection("missing_value_section");
-
   // Enable Bootstrap popovers
   const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
   const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
@@ -17,8 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     return popover;
-});
-
+  });
 });
 
 function handleChange(event) {
@@ -28,6 +25,8 @@ function handleChange(event) {
 
 function initiatePreprocessing(event) {
   $('#upload-btn').addClass('d-none');
+  $('.sections').removeClass('d-none');
+  $('.sections-btn').removeClass('d-none');
   
   const file = document.getElementById('file').files[0];
   const formData = new FormData();
@@ -45,7 +44,7 @@ const enco = "encoding_selection";
 const scale = "scaling_selection";
 
 function preview_data(formData) {    
-  let text, rows, headers, null_columns;
+  let text, headers, null_columns;
 
   fetch('/preprocessing', {
     method: 'POST',
