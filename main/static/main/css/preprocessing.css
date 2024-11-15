@@ -1,3 +1,6 @@
+.title {
+  color: rgb(0, 150, 255)!important;
+}
 .guide-button {
     background-color: #007BFF;
     color: white;
