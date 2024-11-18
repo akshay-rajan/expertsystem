@@ -9,16 +9,14 @@ But what if we could remove this constraint and allow the users to build models 
 
 It provides a user-friendly interface where users can:
 
-![Select Category](./others/screenshot2.png)
-![Select Algorithm](./others/classification.png)
-![Process Data](./others/preprocessing.png)
-![Upload Data](./others/screenshot3.png)
-
-And finally, see the 
-
-![Process Data](./others/screenshot4.png)
-
-in just a few clicks.
+- Upload Data
+- Preprocess data by performing Encoding, Scaling, Handling Missing Values etc.
+- Select a Classification, Regression or Clustering algorithm
+- Select features, target and hyperparameters for the algorithm
+- Build the model
+- Perform predictions using the model
+- Evaluate the model using metrics displayed such as Accuracy, Precision, Recall, F1 Score, MAE, RMSE, r-squared, Inertia, Silhouette Score etc.
+- Download the model as a `.pkl` file.
 
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
 
