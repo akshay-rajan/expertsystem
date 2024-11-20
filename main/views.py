@@ -120,6 +120,7 @@ def linear_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'field': 'checkbox', 'name': 'fit_intercept', 'type': 'checkbox', 'default': 'true'},
         ]
@@ -163,6 +164,7 @@ def lasso(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 0.1},
         },
@@ -210,6 +212,7 @@ def ridge(request):
         })
 
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
         },
@@ -255,6 +258,7 @@ def decision_tree_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
             {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
@@ -297,6 +301,7 @@ def random_forest_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
         },
@@ -385,6 +390,7 @@ def logistic_regression(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'field': 'select', 'name': 'solver', 'type': 'text', 'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'default': 'lbfgs'},
             {'field': 'select', 'name': 'penalty', 'type': 'text', 'options': ['l2', 'None', 'elasticnet', 'l1'], 'default': 'l2'},
@@ -429,6 +435,7 @@ def naive_bayes(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'field': 'input', 'name': 'var_smoothing', 'type': 'text', 'default': 1e-9},
         ]
@@ -473,6 +480,7 @@ def decision_tree(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
             {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
@@ -520,6 +528,7 @@ def random_forest(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
         },
@@ -562,6 +571,7 @@ def svm(request):
         })
 
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'field': 'select', 'name': 'kernel', 'type': 'text', 'options': ['linear', 'poly', 'rbf', 'sigmoid'], 'default': 'rbf'},
             2: {'name': 'C', 'type': 'text', 'default': 1.0},
