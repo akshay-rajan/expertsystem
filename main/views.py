@@ -630,6 +630,7 @@ def kmeans(request):
         })
     
     return render(request, 'main/input_clustering.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'n_clusters', 'type': 'number'}
         }
@@ -690,6 +691,7 @@ def hierarchical_clustering(request):
         })
     
     return render(request, 'main/input_clustering.html', {
+        'datasets': list_available_datasets(),
         'optional_parameters': [
             {'name': 'n_clusters', 'type': 'number'},
             {'field': 'select', 'name': 'linkage_method', 'type': 'text', 'options': ['ward', 'complete', 'average', 'single'], 'default': 'ward'},
@@ -902,9 +904,7 @@ def preprocessing(request):
 
             # Get the columns with missing values and non-numerical columns
             null_columns = data.columns[data.isnull().any()]
-            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-
-            
+            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns            
 
             # Prepare the data preview for rendering
             json_data = data.head(20).to_json(orient='records')

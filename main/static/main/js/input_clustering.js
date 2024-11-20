@@ -1,6 +1,41 @@
+function handleDatasetOptionChange(event) {
+  const selectedOption = event.target.value;
+  const uploadDiv = document.getElementById('upload-div');
+  const preloadedDiv = document.getElementById('preloaded-div');
+  const uploadBtnDiv = $('.dataset-selection-upload');
+  const preloadBtnDiv = $('.dataset-selection-preload');
+
+  if (selectedOption === 'upload') {
+    uploadDiv.classList.remove('d-none');
+    uploadBtnDiv.addClass('selected');
+    preloadedDiv.classList.add('d-none');
+    preloadBtnDiv.removeClass('selected');
+  } else if (selectedOption === 'choose') {
+    uploadDiv.classList.add('d-none');
+    uploadBtnDiv.removeClass('selected');
+    preloadedDiv.classList.remove('d-none');
+    preloadBtnDiv.addClass('selected');
+  }
+}
+
 function handleFileChange(event) {
   const file = event.target.files[0];
   if (file) $('#upload-btn').prop('disabled', false);
+}
+
+function handlePreloadedFileChange(event) {
+  const dataset = event.target.value;
+  if (dataset) $('#upload-btn').prop('disabled', false);
+}
+
+function handleDataset(event) {
+  $('.dataset-selection').addClass('d-none');
+
+  if ($('#option-upload').is(':checked')) {
+    handleFileUpload(event);
+  } else {
+    handleFileSelection(event);
+  }
 }
 
 function handleFileUpload(event) {
@@ -31,12 +66,12 @@ function handleFileUpload(event) {
     })
     .then(data => {
       fileInput.disabled = true;
-      
+
       // Fetch formatted data from the server after file upload is successful
       return fetch('/get_file/', {
         method: 'POST',
         headers: {
-            'X-CSRFToken': getCSRFToken()
+          'X-CSRFToken': getCSRFToken()
         }
       });
     })
@@ -49,11 +84,15 @@ function handleFileUpload(event) {
     .then(data => {
       // Populate Checkboxes
       populateFeatureCheckboxes(data.columns);
+
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
       plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+
+      // Display additional configuration options
       $('#hyperparameter-div').removeClass('d-none');
       $('.optional-div').removeClass('d-none');
     })
@@ -65,6 +104,73 @@ function handleFileUpload(event) {
       console.error('Could not store file: ', error);
     });
   }
+}
+
+function handleFileSelection(event) {
+  event.preventDefault();
+
+  const dataset = document.getElementById('preloaded-dataset').value;
+  if (!dataset) {
+    showWarningToast('Please select a preloaded dataset.');
+    return;
+  }
+
+  $('#upload-btn').addClass('d-none');
+  $('#build-btn').removeClass('d-none');
+
+  // Send the selected preloaded dataset to the server
+  const formData = new FormData();
+  formData.append('preloaded_dataset', dataset);
+
+  fetch('/save_file/', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRFToken': getCSRFToken()
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Fetch the formatted data for the preloaded dataset
+    return fetch('/get_file/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCSRFToken()
+      }
+    });
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Populate feature selection
+    populateFeatureCheckboxes(data.columns);
+
+    // Plot heatmap with the correlation matrix
+    const correlationMatrix = data.correlation_matrix;
+    plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+
+    // Display the preloaded dataset name with a tick icon
+    const preloadedDiv = document.getElementById('preloaded-div');
+    preloadedDiv.innerHTML = dataset + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+
+    // Display additional configuration options
+    $('#hyperparameter-div').removeClass('d-none');
+    $('.optional-div').removeClass('d-none');
+  })
+  .catch(error => {
+    // Handle errors during dataset retrieval
+    showError('Selection Error!', 'An error occurred while retrieving the dataset. Please try again.');
+    console.error('Error during dataset retrieval: ', error);
+  });
 }
 
 function getCSRFToken() {
