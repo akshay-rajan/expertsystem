@@ -18,8 +18,30 @@
           {% csrf_token %}
           <div class="form-group">
             <div class="d-flex justify-content-between">
-              <div class="form-group">
-                <input type="file" name="dataset" id="dataset" class="form-control form-control-file" onchange="handleFileChange(event)" />
+              <div class="dataset-div">
+                <div class="form-group dataset-selection mt-4">
+                  <div class="d-inline dataset-selection-upload selected">
+                    <input type="radio" id="option-upload" name="dataset-option" value="upload" checked onchange="handleDatasetOptionChange(event)">
+                    <label for="option-upload">Upload Your Dataset</label>
+                  </div>
+                  <div class="d-inline dataset-selection-preload">
+                    <input type="radio" id="option-preloaded" name="dataset-option" value="choose" onchange="handleDatasetOptionChange(event)">
+                    <label for="option-preloaded">Use a Preloaded Dataset</label>
+                  </div>
+                </div>
+                
+                <div class="form-group" id="upload-div">
+                  <input type="file" name="dataset" id="dataset" class="form-control form-control-file" onchange="handleFileChange(event)" />
+                </div>
+                
+                <div class="form-group d-none" id="preloaded-div">
+                  <select name="preloaded-dataset" id="preloaded-dataset" class="form-control" onchange="handlePreloadedFileChange(event)">
+                    <option value="" selected disabled>Select a Dataset</option>
+                    {% for dataset in datasets %}
+                    <option value="{{ dataset }}">{{ dataset }}</option>
+                    {% endfor %}
+                  </select>
+                </div>                
               </div>
               <div class="form-group d-none" id="train-test-split">
                 <select name="testsize" id="testsize" class="form-control">
@@ -32,7 +54,7 @@
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleFileUpload(event)">
+          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleDataset(event)">
             Next
           </button>
           

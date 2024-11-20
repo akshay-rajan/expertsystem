@@ -1,4 +1,5 @@
 import io
+import os
 import csv
 import json
 import pickle
@@ -22,7 +23,7 @@ from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
-from .utils import get_input, construct_line, format_predictions, regression_evaluation, classification_evaluation
+from .utils import get_input, list_available_datasets, construct_line, format_predictions, regression_evaluation, classification_evaluation
 from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters
 from .models import MLModel, DataFile
 
@@ -338,6 +339,7 @@ def knn(request):
         })
     
     return render(request, 'main/input.html', {
+        'datasets': list_available_datasets(),
         'hyperparameters': {
             1: {'name': 'n_neighbors', 'type': 'number'},
         },
@@ -800,30 +802,53 @@ def predict(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def save_file(request):
-    """Save the uploaded file to the database as JSON"""
-    if request.method == 'POST' and request.FILES.get('file'):
-        file = request.FILES['file']
-        
-        # Check file size and format
-        if file.size > 2 * 1024 * 1024: # 2MB
-            return JsonResponse({'error': 'File size is too large. Max file size is 2MB'}, status=400)        
-        # Use pandas to read the file based on its extension
-        if file.name.endswith('.csv'):
-            df = pd.read_csv(file)
-        elif file.name.endswith('.xls') or file.name.endswith('.xlsx'):
-            df = pd.read_excel(file)
-        else:
-            return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed'}, status=400)
+    """Save the uploaded file or handle preloaded dataset"""
+    if request.method == 'POST':
+        # If a file is uploaded
+        if request.FILES.get('file'):
+            file = request.FILES['file']
+            
+            # Check file size and format
+            if file.size > 2 * 1024 * 1024:  # 2MB
+                return JsonResponse({'error': 'File size is too large. Max file size is 2MB'}, status=400)
+            
+            # Use pandas to read the file
+            if file.name.endswith('.csv'):
+                df = pd.read_csv(file)
+            elif file.name.endswith('.xls') or file.name.endswith('.xlsx'):
+                df = pd.read_excel(file)
+            else:
+                return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed'}, status=400)
+            
+            # Store the file as JSON in the db
+            file_model = DataFile()
+            file_model.save_file(file.name, df)
+            request.session['file'] = str(file_model.file_id)
 
-        
-        # Store the file name and file as JSON in the db, store the id in the session
-        file_model = DataFile()
-        file_model.save_file(file.name, df)    
-        request.session['file'] = str(file_model.file_id)
+            return JsonResponse({'message': 'File uploaded successfully!'})
 
-        return JsonResponse({'message': 'File uploaded successfully!'})
-    
+        # If a preloaded dataset is selected
+        elif request.POST.get('preloaded_dataset'):
+            dataset_name = request.POST['preloaded_dataset']
+            dataset_path = os.path.join(settings.STATIC_ROOT, 'main/files', dataset_name)
+
+            # Load the preloaded dataset
+            if dataset_name.endswith('.csv'):
+                df = pd.read_csv(dataset_path)
+            elif dataset_name.endswith('.xls') or dataset_name.endswith('.xlsx'):
+                df = pd.read_excel(dataset_path)
+            else:
+                return JsonResponse({'error': 'Invalid dataset format in preloaded files'}, status=400)
+
+            # Store the dataset as JSON in the db
+            file_model = DataFile()
+            file_model.save_file(dataset_name, df)
+            request.session['file'] = str(file_model.file_id)
+
+            return JsonResponse({'message': 'Preloaded dataset selected successfully!'})
+
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 def get_file(request):
     """Return the file content stored in the session"""

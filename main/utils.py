@@ -27,6 +27,11 @@ def get_input(request_post, *args):
     
     return inputs
 
+def list_available_datasets():
+    """List the available datasets in the main/static/main/files directory"""
+    files = os.listdir(os.path.join(settings.BASE_DIR, 'main/static/main/files'))
+    return [file for file in files if file.endswith(('.csv', '.xlsx'))]
+
 def construct_line(intercept, coefficients, X, target):
     """Given the coefficients and intercept, construct the line equation as a string"""
     equation = f"{target} = {intercept:.2f}"
