@@ -590,7 +590,8 @@ def kmeans(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')                
+        features = request.POST.getlist('features')
+        request.session['features'] = features
         n_clusters = int(request.POST.get('n_clusters'))
         
         X = df[features]
@@ -861,7 +862,6 @@ def save_file(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
 def get_file(request):
     """Return the file content stored in the session"""
     if request.method == 'POST':
@@ -880,6 +880,39 @@ def get_file(request):
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def get_cluster_plot(request):
+    """Generate a cluster plot with dynamically selected axes."""
+    if request.method == "POST":
+        try:
+            # Parse JSON input
+            data = json.loads(request.body)
+            x_axis = int(data.get('x_axis', 0))
+            y_axis = int(data.get('y_axis', 1))
+
+            # Retrieve the session's stored dataset and model
+            file_id = request.session.get('file', None)
+            file_model = get_object_or_404(DataFile, file_id=file_id)
+            df = file_model.load_file()
+            model_id = request.session.get('model', None)
+            ml_model = get_object_or_404(MLModel, model_id=model_id)
+            model = ml_model.load_model()
+            
+            # Extract features and perform clustering
+            features = request.session.get('features', [])
+            X = df[features].values
+            labels = model.predict(X)
+            centroids = model.cluster_centers_           
+
+            # Generate the cluster plot
+            plot_json = plot_clusters(X, labels, centroids, features, x_axis, y_axis)
+
+            return JsonResponse(plot_json, safe=False)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # ? Preprocessing
 

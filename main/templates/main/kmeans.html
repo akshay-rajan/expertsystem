@@ -71,7 +71,31 @@
 
     <div class="visual">
       <div id="plotly-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
-    </div>
+      
+      <div class="axis-selection mt-4">
+        <div class="row">
+          <div class="col-md-5">
+            <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
+            <select id="x-axis-select" class="form-control d-inline">
+              {% for feature in features %}
+              <option value="{{ forloop.counter0 }}" {% if forloop.counter0 == 0 %}selected{% endif %}>{{ feature }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-5">
+            <label for="y-axis-select d-inline" class="form-label d-inline">Y-Axis:</label>
+            <select id="y-axis-select" class="form-control d-inline">
+              {% for feature in features %}
+              <option value="{{ forloop.counter0 }}" {% if forloop.counter0 == 1 %}selected{% endif %}>{{ feature }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button id="generate-plot-btn" class="btn btn-primary btn-block">Generate Plot</button>
+          </div>
+        </div>
+      </div>
+    </div>    
 
     <div class="prediction mt-4 mb-4">
       <div class="container d-flex justify-content-between">
@@ -168,4 +192,5 @@
   var graph_data = {{ plot | safe }};
   Plotly.newPlot('plotly-plot', graph_data);
 </script>
+<script src={% static "main/js/clustering.js" %}></script>
 {% endblock %}
