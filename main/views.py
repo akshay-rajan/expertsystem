@@ -24,7 +24,7 @@ from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import get_input, list_available_datasets, construct_line, format_predictions, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters, generate_preview_response
 from .models import MLModel, DataFile
 
 
@@ -928,45 +928,54 @@ def get_cluster_plot(request):
 # ? Preprocessing
 
 def preprocessing(request):
-    """Store the uploaded file and display the data preview"""
-    
-    if request.method == 'POST' and request.FILES.get('file'):
-        uploaded_file = request.FILES['file']
-        try:
-            # Read the uploaded file into a DataFrame, according to its extension
-            if uploaded_file.name.endswith('.csv'):
-                data = pd.read_csv(uploaded_file)
-            elif uploaded_file.name.endswith('.xls') or uploaded_file.name.endswith('.xlsx'):
-                data = pd.read_excel(uploaded_file)
-            else:
-                return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed.'}, status=400)
-            
-            # Store the initial dataset in the database
-            file_model = DataFile()
-            file_model.save_file(uploaded_file.name, data)
-            request.session['file'] = str(file_model.file_id)
+    """Handle dataset upload or preloaded dataset selection for preprocessing."""
+    if request.method == 'POST':
+        # Handle uploaded file
+        if request.FILES.get('file'):
+            uploaded_file = request.FILES['file']
+            try:
+                if uploaded_file.name.endswith('.csv'):
+                    data = pd.read_csv(uploaded_file)
+                elif uploaded_file.name.endswith(('.xls', '.xlsx')):
+                    data = pd.read_excel(uploaded_file)
+                else:
+                    return JsonResponse({'error': 'Invalid file format. Only CSV and Excel files are allowed.'}, status=400)
 
-            # Get the columns with missing values and non-numerical columns
-            null_columns = data.columns[data.isnull().any()]
-            non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns            
+                # Store the dataset and process
+                file_model = DataFile()
+                file_model.save_file(uploaded_file.name, data)
+                request.session['file'] = str(file_model.file_id)
 
-            # Prepare the data preview for rendering
-            json_data = data.head(20).to_json(orient='records')
-            headers = data.columns.tolist()
-            null_columns = null_columns.tolist()
-            non_numerical_cols = non_numerical_cols.tolist() # Cols with categorical values
-            
-            return JsonResponse({
-                'json_data': json_data,
-                'headers': headers,
-                'null_columns': null_columns,
-                'non_numerical_cols':non_numerical_cols
-            })
-            
-        except Exception as e:
-            return JsonResponse({'error': f"Error processing data: {e}"})
+                # Generate response
+                return JsonResponse(generate_preview_response(data))
 
-    return render(request, 'main/preprocessing.html')
+            except Exception as e:
+                return JsonResponse({'error': f"Error processing uploaded file: {e}"}, status=400)
+
+        # Handle preloaded dataset
+        preloaded_dataset = request.POST.get('preloaded_dataset')
+        if preloaded_dataset:
+            try:
+                dataset_path = os.path.join(settings.STATIC_ROOT, 'main/files', preloaded_dataset)
+                # Load the preloaded file
+                if preloaded_dataset.endswith('.csv'):
+                    data = pd.read_csv(dataset_path)
+                elif preloaded_dataset.endswith(('.xls', '.xlsx')):
+                    data = pd.read_excel(dataset_path)
+                
+                file_model = DataFile()
+                file_model.save_file(preloaded_dataset, data)
+                request.session['file'] = str(file_model.file_id)
+
+                # Generate response
+                return JsonResponse(generate_preview_response(data))
+
+            except DataFile.DoesNotExist:
+                return JsonResponse({'error': 'Selected dataset not found.'}, status=404)
+            except Exception as e:
+                return JsonResponse({'error': f"Error processing preloaded dataset: {e}"}, status=400)
+
+    return render(request, 'main/preprocessing.html', {'datasets': list_available_datasets()})
 
 def fill_missing_values(request):
     """Replace missing values with mean / median or drop the rows"""
@@ -1014,19 +1023,7 @@ def fill_missing_values(request):
         request.session['file'] = str(file_model.file_id)
 
         # Return the updated data preview
-        null_columns = data.columns[data.isnull().any()]
-        non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
-
-        json_data = data.head(20).to_json(orient='records')
-        headers = data.columns.tolist()
-        null_columns = null_columns.tolist()
-        non_numerical_cols = non_numerical_cols.tolist() 
-        return JsonResponse({
-            'json_data': json_data,
-            'headers': headers,
-            'null_columns': null_columns,
-            'non_numerical_cols':non_numerical_cols
-        })
+        return JsonResponse(generate_preview_response(data))
 
 def encoding(request):
     """

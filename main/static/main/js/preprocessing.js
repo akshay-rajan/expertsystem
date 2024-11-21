@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     return popover;
-  });
+  });  
 });
 
 function handleChange(event) {
@@ -23,19 +23,38 @@ function handleChange(event) {
   if (file) $('#upload-btn').prop('disabled', false);
 }
 
+function handlePreloadedFileChange(event) {
+  const dataset = event.target.value;
+  if (dataset) $('#upload-btn').prop('disabled', false);
+}
+
 function initiatePreprocessing(event) {
+  $('.preprocessing-dataset-selection').addClass('d-none');
+
+  const isUpload = document.getElementById('option-upload').checked;
+  if (isUpload) {
+    const fileInput = document.getElementById('file');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+    preview_data(formData);
+  } else {
+    const dataset = document.getElementById('preloaded-dataset').value;
+    if (!dataset) {
+      showWarningToast('Please select a preloaded dataset.');
+      return;
+    }
+    const preloadedDiv = document.getElementById('preloaded-div');
+    preloadedDiv.innerHTML = dataset + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+    const formData = new FormData();
+    formData.append('preloaded_dataset', dataset);
+    preview_data(formData);
+  }
+
   $('#upload-btn').addClass('d-none');
   $('.sections').removeClass('d-none');
   $('.sections-btn').removeClass('d-none');
-  
-  const fileInput = document.getElementById('file');
-  const file = fileInput.files[0];
-  const formData = new FormData();
-  formData.append('file', file);
-  fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
-
-  // Store the file in the server, display the feature selection section, and preview the data
-  preview_data(formData);
 }
 
 const featureSelectionDiv = document.getElementById("feature_selection");

@@ -1,7 +1,5 @@
 import os
 import json
-import uuid
-import pickle
 from django.conf import settings
 import plotly.express as px
 import plotly.graph_objects as go
@@ -77,6 +75,17 @@ def classification_evaluation(y_test, y_pred):
         'f1': round(f1, 4) * 100
     }
 
+def generate_preview_response(data):
+    """Helper function to prepare data preview."""
+    null_columns = data.columns[data.isnull().any()]
+    non_numerical_cols = data.select_dtypes(include=['object', 'category']).columns
+
+    return {
+        'json_data': data.head(20).to_json(orient='records'),
+        'headers': data.columns.tolist(),
+        'null_columns': null_columns.tolist(),
+        'non_numerical_cols': non_numerical_cols.tolist()
+    }
 
 def plot_feature_importances(features, importances, indices):
     """Plot the feature importances for Random Forest""", 

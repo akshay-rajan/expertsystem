@@ -1,23 +1,3 @@
-function handleDatasetOptionChange(event) {
-  const selectedOption = event.target.value;
-  const uploadDiv = document.getElementById('upload-div');
-  const preloadedDiv = document.getElementById('preloaded-div');
-  const uploadBtnDiv = $('.dataset-selection-upload');
-  const preloadBtnDiv = $('.dataset-selection-preload');
-
-  if (selectedOption === 'upload') {
-    uploadDiv.classList.remove('d-none');
-    uploadBtnDiv.addClass('selected');
-    preloadedDiv.classList.add('d-none');
-    preloadBtnDiv.removeClass('selected');
-  } else if (selectedOption === 'choose') {
-    uploadDiv.classList.add('d-none');
-    uploadBtnDiv.removeClass('selected');
-    preloadedDiv.classList.remove('d-none');
-    preloadBtnDiv.addClass('selected');
-  }
-}
-
 function handleFileChange(event) {
   const file = event.target.files[0];
   if (file) $('#upload-btn').prop('disabled', false);

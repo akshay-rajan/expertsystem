@@ -57,3 +57,25 @@
   border: 1px solid #ccc;
   margin-top: 10px;
 }
+
+input#file {
+  border: 0.01px solid rgba(0, 150, 255, 0.2);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  height: 40px;
+}
+
+.preprocessing-dataset-selection {
+  margin-top: 15px;
+  min-width: 450px;
+}
+.preprocessing-dataset-selection div {
+  display: inline-block;
+  padding: 10px;
+  opacity: 0.6;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+.preprocessing-dataset-selection div.selected {
+  opacity: 1;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
