@@ -397,7 +397,15 @@ body {
 }
 .algo:hover {
   text-decoration: none;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+}
+.algo li:hover {
+  text-decoration: none;
+  border: 1px solid rgba(0, 150, 255, 0.1);
+  box-shadow: 1px 1px 10px rgba(0, 150, 255, 0.3);
+}
+.algo-description {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 20px;
 }
 
 /* ! Input form */
