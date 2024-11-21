@@ -22,7 +22,12 @@ document.getElementById('generate-plot-btn').addEventListener('click', () => {
       try {
         // Render the plot using Plotly
         Plotly.newPlot(plotDiv, JSON.parse(data));
-        document.querySelector('.visual').scrollIntoView({ behavior: 'smooth' });
+
+        // Scroll to 100px above the plotly-plot div
+        window.scrollTo({
+          top: (plotDiv.getBoundingClientRect().top + window.scrollY) - 100,
+          behavior: 'smooth'
+        });
       } catch (err) {
         console.error('Error rendering plot:', err);
         showError("Error", 'An error occurred while rendering the plot.');
@@ -34,3 +39,17 @@ document.getElementById('generate-plot-btn').addEventListener('click', () => {
     });
 });
   
+
+var animateButton = function(e) {
+  e.preventDefault;
+  e.target.classList.remove('animate');  
+  e.target.classList.add('animate');
+  setTimeout(function(){
+    e.target.classList.remove('animate');
+  },700);
+};
+
+var bubblyButtons = document.getElementsByClassName("bubbly-button");
+for (var i = 0; i < bubblyButtons.length; i++) {
+  bubblyButtons[i].addEventListener('click', animateButton, false);
+}

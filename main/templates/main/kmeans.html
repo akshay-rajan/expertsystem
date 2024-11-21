@@ -73,8 +73,8 @@
       <div id="plotly-plot" class="img-fluid dt-plot" style="max-width: 90vw;"></div>
       
       <div class="axis-selection mt-4">
-        <div class="row">
-          <div class="col-md-5">
+        <div class="row d-flex justify-content-center">
+          <div class="m-2">
             <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
             <select id="x-axis-select" class="form-control d-inline">
               {% for feature in features %}
@@ -82,7 +82,7 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-5">
+          <div class="m-2">
             <label for="y-axis-select d-inline" class="form-label d-inline">Y-Axis:</label>
             <select id="y-axis-select" class="form-control d-inline">
               {% for feature in features %}
@@ -90,8 +90,8 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-2 d-flex align-items-end">
-            <button id="generate-plot-btn" class="btn btn-primary btn-block">Generate Plot</button>
+          <div class="m-2 d-flex align-items-end">
+            <button id="generate-plot-btn" class="btn-primary bubbly-button">Plot</button>
           </div>
         </div>
       </div>
