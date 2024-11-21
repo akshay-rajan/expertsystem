@@ -15,7 +15,9 @@ It provides a user-friendly interface where users can:
 - Select features, target and hyperparameters for the algorithm
 - Build the model
 - Perform predictions using the model
+- View sample code for the training in python
 - Evaluate the model using metrics displayed such as Accuracy, Precision, Recall, F1 Score, MAE, RMSE, r-squared, Inertia, Silhouette Score etc.
+- Visualize the model using cluster plots, dendrogram etc.
 - Download the model as a `.pkl` file.
 
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
@@ -24,22 +26,17 @@ Expert System is designed to make Machine Learning accessible to everyone, regar
 
 ```mermaid
 flowchart LR
-    A(Start) --> B[Preprocessing]
-
-    A --> D(Modelling)
-    B --> D
+    A(Start) --> B(Preprocessing)
+    B --> D(Modelling)
     D --> E[Select Algorithm]
-    E --> F[Pick Features, Target etc.]
-    F --> G{Training}
-    G --> H[Evaluation]
-    G --> I[Prediction]
-    G --> J[View Code]
-    G --> K[Download Model]
+    E --> F[Pick Features, Target, Hyperparameters]
+    F --> G(Training)
+    G --> H[Evaluation Metrics]
+    H --> I[Prediction using the model]
+    I --> J[View Code]
+    J --> K[Download the Model]
 
-    H --> Z(End)
-    I --> Z
-    J --> Z
-    K --> Z    
+    K --> Z(End)
 ```
 
 
