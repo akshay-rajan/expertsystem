@@ -349,8 +349,7 @@ function toggleGuide() {
     `,
     showCloseButton: true,
     focusConfirm: false,
-    icon: 'info',
-    confirmButtonText: 'Got it!',
+    showConfirmButton: false,
     customClass: {
       popup: 'custom-popup', // Adding a custom class for styling
       htmlContainer: 'custom-html' // If you want to style just the HTML content specifically

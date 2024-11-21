@@ -250,4 +250,3 @@ function handleDatasetOptionChange(event) {
     preloadBtnDiv.addClass('selected');
   }
 }
-
