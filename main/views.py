@@ -645,7 +645,8 @@ def hierarchical_clustering(request):
         file_model = get_object_or_404(DataFile, file_id=file_id)
         df = file_model.load_file()
         
-        features = request.POST.getlist('features')                
+        features = request.POST.getlist('features')
+        request.session['features'] = features
         n_clusters = request.POST.get('n_clusters', None)
         linkage_method = request.POST.get('linkage_method', 'ward')
         
@@ -901,8 +902,15 @@ def get_cluster_plot(request):
             # Extract features and perform clustering
             features = request.session.get('features', [])
             X = df[features].values
-            labels = model.predict(X)
-            centroids = model.cluster_centers_           
+            
+            if isinstance(model, KMeans):
+                labels = model.predict(X)
+                centroids = model.cluster_centers_
+            elif isinstance(model, AgglomerativeClustering):
+                labels = model.fit_predict(X)
+                centroids = np.array([X[labels == i].mean(axis=0) for i in np.unique(labels)])
+            else:
+                return JsonResponse({'error': 'Unsupported model type'}, status=400)
 
             # Generate the cluster plot
             plot_json = plot_clusters(X, labels, centroids, features, x_axis, y_axis)
