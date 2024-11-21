@@ -78,6 +78,10 @@ body {
   outline: none!important;
 }
 
+.nav-item.active .nav-link {
+  color: var(--dark-color)!important;
+}
+
 /* ! Home */
 #home {
   height: 110vh;

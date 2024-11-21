@@ -218,3 +218,14 @@ function showInfoToast(message) {
     }
   }).showToast();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const path = window.location.pathname; // Get the current path
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === path) {
+      link.parentElement.classList.add('active'); // Add active class to the current link
+    }
+  });
+});
