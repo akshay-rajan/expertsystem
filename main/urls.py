@@ -22,6 +22,7 @@ urlpatterns = [
     path('clustering/kmeans/', views.kmeans, name='kmeans'),
     path('clustering/hierarchical_clustering/', views.hierarchical_clustering, name='hierarchical_clustering'),
     path('samples/', views.samples, name='samples'),
+    path('about/', views.about, name='about'),
     path('download-model/', views.download_model, name='download_model'),
     path('test/', views.test, name='test'),
     path('predict', views.predict, name='predict'),

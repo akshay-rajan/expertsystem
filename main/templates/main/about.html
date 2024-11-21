@@ -1,0 +1,26 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block body %}
+<div class="fade-in page">
+  <h1 class='display-3 title'>About</h1>
+  <div class="d-flex flex-wrap">
+    <div class="about-content">
+      <p class="m-2">
+        Expert System is designed as a machine learning playground that allows you to experiment with different datasets and algorithms. You can upload your own dataset or use a preloaded dataset to train and test machine learning models. The application supports classification, regression, and clustering algorithms. You can visualize the results of your models and evaluate their performance using various metrics.
+      </p>
+      <p class="m-2">
+        The application is built using Django, a high-level Python web framework, and scikit-learn, a popular machine learning library in Python. The frontend is designed using HTML, CSS, and JavaScript, with Bootstrap for styling and jQuery for interactivity. The application is hosted on Microsoft Azure, a cloud platform as a service, and uses SQLite as the database for temporary storage.
+      </p>
+      <p class="m-2">
+        The source code for this project is available on <a href="https://github.com/akshay-rajan/expertsystem.git" alt="Github Link">GitHub</a>.
+      </p>
+    </div>
+    <div class="about-img">
+      <img src="{% static 'main/img/es_icon.png' %}" alt="About Image" id="about-logo" />
+    </div>
+  </div>
+</div>
+{% endblock %}

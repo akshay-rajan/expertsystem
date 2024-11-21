@@ -788,6 +788,9 @@ def download_model(request):
 def test(request):
     return render(request, 'main/temp.html')
 
+def about(request):
+    return render(request, 'main/about.html')
+
 # ? API Endpoints
 def predict(request):
     """Open an endpoint to predict using a saved model"""

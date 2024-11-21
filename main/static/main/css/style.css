@@ -792,6 +792,25 @@ a:focus {
   }
 }
 
+/* ! About */
+.about-content {
+  font-size: 20px;
+  flex: 2;
+}
+.about-content p {
+  margin-bottom: 20px!important;
+}
+.about-img {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+}
+#about-logo {
+  width: 200px;
+  height: 200px;
+}
+
 /* ! Others */
 .error-404 {
   color: var(--secondary-color)!important;
