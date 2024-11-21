@@ -17,14 +17,12 @@ document.getElementById('generate-plot-btn').addEventListener('click', () => {
       return response.json();
     })
     .then(data => {
-      console.log('Received plot data:', data);  
-      console.log(data['data']);
       const plotDiv = document.getElementById('plotly-plot');
       plotDiv.innerHTML = ''; // Clear existing plot
       try {
         // Render the plot using Plotly
-        Plotly.newPlot(plotDiv, data);
-        console.log('Plot rendered successfully');
+        Plotly.newPlot(plotDiv, JSON.parse(data));
+        document.querySelector('.visual').scrollIntoView({ behavior: 'smooth' });
       } catch (err) {
         console.error('Error rendering plot:', err);
         showError("Error", 'An error occurred while rendering the plot.');
