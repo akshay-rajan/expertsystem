@@ -37,6 +37,3 @@ urlpatterns = [
     path('preprocessing/scaling/data_details/', views.data_details, name='data_details'),
     
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
