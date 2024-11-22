@@ -50,7 +50,10 @@
   padding-left: 50px;
   padding-right: 50px;
 }
-
+.chapter-content {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 .chapter-title {
   font-size: 3em;
   color: var(--secondary-color);
@@ -71,7 +74,6 @@
   text-align: center;
 }
 .img-div .caption {
-  display: block;
   font-size: 0.8em;
   margin-top: 0.5em;
   color: var(--secondary-color);
@@ -81,4 +83,11 @@
   border-top: 1px solid var(--secondary-color);
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.chapter-content span {
+  color: var(--dark-color);
+  font-weight: 600;
+}
+.chapter-content span.red {
+  color: red;
 }

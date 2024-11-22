@@ -1,34 +1,63 @@
 {% extends "learn/layout.html" %}
+{% load static %}
 
 {% block title %}Introduction{% endblock %}
 
 {% block body %}
 <div>
-  <h1 class="chapter-title">Introduction</h1>
+  <h1 class="chapter-title">Machine Learning</h1>
   <div class="chapter-content">
     <p>
-        Machine learning is a method of data analysis that automates analytical model building. It is a branch of artificial intelligence based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention.
+      <span>Machine learning (ML)</span> is a subset of artificial intelligence (AI) that focuses on building systems capable of learning from data and improving their performance without explicit programming. It involves designing algorithms and models that can process and analyze vast amounts of data to uncover patterns, make predictions, or automate decisions.
     </p>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel tristique turpis, vitae ullamcorper nisi. Nulla tristique tempor tortor ut faucibus. Aenean in egestas lectus. Sed hendrerit nunc vitae neque finibus dapibus. Suspendisse ultricies vulputate maximus. Praesent vel augue ut erat euismod sollicitudin ac nec lacus. Vivamus rhoncus in neque et commodo. Nam ac euismod tortor. Vivamus tempus lacinia nisl sit amet tincidunt. Vivamus lacinia condimentum magna a egestas. Fusce eget varius dolor. Integer dui eros, ultricies at dui et, lacinia efficitur turpis. Donec id eros finibus, tincidunt ante vel, dignissim nunc. Aenean interdum massa at elementum pellentesque.
+      Machine learning is fundamentally about teaching machines to learn from experience. Unlike traditional programming, where rules are explicitly programmed, machine learning systems derive rules and patterns directly from data. This enables them to handle complex, real-world problems where explicit instructions are impractical.
     </p>
     <div class="img-div">
-      <img src="https://fastly.picsum.photos/id/75/500/300.jpg?hmac=AHCsb9PX6UlSKhkSUu2vFyS9nXoknv8lq6nfw0oU904" alt="img">
-      <span class="caption">Hello, world!</span>
+      <img src="{% static 'learn/img/1_ml-ai-dl.png' %}" alt="AI, Machine Learning, Deep Learning" style="width:300px;">
     </div>
     <p>
-        Fusce sagittis justo in risus iaculis, vitae malesuada arcu ultrices. Etiam quis pulvinar metus. Fusce augue eros, sagittis vitae fringilla vitae, imperdiet a mauris. Cras sit amet orci sit amet orci varius auctor. Pellentesque sodales velit in ultricies ultrices. In iaculis sem et tortor bibendum, id lobortis eros efficitur. Nam euismod ultrices consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta, nisl eu aliquam porttitor, enim ligula suscipit purus, et bibendum turpis arcu sed lorem. Nullam scelerisque sapien quis tincidunt tincidunt. Sed orci leo, eleifend quis orci non, euismod tincidunt lacus.
+      These systems improve their accuracy over time as they process more data. They make decisions or predictions without requiring constant human intervention.
+      Machine learning is used across various domains, including healthcare, finance, transportation, and entertainment.
     </p>
-    <h2 class="chapter-subheading">Lorem Ipsum</h2>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel tristique turpis, vitae ullamcorper nisi. Nulla tristique tempor tortor ut faucibus. Aenean in egestas lectus. Sed hendrerit nunc vitae neque finibus dapibus. Suspendisse ultricies vulputate maximus. Praesent vel augue ut erat euismod sollicitudin ac nec lacus. Vivamus rhoncus in neque et commodo. Nam ac euismod tortor. Vivamus tempus lacinia nisl sit amet tincidunt. Vivamus lacinia condimentum magna a egestas. Fusce eget varius dolor. Integer dui eros, ultricies at dui et, lacinia efficitur turpis. Donec id eros finibus, tincidunt ante vel, dignissim nunc. Aenean interdum massa at elementum pellentesque.
-    </p>
-    <p>
-        Fusce sagittis justo in risus iaculis, vitae malesuada arcu ultrices. Etiam quis pulvinar metus. Fusce augue eros, sagittis vitae fringilla vitae, imperdiet a mauris. Cras sit amet orci sit amet orci varius auctor. Pellentesque sodales velit in ultricies ultrices. In iaculis sem et tortor bibendum, id lobortis eros efficitur. Nam euismod ultrices consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta, nisl eu aliquam porttitor, enim ligula suscipit purus, et bibendum turpis arcu sed lorem. Nullam scelerisque sapien quis tincidunt tincidunt. Sed orci leo, eleifend quis orci non, euismod tincidunt lacus.
-    </p>
+    <h2 class="chapter-subheading">Types of Machine Learning</h2>
+    <div>
+      <table class="table table-hover table-bordered mt-3">
+        <thead class="thead">
+          <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Example Algorithms</th>
+            <th>Applications</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Supervised Learning</th>
+            <td>
+              The system learns from <span class="red">labeled datasets</span>, where input-output pairs are provided. Types: <span>Classification, Regression</span>.
+            </td>
+            <td>Linear Regression, Decision Trees, Support Vector Machines</td>
+            <td>Spam Email Detection, Stock Price Prediction, Credit Risk Assessment</td>
+          </tr>
+          <tr>
+            <th>Unsupervised Learning</th>
+            <td>The system identifies patterns or structures in <span class="red">unlabeled data</span>.</td>
+            <td>K-Means Clustering, Principal Component Analysis</td>
+            <td>Customer Segmentation, Recommendation Systems, Fraud Detection</td>
+          </tr>
+          <tr>
+            <th>Reinforcement Learning</th>
+            <td>The system learns by interacting with an environment and receiving feedback in the form of rewards or penalties.</td>
+            <td>Q-Learning, Deep Q-Networks</td>
+            <td>Robotics, Game Playing</td>
+          </tr>
+        </tbody>
+      </table>      
+    </div>
   </div>
   <div class="content-links d-flex justify-content-end">
-    <a href="{% url 'chapter' 'machinelearning' %}" class="content-link">
+    <a href="{% url 'chapter' 'steps' %}" class="content-link">
       <button class="btn btn-primary">
         Next
       </button>
@@ -37,7 +66,7 @@
   <div class="other-links">
     <div class="hline"></div>
     <ul>
-      <li><a href="{% url 'chapter' 'machinelearning' %}">Machine Learning</a></li>
+      <li><a href="{% url 'chapter' 'steps' %}">Machine Learning Workflow</a></li>
     </ul>
   </div>
 </div>
