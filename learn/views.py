@@ -4,6 +4,7 @@ TEMPLATES = {
     'introduction': 'learn/introduction.html',
     'steps': 'learn/steps.html',
     'preprocessing': 'learn/preprocessing.html',
+    'numpy': 'learn/numpy.html',
 }
 
 def index(request):

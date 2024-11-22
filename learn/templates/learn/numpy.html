@@ -1,0 +1,148 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}NumPy{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">NumPy</h1>
+  <div class="chapter-content">
+    <p>
+      NumPy is a powerful library for numerical computing in Python. It provides efficient and flexible tools for working with arrays, performing mathematical computations, and generating data.
+    </p>
+
+    <h2 class="chapter-subheading">Features</h2>
+    <div class="container mt-4">
+      <div>
+        <div class="mt-4">
+          <span class="dark">1. Array Creation:</span> NumPy provides the <code>ndarray</code> object, which is a fast and space-efficient multidimensional array for storing data.
+          <div class="code-block">
+            <pre><code class="language-python">import numpy as np
+# Create a 1D array
+array_1d = np.array([1, 2, 3, 4])
+
+# Create a 2D array
+array_2d = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Print the arrays
+print("1D Array:", array_1d)
+print("2D Array:\n", array_2d)</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">2. Array Attributes:</span> You can access array properties such as shape, size, and data type.
+          <div class="code-block">
+            <pre><code class="language-python">print("Shape:", array_2d.shape)  # (2, 3)
+print("Size:", array_2d.size)    # 6
+print("Data Type:", array_2d.dtype)  # int32 (or int64 depending on platform)</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">3. Mathematical Operations</span> NumPy supports element-wise operations and broadcasting (applying operations on arrays of different shapes). 
+          <div class="code-block">
+            <pre><code class="language-python"># Element-wise addition and multiplication
+result = array_2d + 10
+product = array_2d * 2
+
+print("Addition:\n", result)
+print("Multiplication:\n", product)</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">4. Statistical Functions</span>
+          <div class="code-block">
+            <pre><code class="language-python"># Generate a random array
+random_array = np.random.randint(1, 10, size=10)
+
+# Calculate statistics
+mean = np.mean(random_array)
+std = np.std(random_array)
+sum_array = np.sum(random_array)
+
+print("Array:", random_array)
+print("Mean:", mean, "Std Dev:", std, "Sum:", sum_array)</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">5. Indexing and Slicing:</span> Access and modify specific elements or subarrays.
+          <div class="code-block">
+            <pre><code class="language-python"># Access elements
+print("Element at (0, 1):", array_2d[0, 1])  # 2
+
+# Slice rows and columns
+print("First row:", array_2d[0, :])  # [1, 2, 3]
+print("Second column:", array_2d[:, 1])  # [2, 5]</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">6. Sample Data Generation:</span> NumPy provides functions for generating arrays for testing and experimentation.
+          <ul>
+            <li><span class="dark">Random Numbers:</span> Generate random integers, floats, or arrays.</li>
+            <li><span class="dark">Linspace:</span> Create evenly spaced numbers over a specified range.</li>
+            <li><span class="dark">Arange:</span> Generate sequences of numbers with a specified step size.</li>
+          </ul>
+          <div class="code-block">
+            <pre><code class="language-python"># Random integers
+random_ints = np.random.randint(1, 100, size=(3, 3))
+
+# Linearly spaced array
+linear_space = np.linspace(0, 1, 5)
+
+# Sequence of numbers
+sequence = np.arange(0, 10, 2)
+
+print("Random Integers:\n", random_ints) # Outputs a 3x3 array of random integers
+print("Linearly Spaced Array:", linear_space) # [0. 0.25 0.5 0.75 1.]
+print("Sequence of Numbers:", sequence) # [0 2 4 6 8]</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <span class="dark">7. Matrix Operations</span>
+          <div class="code-block">
+            <pre><code class="language-python"># Dot product
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+dot_product = np.dot(A, B)
+
+# Transpose
+transpose = A.T
+
+# Inverse (requires square matrix)
+inverse = np.linalg.inv(A)
+
+print("Dot Product:\n", dot_product)
+print("Transpose:\n", transpose)
+print("Inverse:\n", inverse)</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'preprocessing' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'pandas' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'preprocessing' %}">Data Preprocessing</a></li>
+      <li><a href="{% url 'chapter' 'pandas' %}">Working with Pandas</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

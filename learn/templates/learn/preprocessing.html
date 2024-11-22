@@ -11,9 +11,11 @@
       Data preprocessing is a crucial step in the machine learning pipeline, where raw data is transformed into a clean and structured format suitable for analysis. Proper preprocessing can significantly enhance the performance of machine learning models.
     </p>
 
+    <div class="chapter-subheading">Common Preprocessing Techniques</div>
+
     <div class="container mt-4">
-      <div class="list-group">
-        <div class="list-group-item">
+      <div>
+        <div class="mt-4">
           <span class="dark">Handling Missing Values:</span> Missing data can lead to incorrect analyses and model inaccuracies. Common techniques to handle missing values include:
           <ul>
             <li><span class="dark">Mean/Median Imputation:</span> Replace missing values with the mean or median of the column.</li>
@@ -30,7 +32,7 @@ df['column_name'].fillna(df['column_name'].mean(), inplace=True)
 df.dropna(inplace=True)</code></pre>
           </div>
         </div>
-        <div class="list-group-item">
+        <div class="mt-4">
           <span class="dark">Encoding Categorical Variables:</span> Machine learning models often require numerical inputs. Encoding is used to convert categorical data into numerical format. Techniques include:
           <ul>
             <li><span class="dark">One-Hot Encoding:</span> Create binary columns for each category. (For example, <i>Red, Green, Blue</i> becomes [1, 0, 0], [0, 1, 0], [0, 0, 1]).</li>
@@ -48,7 +50,7 @@ label_encoder = LabelEncoder()
 df['category_column'] = label_encoder.fit_transform(df['category_column'])</code></pre>
           </div>
         </div>
-        <div class="list-group-item">
+        <div class="mt-4">
           <span class="dark">Scaling:</span> Scaling ensures that numerical features are on a similar scale, which improves model performance. Techniques include:
           <ul>
             <li><span class="dark">Normalization:</span> Scale values to a range of [0, 1].</li>
@@ -66,7 +68,7 @@ normalizer = MinMaxScaler()
 df['normalized_column'] = normalizer.fit_transform(df[['column_name']])</code></pre>
           </div>
         </div>
-        <div class="list-group-item">
+        <div class="mt-4">
           <span class="dark">Outlier Detection and Removal:</span> Outliers are data points that significantly differ from other observations. Outliers can distort data distributions and affect model performance. Techniques include:
           <ul>
             <li><span class="dark">Z-Score Method:</span> Remove data points that deviate significantly from the mean.</li>
@@ -82,14 +84,14 @@ IQR = Q3 - Q1
 df = df[~((df['column_name'] < (Q1 - 1.5 * IQR)) | (df['column_name'] > (Q3 + 1.5 * IQR)))]</code></pre>
           </div>
         </div>
-        <div class="list-group-item">
+        <div class="mt-4">
           <span class="dark">Data Transformation:</span> Transform data into a more suitable format for modeling. Techniques include:
           <ul>
             <li><span class="dark">Log Transformation:</span> Reduce skewness in data.</li>
             <li><span class="dark">Box-Cox Transformation:</span> Normalize data distributions.</li>
           </ul>
         </div>
-        <div class="list-group-item">
+        <div class="mt-4">
           <span class="dark">Feature Selection:</span> Select the most relevant features to reduce dimensionality and improve model performance. Techniques include:
           <ul>
             <li><span class="dark">Filter Methods:</span> Use statistical tests (e.g., correlation) to select features.</li>
@@ -110,7 +112,7 @@ df = df[~((df['column_name'] < (Q1 - 1.5 * IQR)) | (df['column_name'] > (Q3 + 1.
         Previous
       </button>
     </a>
-    <a href="{% url 'chapter' 'exploration' %}" class="content-link">
+    <a href="{% url 'chapter' 'numpy' %}" class="content-link">
       <button class="btn btn-primary">
         Next
       </button>
@@ -119,8 +121,7 @@ df = df[~((df['column_name'] < (Q1 - 1.5 * IQR)) | (df['column_name'] > (Q3 + 1.
   <div class="other-links">
     <div class="hline"></div>
     <ul>
-      <li><a href="{% url 'chapter' 'steps' %}">Machine Learning Workflow</a></li>
-      <li><a href="{% url 'chapter' 'exploration' %}">Exploratory Data Analysis</a></li>
+      <li><a href="{% url 'chapter' 'numpy' %}">NumPy</a></li>
     </ul>
   </div>
 </div>
