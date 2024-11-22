@@ -120,6 +120,21 @@
 
     <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
+        <h5 class="card-title">Introduction</h5>
+        <p class="card-text">Learn everything about Machine Learning, from preprocessing to deployment.</p>
+        <a href="{% url 'learn' %}">
+          <button>
+            Start Learning →
+          </button>
+        </a>
+      </div>
+      <div class="p-4 d-flex justify-content-center align-items-center card-right">
+        <img src="{% static 'main/img/data.png' %}" class="feature-card-img" alt="Learn">
+      </div>
+    </div>
+
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
         <h5 class="card-title">Manage Data</h5>
         <p class="card-text">Prepare your data for analysis with cleaning and pre-processing.</p>
         <a href="{% url 'preprocessing' %}">
@@ -147,20 +162,8 @@
         <img src="{% static 'main/img/brain.png' %}" class="feature-card-img" alt="Learn">
       </div>
     </div>
-
-    {% comment %} <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
-      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left  p-4">
-        <h5 class="card-title">Introduction</h5>
-        <p class="card-text">Learn everything about Machine Learning, from preprocessing to deployment.</p>
-        <button disabled>Coming soon!</button>
-      </div>
-
-      <div class="p-4 d-flex justify-content-center align-items-center card-right">
-        <img src="{% static 'main/img/data.png' %}" class="feature-card-img" alt="Learn">
-      </div>
-    </div>
   
-    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+    {% comment %} <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4 flex-grow-1">
         <h5 class="card-title">Advanced Features</h5>
         <p class="card-text">Hyperparameter Tuning, Neural Networks, Dimensionality Reduction...</p>
