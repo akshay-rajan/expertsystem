@@ -85,7 +85,7 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.chapter-content span {
+.chapter-content span.dark {
   color: var(--dark-color);
   font-weight: 600;
 }

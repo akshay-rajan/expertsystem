@@ -1,0 +1,127 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Data Preprocessing{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Data Preprocessing</h1>
+  <div class="chapter-content">
+    <p>
+      Data preprocessing is a crucial step in the machine learning pipeline, where raw data is transformed into a clean and structured format suitable for analysis. Proper preprocessing can significantly enhance the performance of machine learning models.
+    </p>
+
+    <div class="container mt-4">
+      <div class="list-group">
+        <div class="list-group-item">
+          <span class="dark">Handling Missing Values:</span> Missing data can lead to incorrect analyses and model inaccuracies. Common techniques to handle missing values include:
+          <ul>
+            <li><span class="dark">Mean/Median Imputation:</span> Replace missing values with the mean or median of the column.</li>
+            <li><span class="dark">Mode Imputation:</span> Replace missing values with the most frequent value in the column.</li>
+            <li><span class="dark">Row/Column Deletion:</span> Remove rows or columns with excessive missing values.</li>
+          </ul>
+          <div class="code-block">
+            <pre><code class="language-python">import pandas as pd
+
+# Replace missing values with the column mean
+df['column_name'].fillna(df['column_name'].mean(), inplace=True)
+
+# Remove rows with missing values
+df.dropna(inplace=True)</code></pre>
+          </div>
+        </div>
+        <div class="list-group-item">
+          <span class="dark">Encoding Categorical Variables:</span> Machine learning models often require numerical inputs. Encoding is used to convert categorical data into numerical format. Techniques include:
+          <ul>
+            <li><span class="dark">One-Hot Encoding:</span> Create binary columns for each category. (For example, <i>Red, Green, Blue</i> becomes [1, 0, 0], [0, 1, 0], [0, 0, 1]).</li>
+            <li><span class="dark">Label Encoding:</span> Assign a unique integer to each category. (For example, <i>Red, Green, Blue</i> becomes 0, 1, 2)</li>
+          </ul>
+          <div class="code-block">
+            <pre><code class="language-python">from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    
+# One-Hot Encoding
+encoder = OneHotEncoder()
+encoded_data = encoder.fit_transform(df[['category_column']])
+
+# Label Encoding
+label_encoder = LabelEncoder()
+df['category_column'] = label_encoder.fit_transform(df['category_column'])</code></pre>
+          </div>
+        </div>
+        <div class="list-group-item">
+          <span class="dark">Scaling:</span> Scaling ensures that numerical features are on a similar scale, which improves model performance. Techniques include:
+          <ul>
+            <li><span class="dark">Normalization:</span> Scale values to a range of [0, 1].</li>
+            <li><span class="dark">Standardization:</span> Scale values to have a mean of 0 and standard deviation of 1.</li>
+          </ul>
+          <div class="code-block">
+            <pre><code class="language-python">from sklearn.preprocessing import StandardScaler, MinMaxScaler
+    
+# Standardization
+scaler = StandardScaler()
+df['scaled_column'] = scaler.fit_transform(df[['column_name']])
+
+# Normalization
+normalizer = MinMaxScaler()
+df['normalized_column'] = normalizer.fit_transform(df[['column_name']])</code></pre>
+          </div>
+        </div>
+        <div class="list-group-item">
+          <span class="dark">Outlier Detection and Removal:</span> Outliers are data points that significantly differ from other observations. Outliers can distort data distributions and affect model performance. Techniques include:
+          <ul>
+            <li><span class="dark">Z-Score Method:</span> Remove data points that deviate significantly from the mean.</li>
+            <li><span class="dark">IQR Method:</span> Use the interquartile range to identify and remove outliers.</li>
+          </ul>
+          <div class="code-block">
+            <pre><code class="language-python">import numpy as np
+
+# IQR Method
+Q1 = df['column_name'].quantile(0.25)
+Q3 = df['column_name'].quantile(0.75)
+IQR = Q3 - Q1
+df = df[~((df['column_name'] < (Q1 - 1.5 * IQR)) | (df['column_name'] > (Q3 + 1.5 * IQR)))]</code></pre>
+          </div>
+        </div>
+        <div class="list-group-item">
+          <span class="dark">Data Transformation:</span> Transform data into a more suitable format for modeling. Techniques include:
+          <ul>
+            <li><span class="dark">Log Transformation:</span> Reduce skewness in data.</li>
+            <li><span class="dark">Box-Cox Transformation:</span> Normalize data distributions.</li>
+          </ul>
+        </div>
+        <div class="list-group-item">
+          <span class="dark">Feature Selection:</span> Select the most relevant features to reduce dimensionality and improve model performance. Techniques include:
+          <ul>
+            <li><span class="dark">Filter Methods:</span> Use statistical tests (e.g., correlation) to select features.</li>
+            <li><span class="dark">Wrapper Methods:</span> Use algorithms like Recursive Feature Elimination (RFE).</li>
+            <li><span class="dark">Embedded Methods:</span> Use model-based methods like feature importance from tree-based models.</li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>    
+
+  </div>      
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'steps' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'exploration' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'steps' %}">Machine Learning Workflow</a></li>
+      <li><a href="{% url 'chapter' 'exploration' %}">Exploratory Data Analysis</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

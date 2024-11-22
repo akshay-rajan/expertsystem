@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 TEMPLATES = {
     'introduction': 'learn/introduction.html',
     'steps': 'learn/steps.html',
+    'preprocessing': 'learn/preprocessing.html',
 }
 
 def index(request):
