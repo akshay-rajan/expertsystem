@@ -2,7 +2,7 @@
 
 {% block body %}
 <div>
-  <h1>Introduction to Machine Learning</h1>
+  <h1 class="chapter-title">Introduction</h1>
   <div class="chapter-content">
     <p>
         Machine learning is a method of data analysis that automates analytical model building. It is a branch of artificial intelligence based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention.
@@ -10,15 +10,33 @@
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel tristique turpis, vitae ullamcorper nisi. Nulla tristique tempor tortor ut faucibus. Aenean in egestas lectus. Sed hendrerit nunc vitae neque finibus dapibus. Suspendisse ultricies vulputate maximus. Praesent vel augue ut erat euismod sollicitudin ac nec lacus. Vivamus rhoncus in neque et commodo. Nam ac euismod tortor. Vivamus tempus lacinia nisl sit amet tincidunt. Vivamus lacinia condimentum magna a egestas. Fusce eget varius dolor. Integer dui eros, ultricies at dui et, lacinia efficitur turpis. Donec id eros finibus, tincidunt ante vel, dignissim nunc. Aenean interdum massa at elementum pellentesque.
     </p>
+    <div class="img-div">
+      <img src="https://fastly.picsum.photos/id/75/500/300.jpg?hmac=AHCsb9PX6UlSKhkSUu2vFyS9nXoknv8lq6nfw0oU904" alt="img">
+      <span class="caption">Hello, world!</span>
+    </div>
     <p>
         Fusce sagittis justo in risus iaculis, vitae malesuada arcu ultrices. Etiam quis pulvinar metus. Fusce augue eros, sagittis vitae fringilla vitae, imperdiet a mauris. Cras sit amet orci sit amet orci varius auctor. Pellentesque sodales velit in ultricies ultrices. In iaculis sem et tortor bibendum, id lobortis eros efficitur. Nam euismod ultrices consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta, nisl eu aliquam porttitor, enim ligula suscipit purus, et bibendum turpis arcu sed lorem. Nullam scelerisque sapien quis tincidunt tincidunt. Sed orci leo, eleifend quis orci non, euismod tincidunt lacus.
     </p>
+    <h2 class="chapter-subheading">Lorem Ipsum</h2>
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel tristique turpis, vitae ullamcorper nisi. Nulla tristique tempor tortor ut faucibus. Aenean in egestas lectus. Sed hendrerit nunc vitae neque finibus dapibus. Suspendisse ultricies vulputate maximus. Praesent vel augue ut erat euismod sollicitudin ac nec lacus. Vivamus rhoncus in neque et commodo. Nam ac euismod tortor. Vivamus tempus lacinia nisl sit amet tincidunt. Vivamus lacinia condimentum magna a egestas. Fusce eget varius dolor. Integer dui eros, ultricies at dui et, lacinia efficitur turpis. Donec id eros finibus, tincidunt ante vel, dignissim nunc. Aenean interdum massa at elementum pellentesque.
     </p>
     <p>
         Fusce sagittis justo in risus iaculis, vitae malesuada arcu ultrices. Etiam quis pulvinar metus. Fusce augue eros, sagittis vitae fringilla vitae, imperdiet a mauris. Cras sit amet orci sit amet orci varius auctor. Pellentesque sodales velit in ultricies ultrices. In iaculis sem et tortor bibendum, id lobortis eros efficitur. Nam euismod ultrices consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta, nisl eu aliquam porttitor, enim ligula suscipit purus, et bibendum turpis arcu sed lorem. Nullam scelerisque sapien quis tincidunt tincidunt. Sed orci leo, eleifend quis orci non, euismod tincidunt lacus.
     </p>
+  </div>
+  <div class="content-links d-flex justify-content-end">
+    <a href="{% url 'machinelearning' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'machinelearning' %}">Machine Learning</a></li>
+    </ul>
   </div>
 </div>
 {% endblock %}

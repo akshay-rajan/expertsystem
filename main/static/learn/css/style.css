@@ -3,18 +3,82 @@
   --secondary-color: rgb(0, 150, 255); 
   --dark-color: rgb(0, 10, 102);
 }
-.container.learn {
+/* .learn-container {
   margin: 20px;
+} */
+.learn-content {
+  margin: 10px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: large;
 }
 .chapters {
-  background-color: rgba(0, 150, 255, 0.1);
-  display: flex;
-  flex-wrap: wrap;
-  padding: 20px;
-  align-items: center;
-  margin: 20px;
+  margin-top: 25px;
   min-width: 20vw!important;
 }
-.content {
+.chapters .links {
+  margin-left: 10px;
+}
+.chapter-link {
+  width: 100%;
+  margin: 0;
+  padding: 8px;
+  padding-left: 20px;
+  background-color: white;
+  border: 1px solid rgba(0, 150, 255, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 150, 255, 0.1);
+  transition: all 0.3s;
+}
+.chapter-link.active {
+  background-color: rgba(0, 150, 255, 0.1);
+  margin-left: 5px;
+  color: var(--secondary-color);
+}
+.chapter-link:hover {
+  margin-left: 5px;
+  background-color: rgba(0, 150, 255, 0.1);
+}
+.chapter-link-a {
+  text-decoration: none;
+}
+.chapter-link-a:hover {
+  text-decoration: none;
+}
+.learn-content {
   min-width: 60vw;
+  margin-left: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.chapter-title {
+  font-size: 3em;
+  color: var(--secondary-color);
+}
+.chapter-subheading {
+  font-size: 1.5em;
+  color: var(--secondary-color);
+}
+.content-link {
+  min-width: 10vw;
+}
+.content-link button {
+  width: 100%;
+}
+.img-div {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.img-div .caption {
+  display: block;
+  font-size: 0.8em;
+  margin-top: 0.5em;
+  color: var(--secondary-color);
+}
+.hline {
+  width: 100%;
+  border-top: 1px solid var(--secondary-color);
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

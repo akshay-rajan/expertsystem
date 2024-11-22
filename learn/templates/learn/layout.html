@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}DeviceDash{% endblock %}</title>
+  <title>{% block title %}Expert System{% endblock %}</title>
   
   <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'learn/css/style.css' %}">
@@ -54,20 +54,14 @@
     </div>
   </nav>
 
-  <div class="container learn d-flex">
+  <div class="learn-container d-flex">
     <div class="left chapters">
-      <ul>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-          <li><a href="{% url 'introduction' %}">Introduction</a></li>
-      </ul>
+      <div class="links">
+        <a href="{% url 'introduction' %}" class="chapter-link-a"><div class="chapter-link">Introduction</div></a>
+        <a href="{% url 'machinelearning' %}" class="chapter-link-a"><div class="chapter-link">Machine Learning</div></a>
+      </div>
     </div>
-    <div class="right content" style="min-height:60vh;">
+    <div class="right learn-content" style="min-height:60vh;">
       {% block body %}{% endblock %}
     </div>
   </div>
@@ -144,6 +138,18 @@
       $('.fade-in').fadeIn(500);
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const path = window.location.pathname; // Get the current path
+      const chapters = document.querySelectorAll('.chapter-link-a'); // Get all the links
+    
+      chapters.forEach(chapter => {
+        if (chapter.getAttribute('href') === path) {
+          chapter.querySelector('.chapter-link').classList.add('active');
+        }
+      });
+    });
+  </script>    
   {% block script %}{% endblock %}
 </body>
 </html>
