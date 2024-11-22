@@ -1,29 +1,83 @@
-{% extends 'learn/layout.html' %}
+{% extends "learn/layout.html" %}
 {% load static %}
 
-{% block title %}Machine Learning{% endblock %}
+{% block title %}Machine Learning Workflow{% endblock %}
 
 {% block body %}
 <div>
-  <h1 class="chapter-title">Steps in Machine Learning</h1>
+  <h1 class="chapter-title">Machine Learning Workflow</h1>
   <div class="chapter-content">
     <p>
-      Machine learning is a method of data analysis that automates analytical model building. It is a branch of artificial intelligence based on the idea that systems can learn from data, identify patterns and make decisions with minimal human intervention.
+      The process of building a machine learning model involves a series of structured steps that transform raw data into actionable insights.
     </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel tristique turpis, vitae ullamcorper nisi. Nulla tristique tempor tortor ut faucibus. Aenean in egestas lectus. Sed hendrerit nunc vitae
-      neque finibus dapibus. Suspendisse ultricies vulputate maximus. Praesent vel augue ut erat euismod sollicitudin ac nec lacus. Vivamus rhoncus in neque et commodo. Nam ac euismod tortor. Vivamus tempus
-      lacin
-      ia nisl sit amet tincidunt. Vivamus lacinia condimentum magna a egestas. Fusce eget varius dolor. Integer dui eros
-      , ultricies at dui et, lacinia efficitur turpis. Donec id eros finibus, tincidunt ante vel, dignissim nunc. Aenean interdum massa at elementum pellentesque.
-    </p>
+
+    <h2 class="chapter-subheading">Steps in Machine Learning</h2>
+    <div>
+      <div class="container mt-4">
+        <div class="list-group">
+          <div class="list-group-item">
+            <strong>1. Problem Definition:</strong> Clearly outline the problem you are trying to solve. This step includes identifying the objective (e.g., classification, regression, or clustering) and the expected outcomes.
+          </div>
+          <div class="list-group-item">
+            <strong>2. Data Collection:</strong> Gather data from reliable sources. Data can be collected from databases, APIs, user-generated content, or sensors. The quality and relevance of the data directly impact the model's performance.
+          </div>
+          <div class="list-group-item">
+            <strong>3. Data Preprocessing:</strong> Clean and prepare the data for analysis. This includes:
+              <ul>
+                <li>Handling Missing values</li>
+                <li>Encoding Categorical Data,</li>
+                <li>Scaling Numerical Features</li>
+                <li>Removing Duplicates.</li>
+              </ul>
+          </div>
+          <div class="list-group-item">
+            <strong>4. Feature Engineering:</strong> Select or create the most relevant features for modelling. Feature engineering may include feature selection, extraction, or transformation.
+          </div>
+          <div class="list-group-item">
+            <strong>5. Model Selection:</strong> Choose an algorithm based on the problem type and dataset. For example, use linear regression for regression tasks, decision trees for classification, or k-means clustering for unsupervised learning.
+          </div>
+          <div class="list-group-item">
+            <strong>6. Model Training:</strong> Train the model on labeled data (if supervised learning) or allow it to discover patterns in data (if unsupervised learning). The model learns by minimizing the error it makes while training.
+          </div>
+          <div class="list-group-item">
+            <strong>7. Model Evaluation:</strong> Test the model using metrics such as accuracy, precision, recall, or R-squared. Evaluate its performance on unseen data.
+          </div>
+          <div class="list-group-item">
+            <strong>8. Hyperparameter Tuning:</strong> Fine-tune model parameters (settings that control the learning process) to improve performance.
+          </div>
+          <div class="list-group-item">
+            <strong>9. Deployment:</strong> Deploy the model into production, integrating it into applications or systems for real-time predictions or decision-making.
+          </div>
+          <div class="list-group-item">
+            <strong>10. Monitoring and Maintenance:</strong> Continuously monitor the model's performance. Update it periodically with new data to address model drift (degradation of performance due to changes in the data) and ensure accuracy.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="img-div">
+      <img src="{% static 'learn/img/2_ml_workflow.png' %}" alt="Machine Learning Workflow" style="width:100%;">
+      <span class="caption">Machine Learning Workflow</span>
+    </div>
   </div>
-  <div class="content-links d-flex justify-content-end">
-    <a href="{% url 'chapter' 'steps' %}" class="content-link">
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'introduction' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'algorithms' %}" class="content-link">
       <button class="btn btn-primary">
         Next
       </button>
     </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'introduction' %}">Introduction</a></li>
+    </ul>
   </div>
 </div>
 {% endblock %}
