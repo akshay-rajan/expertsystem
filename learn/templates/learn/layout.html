@@ -57,11 +57,11 @@
   <div class="learn-container d-flex">
     <div class="left chapters">
       <div class="links">
-        <a href="{% url 'introduction' %}" class="chapter-link-a"><div class="chapter-link">Introduction</div></a>
-        <a href="{% url 'machinelearning' %}" class="chapter-link-a"><div class="chapter-link">Machine Learning</div></a>
+        <a href="{% url 'chapter' 'introduction' %}" class="chapter-link-a"><div class="chapter-link">Introduction</div></a>
+        <a href="{% url 'chapter' 'machinelearning' %}" class="chapter-link-a"><div class="chapter-link">Machine Learning</div></a>
       </div>
     </div>
-    <div class="right learn-content" style="min-height:60vh;">
+    <div class="right learn-content fade-in" style="min-height:60vh;">
       {% block body %}{% endblock %}
     </div>
   </div>

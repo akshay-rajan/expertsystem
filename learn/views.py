@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 
+TEMPLATES = {
+    'introduction': 'learn/introduction.html',
+    'machinelearning': 'learn/machinelearning.html',
+}
+
 def index(request):
+    return redirect('chapter', chapter='introduction')
+
+def chapter_view(request, chapter):
+    template = TEMPLATES.get(chapter)
+    if template:
+        return render(request, template)
     return redirect('introduction/')
-
-def introduction(request):
-    return render(request, 'learn/introduction.html')
-
-def machinelearning(request):
-    return render(request, 'learn/machinelearning.html')

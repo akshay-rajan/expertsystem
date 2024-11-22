@@ -3,6 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='learn'),
-    path('introduction/', views.introduction, name='introduction'),
-    path('machinelearning/', views.machinelearning, name='machinelearning'),
+    path('<slug:chapter>/', views.chapter_view, name='chapter'),
 ]
