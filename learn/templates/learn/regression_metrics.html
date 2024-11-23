@@ -1,0 +1,76 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Regression Evaluation Metrics{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Regression Evaluation Metrics</h1>
+  <div class="chapter-content">
+    <p>
+      Evaluating regression models involves various metrics to assess their predictive performance. Each metric provides a unique perspective on the model's errors and goodness of fit.
+    </p>
+
+    <h2 class="chapter-subheading">1. Mean Absolute Error (MAE)</h2>
+    <p>
+      Measures the average magnitude of errors:
+    </p>
+    $$
+    \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+    $$
+
+    <h2 class="chapter-subheading">2. Mean Squared Error (MSE)</h2>
+    <p>
+      Measures the average squared differences:
+    </p>
+    $$
+    \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+    $$
+
+    <h2 class="chapter-subheading">3. Root Mean Squared Error (RMSE)</h2>
+    <p>
+      Provides error in the same units as the target variable:
+    </p>
+    $$
+    \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+    $$
+
+    <h2 class="chapter-subheading">4. R-squared (R²)</h2>
+    <p>
+      Indicates the proportion of variance explained by the model:
+    </p>
+    $$
+    R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+    $$
+
+    <div class="code-block">
+      <pre><code class="language-python">from sklearn.metrics import mean_squared_error, r2_score
+
+# Evaluate metrics
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MSE: {mse}")
+print(f"R²: {r2}")</code></pre>
+    </div>
+
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'linear_regression' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'next_chapter' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
