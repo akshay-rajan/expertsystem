@@ -13,6 +13,7 @@ TEMPLATES = {
     'naive_bayes': 'learn/naive_bayes.html',
     'linear_regression': 'learn/linear_regression.html',
     'regression_metrics': 'learn/regression_metrics.html',
+    'kmeans': 'learn/kmeans.html',
 }
 
 def index(request):

@@ -1,0 +1,162 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}K-Means Clustering{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">K-Means Clustering</h1>
+  <div class="chapter-content">
+    <p>
+      <span class="dark">K-means</span> is a popular unsupervised machine learning algorithm used for clustering tasks. It partitions a dataset into \( K \) distinct, non-overlapping groups or clusters based on feature similarity. The algorithm aims to group data points so that points in each cluster are more similar to each other than to those in other clusters.
+    </p>
+
+    <h2 class="chapter-subheading">Algorithm</h2>
+    <ol>
+      <li>
+        <span class="dark">Initialization:</span> Choose the number of clusters \( K \) and randomly initialize \( K \) centroids from the data points.
+      </li>
+      <li>
+        <span class="dark">Assignment Step:</span> Assign each data point to the nearest centroid based on a distance metric (usually Euclidean distance).
+      </li>
+      <li>
+        <span class="dark">Update Step:</span> Calculate the new centroids by taking the mean of all the data points assigned to each cluster.
+      </li>
+      <li>
+        <span class="dark">Convergence Check:</span> Repeat the assignment and update steps until centroids no longer change significantly or a maximum number of iterations is reached.
+      </li>
+    </ol>
+
+    <h2 class="chapter-subheading">Mathematical Formulation</h2>
+    <p>The K-means algorithm minimizes the total intra-cluster variance:</p>
+    $$
+    J = \sum_{i=1}^{K} \sum_{x_j \in C_i} \| x_j - \mu_i \|^2
+    $$
+    <ul>
+      <li>\( J \): Objective function to minimize (sum of squared distances).</li>
+      <li>\( K \): Number of clusters.</li>
+      <li>\( C_i \): Set of data points in cluster \( i \).</li>
+      <li>\( x_j \): Data point in cluster \( i \).</li>
+      <li>\( \mu_i \): Centroid of cluster \( i \).</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Code</h2>
+    <div class="code-block">
+      <pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Generate synthetic data
+data, _ = make_blobs(n_samples=300, random_state=42)
+
+# Train K-Means model
+model = KMeans(random_state=42, n_clusters=5, n_init='auto')
+model.fit(data)
+
+# Extract cluster labels and centroids
+labels = model.labels_
+centroids = model.cluster_centers_
+
+# Plot clusters
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis', marker='o', alpha=0.6)
+plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='X', s=200, label='Centroids')
+plt.title('K-Means Clustering')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.show()</code></pre>
+    </div>
+
+    <div class="img-div">
+        <img src="{% static 'learn/img/kmeans_clusters.png' %}" alt="K-Means Clustering" style="width:500px;">
+        <span class="caption">K-Means Clustering Visualization</span>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <div>
+            <h2 class="chapter-subheading">Choosing the Number of Clusters (\( K \))</h2>
+            <ul>
+              <li>
+                <span class="dark">Elbow Method:</span> Plot the total within-cluster variance (inertia) against the number of clusters. The "elbow" point indicates a good choice for \( K \).
+              </li>
+              <li>
+                  <span class="dark">Silhouette Score:</span> Measures how similar a point is to its own cluster compared to other clusters. Higher scores indicate better-defined clusters.
+                </li>
+            </ul>
+        </div>
+        <div class="img-div">
+          <img src="{% static 'learn/img/elbow_method_kmeans.png' %}" alt="Elbow Method" style="width:300px;">
+          <span class="caption">Elbow Method for Choosing \( K \)</span>
+        </div>
+    </div>
+
+    <h2 class="chapter-subheading">Prediction Example</h2>
+    <div class="code-block">
+      <pre><code class="language-python"># Predict cluster for new data points
+predictions = model.predict([[2, -4], [6, 6], [6, -2]])
+print("Cluster Predictions:", predictions)</code></pre>
+    </div>
+    <div class="output-block">
+      <pre><code>Cluster Predictions: [0, 4, 3]</code></pre>
+    </div>
+
+    <h2 class="chapter-subheading">Advantages, Limitations, and Applications</h2>
+    <div class="container mt-4">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advantages</th>
+            <th>Limitations</th>
+            <th>Applications</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Simple and easy to implement.</td>
+            <td>Requires specifying \( K \) in advance.</td>
+            <td>Customer Segmentation: Grouping customers based on purchasing behavior.</td>
+          </tr>
+          <tr>
+            <td>Computationally efficient for large datasets.</td>
+            <td>Sensitive to initialization of centroids.</td>
+            <td>Image Compression: Reducing the number of colors in an image.</td>
+          </tr>
+          <tr>
+            <td>Scalable for high-dimensional data.</td>
+            <td>Assumes spherical clusters, which may not always be valid.</td>
+            <td>Anomaly Detection: Identifying outliers based on cluster distance.</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Sensitive to outliers, which can skew results.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'regression_metrics' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'svm' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'visualization' %}">Data Visualization</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
