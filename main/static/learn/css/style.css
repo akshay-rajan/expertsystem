@@ -92,3 +92,10 @@
 .chapter-content span.red {
   color: red;
 }
+.output-block {
+  padding: 10px;
+  background-color: rgba(0, 150, 255, 0.1);
+  border: 1px solid rgba(0, 150, 255, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 150, 255, 0.1);
+}

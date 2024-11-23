@@ -1,0 +1,272 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Pandas{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Pandas</h1>
+  <div class="chapter-content">
+    <p>
+      <span>Pandas</span> is a powerful library for data manipulation and analysis. It provides data structures like <code>DataFrame</code> and <code>Series</code>, which allow for easy handling of structured data, including data from CSV files, databases, and more. 
+    </p>
+
+    <h2 class="chapter-subheading">Key Features</h2>
+    <div class="container mt-4">
+      <div class="mt-4">
+        <span class="dark">1. Data Structures:</span> Pandas provides two primary data structures:
+        <ul>
+          <li><span class="dark">Series:</span> One-dimensional labeled array.</li>
+          <li><span class="dark">DataFrame:</span> Two-dimensional labeled data structure.</li>
+        </ul>
+        <div class="code-block">
+          <pre><code class="language-python">import pandas as pd
+
+# Create a Series
+series = pd.Series([10, 20, 30], index=['a', 'b', 'c'])
+
+# Create a DataFrame
+data = {'Name': ['Alice', 'Bob'], 'Age': [25, 30]}
+df = pd.DataFrame(data)
+
+print("Series:\n", series)
+print("DataFrame:\n", df)</code></pre>
+        </div>
+        <div class="output-block">
+            <pre><code>Series:
+a    10
+b    20
+c    30
+dtype: int64
+DataFrame:
+    Name  Age
+0  Alice   25
+1    Bob   30</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">2. Data Input and Output:</span> Pandas supports importing and exporting data in various formats.
+        <div class="code-block">
+          <pre><code class="language-python"># Read from a CSV file
+df = pd.read_csv('data.csv')
+
+# Export to a CSV file
+df.to_csv('output.csv', index=False)
+
+# Read from and write to Excel
+df = pd.read_excel('data.xlsx')
+df.to_excel('output.xlsx', index=False)</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">3. Data Inspection:</span> Quickly explore and understand your data.
+        <div class="code-block">
+          <pre><code class="language-python"># Inspect the first and last few rows
+print(df.head())  # First 5 rows
+print(df.tail())  # Last 5 rows
+
+# Get a summary of the data
+print(df.info())
+
+# Get statistics
+print(df.describe())</code></pre>
+        </div>
+        <div class="output-block">
+            <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 2 columns):
+    #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+    0   Name    5 non-null      object
+    1   Age    5 non-null      int64
+dtypes: int64(1), object(1)
+memory usage: 208.0+ bytes
+None
+
+             Age
+count   5.000000
+mean   35.000000
+std     8.366600
+min    25.000000
+25%    30.000000
+50%    35.000000
+75%    40.000000
+max    45.000000</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">4. Data Cleaning:</span> Handle missing or inconsistent data effectively.
+        <div class="code-block">
+          <pre><code class="language-python"># Handle missing values
+df['Column'].fillna(value=0, inplace=True)  # Replace with 0
+df.dropna(inplace=True)  # Remove rows with missing values
+
+# Remove duplicates
+df.drop_duplicates(inplace=True)</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">5. Data Selection:</span> Select specific rows and columns for analysis.
+        <div class="code-block">
+          <pre><code class="language-python"># Select a column
+ages = df['Age']
+
+# Select multiple columns
+subset = df[['Name', 'Age']]
+
+# Select rows using conditions
+adults = df[df['Age'] > 18] # or df.query('Age > 18')
+
+# Select rows based on index
+row = df.loc[0]
+
+# Select rows and columns by index
+value = df.at[0, 'Name']
+
+# Select rows by position
+row = df.iloc[0]
+
+# Select rows and columns by position
+value = df.iat[0, 0]
+
+# Select rows based on multiple conditions
+subset = df[(df['Age'] > 18) & (df['Name' == 'Alice'])]
+
+# Select rows based on a list of values
+subset = df[df['Name'].isin(['Alice', 'Bob'])]
+
+# Select rows based on a string match
+subset = df[df['Name'].str.contains('A')]</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">6. Grouping and Aggregation:</span> Group data by categories and calculate summary statistics.
+        <div class="code-block">
+          <pre><code class="language-python"># Group by a column and calculate mean
+grouped = df.groupby('Category')['Value'].mean()
+
+# Multiple aggregations
+agg = df.groupby('Category').agg({'Value': ['mean', 'sum']})
+
+print("Grouped Data:\n", grouped)
+print("Aggregated Data:\n", agg)</code></pre>
+        </div>
+        <div class="output-block">
+            <pre><code>Original Data:
+    Category  Value
+0        A     20
+1        A     30
+2        B     30
+3        B     30
+
+Grouped Data:
+Category
+A           25
+B           30
+Name: Value, dtype: int64
+
+Aggregated Data:
+            Value
+          mean  sum
+Category
+A         25   50
+B         30   60</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">7. Merging and Joining:</span> Combine multiple datasets.
+        <div class="code-block">
+          <pre><code class="language-python"># Merge two DataFrames
+merged = pd.merge(df1, df2, on='Key')
+
+# Concatenate along rows or columns
+concatenated = pd.concat([df1, df2], axis=0)
+
+print("Merged DataFrame:\n", merged)
+print("Concatenated DataFrame:\n", concatenated)</code></pre>
+        </div>
+        <div class="output-block">
+            <pre><code>Original DataFrames:
+    Key  Value1
+0  K1      10
+1  K2      20
+
+    Key  Value2
+0  K1      20
+1  K2      30
+2  K3      40
+3  K4      50
+
+Merged DataFrame:
+    Key  Value1  Value2
+0  K1      10      20
+1  K2      20      30
+
+Concatenated DataFrame:
+    Key  Value1  Value2
+0  K1      10      20
+1  K2      20      30
+2  K3      30      40
+3  K4      40      50</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <span class="dark">8. Sample Data Generation:</span> Generate test data for analysis.
+        <div class="code-block">
+          <pre><code class="language-python"># Create a DataFrame with random data
+import numpy as np
+
+data = {
+    'A': np.random.randint(0, 100, size=10),
+    'B': np.random.randn(10),
+}
+df = pd.DataFrame(data)
+
+print("Generated DataFrame:\n", df)</code></pre>
+        </div>
+        <div class="output-block">
+            <pre><code>Generated DataFrame:
+    A         B
+0  12  0.123456
+1  45 -0.654321
+2  78  0.987654
+3  23 -0.123456
+4  56  0.456789
+5  89 -0.789012
+6  34  0.345678
+7  67 -0.567890
+8  90  0.678901
+9  10 -0.234567</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'numpy' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'matplotlib' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'numpy' %}">NumPy Basics</a></li>
+      <li><a href="{% url 'chapter' 'matplotlib' %}">Data Visualization</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
