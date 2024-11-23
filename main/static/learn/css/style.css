@@ -99,3 +99,25 @@
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 150, 255, 0.1);
 }
+table.confusion-matrix {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  border: 1px solid var(--secondary-color);
+  width: 100%;
+}
+table.confusion-matrix th {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 10px;
+}
+table.confusion-matrix td {
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+}
+table.confusion-matrix td.correct {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+table.confusion-matrix td.incorrect {
+  background-color: rgba(255, 0, 0, 0.1);
+}

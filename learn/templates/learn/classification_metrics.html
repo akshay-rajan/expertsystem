@@ -1,0 +1,127 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Classification Metrics{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Classification Metrics</h1>
+  <div class="chapter-content">
+    <p>
+      Evaluating the performance of a classification model involves comparing its predictions with actual labels using various metrics. Each metric highlights different aspects of the model's performance.
+    </p>
+
+    <h2 class="chapter-subheading">1. Accuracy</h2>
+    <p>
+      The ratio of correctly predicted instances to the total number of instances.
+    </p>
+    <p>
+      $$\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}$$
+    </p>
+    <p>
+      While simple and widely used, accuracy can be misleading for imbalanced datasets where one class dominates.
+    </p>
+
+    <h2 class="chapter-subheading">2. Precision</h2>
+    <p>
+      The ratio of correctly predicted positive observations to the total predicted positives.
+    </p>
+    <p>
+      $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
+    </p>
+    <p>
+      Precision is crucial when the cost of false positives is high.
+    </p>
+
+    <h2 class="chapter-subheading">3. Recall (Sensitivity or True Positive Rate)</h2>
+    <p>
+      The ratio of correctly predicted positive observations to all actual positives.
+    </p>
+    <p>
+      $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+    </p>
+    <p>
+      Recall is critical when the cost of false negatives is high, such as in medical diagnoses.
+    </p>
+
+    <h2 class="chapter-subheading">4. F1 Score</h2>
+    <p>
+      The harmonic mean of precision and recall, balancing the two metrics.
+    </p>
+    <p>
+      $$\text{F1 Score} = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+    </p>
+    <p>
+      Useful in cases where an even balance between precision and recall is required, especially for imbalanced datasets.
+    </p>
+
+    <h2 class="chapter-subheading">5. Specificity (True Negative Rate)</h2>
+    <p>
+      The ratio of correctly predicted negative observations to all actual negatives.
+    </p>
+    <p>
+      $$\text{Specificity} = \frac{\text{TN}}{\text{TN} + \text{FP}}$$
+    </p>
+    <p>
+      Specificity is useful when the cost of false positives is high.
+    </p>
+
+    <h2 class="chapter-subheading">6. ROC Curve and AUC (Area Under Curve)</h2>
+    <p>
+      The <span class="dark">ROC Curve</span> plots the True Positive Rate (Recall) against the False Positive Rate (1 - Specificity) at different threshold levels.
+    </p>
+    <p>
+      The <span class="dark">AUC (Area Under Curve)</span> measures the overall ability of the model to distinguish between positive and negative classes.
+    </p>
+    <p>
+      AUC values close to 1 indicate a better model, as it can effectively distinguish between positive and negative classes.
+    </p>
+
+    <h2 class="chapter-subheading">7. Confusion Matrix</h2>
+    <p>
+      A matrix showing counts of true positive (TP), false positive (FP), true negative (TN), and false negative (FN) classifications.
+    </p>
+    <table class="table table-bordered confusion-matrix mt-3">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Predicted Positive</th>
+          <th>Predicted Negative</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dark">Actual Positive</span></td>
+          <td class="correct"><span style="color:green;">True Positive (TP)</span></td>
+          <td class="incorrect"><span style="color:red;">False Negative (FN)</span></td>
+        </tr>
+        <tr>
+          <td><span class="dark">Actual Negative</span></td>
+          <td class="incorrect"><span style="color:red;">False Positive (FP)</span></td>
+          <td class="correct"><span style="color:green;">True Negative (TN)</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      True values are when <code>actual == predicted</code>, and False values occur otherwise.
+    </p>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'knn' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'decision_tree' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
