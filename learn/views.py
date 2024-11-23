@@ -10,6 +10,7 @@ TEMPLATES = {
     'knn': 'learn/knn.html',
     'classification_metrics': 'learn/classification_metrics.html',
     'decision_tree': 'learn/decision_tree.html',
+    'naive_bayes': 'learn/naive_bayes.html',
 }
 
 def index(request):

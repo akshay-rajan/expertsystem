@@ -1,0 +1,143 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Naive Bayes{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Naive Bayes</h1>
+  <div class="chapter-content">
+    <p>
+      <span class="dark">Naive Bayes</span> is a family of probabilistic algorithms based on <span class="dark">Bayes' Theorem</span>, used for classification tasks in machine learning and statistics. It <span class="red">assumes independence among the features</span> given the class label, which is why it is termed "naive." Despite this assumption, Naive Bayes classifiers often perform well in practice, especially for text classification tasks like spam detection and sentiment analysis.
+    </p>
+
+    <h2 class="chapter-subheading">Bayes' Theorem</h2>
+    <p>
+      Bayes' Theorem describes the probability of occurrence of an event related to any condition. Mathematically:
+    </p>
+$$
+P(C|X) = \frac{P(X|C) \cdot P(C)}{P(X)}
+$$
+    <ul>
+      <li>\( P(C|X) \): Posterior probability of class \( C \) given feature set \( X \).</li>
+      <li>\( P(X|C) \): Likelihood of feature set \( X \) given class \( C \).</li>
+      <li>\( P(C) \): Prior probability of class \( C \).</li>
+      <li>\( P(X) \): Marginal probability of feature set \( X \).</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Naive Bayes Classifier</h2>
+    <p>
+      The assumption of feature independence simplifies the likelihood calculation:
+    </p>
+$$
+P(X|C) = P(x_1 | C) \cdot P(x_2 | C) \cdots P(x_n | C)
+$$
+$$
+P(C|X) \propto P(C) \cdot P(x_1 | C) \cdot P(x_2 | C) \cdots P(x_n | C)
+$$
+    <p>
+      To classify a new observation, compute \( P(C|X) \) for each class and assign the class with the highest probability.
+    </p>
+
+    <h2 class="chapter-subheading">Types of Naive Bayes</h2>
+    <ul>
+      <li><span class="dark">Gaussian Naive Bayes:</span> Assumes features follow a normal (Gaussian) distribution. Useful for continuous data.</li>
+      <li><span class="dark">Multinomial Naive Bayes:</span> Suitable for text data where features are word frequencies.</li>
+      <li><span class="dark">Bernoulli Naive Bayes:</span> Works with binary/boolean data, indicating the presence or absence of features.</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Code Example</h2>
+    <div class="code-block">
+      <pre><code class="language-python"># Import libraries
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn import datasets
+
+# Load dataset
+dataset = datasets.load_iris()
+X, y = dataset.data, dataset.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+# Create and train the model
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+
+# Evaluate accuracy
+y_predict = classifier.predict(X_test)
+accuracy = accuracy_score(y_test, y_predict)
+print("Accuracy:", accuracy)</code></pre>
+    </div>
+    <div class="output-block">
+      <pre><code>Accuracy: 0.98</code></pre>
+    </div>
+    <p>
+      To classify a new instance:
+    </p>
+    <div class="code-block">
+      <pre><code class="language-python">result = classifier.predict([[5, 2, 1, 4]])
+print(dataset.target_names[result])</code></pre>
+    </div>
+    <div class="output-block">
+      <pre><code>['virginica']</code></pre>
+    </div>
+
+    <h2 class="chapter-subheading">Advantages and Limitations</h2>
+    <div class="container mt-4">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advantages</th>
+            <th>Limitations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Simplicity: Easy to implement and understand.</td>
+            <td>Independence Assumption: Assumes features are independent, which may not hold in practice.</td>
+          </tr>
+          <tr>
+            <td>Efficiency: Handles large datasets effectively.</td>
+            <td>Zero Probability Problem: Assigns zero probability to unseen features; can be mitigated with Laplace smoothing.</td>
+          </tr>
+          <tr>
+            <td>Works Well with High-Dimensional Data: Ideal for text classification tasks.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Handles Missing Data: Performs well even with missing feature values.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'decision_tree' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'linear_regression' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'knn' %}">K Nearest Neighbours</a></li>
+      <li><a href="{% url 'chapter' 'decision_tree' %}">Classification using Decision Trees</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
