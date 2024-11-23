@@ -122,3 +122,94 @@ table.confusion-matrix td.correct {
 table.confusion-matrix td.incorrect {
   background-color: rgba(255, 0, 0, 0.1);
 }
+
+.chapter-links-header {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .learn-content {
+    min-width: 80vw;
+    margin-left: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .chapters {
+    position: absolute;
+    z-index: 2;
+    margin-top: 0px;
+    min-width: 10vw!important;
+  }
+  .chapters.open {
+    background-color: aliceblue;
+  }
+  .chapter-link {
+    padding: 5px;
+    padding-left: 10px;
+  }
+  .chapter-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .chapter-title {
+    font-size: 2em;
+  }
+  .chapter-subheading {
+    font-size: 1.2em;
+  }
+  .content-link {
+    min-width: 5vw;
+  }
+  .content-link button {
+    width: 100%;
+  }
+  .img-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .img-div .caption {
+    font-size: 0.6em;
+  }
+  .hline {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .chapter-content span.dark {
+    font-weight: 400;
+  }
+  table.confusion-matrix {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  table.confusion-matrix th {
+    padding: 5px;
+  }
+  table.confusion-matrix td {
+    padding: 5px;
+  }
+  .chapter-links-header {
+    display: flex;
+    justify-content: end;
+    margin: 2px;
+    padding: 5px;
+  }
+  .toggle-chapter-links {
+    position: sticky;
+    top: 0;
+    right: 0;
+    border: 1px solid var(--secondary-color)!important;
+    border-radius: 5px!important;
+    width: 30px!important;
+    height: 30px!important;
+    color: var(--secondary-color)!important;
+  }
+  #chapter-link-open {
+    opacity: 0.5;
+    position: sticky!important;
+    top: 0;
+    right: 0;
+  }
+  .img-div.no-of-clusters {
+    display: none;
+  }
+}

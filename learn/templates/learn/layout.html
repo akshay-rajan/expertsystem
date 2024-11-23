@@ -1,4 +1,4 @@
-{% load static %}
+  {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +58,11 @@
   </nav>
 
   <div class="learn-container d-flex">
-    <div class="left chapters">
+    <div class="left chapters open">
+      <div class="chapter-links-header">
+        <button class="btn btn-sm toggle-chapter-links" id="chapter-link-close" onClick="toggleChapterLinks()">&lt;</button>
+        <button class="btn btn-sm d-none toggle-chapter-links" id="chapter-link-open" onClick="toggleChapterLinks()">&gt;</button>
+      </div>
       <div class="links">
         {% for chapter in chapters %}
           <a href="{% url 'chapter' chapter %}" class="chapter-link-a"><div class="chapter-link">{{ chapter.title | title }}</div></a>
@@ -155,6 +159,14 @@
     });
     // Syntax highlighting
     Prism.highlightAll();
+    // Toggle chapter links
+    function toggleChapterLinks() {
+      const chapters = document.querySelector('.chapters .links');
+      chapters.classList.toggle('d-none');
+      document.querySelector('.chapters').classList.toggle('open');
+      document.getElementById('chapter-link-close').classList.toggle('d-none');
+      document.getElementById('chapter-link-open').classList.toggle('d-none');
+    }
   </script>    
   {% block script %}{% endblock %}
 </body>
