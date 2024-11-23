@@ -11,6 +11,7 @@ TEMPLATES = {
     'classification_metrics': 'learn/classification_metrics.html',
     'decision_tree': 'learn/decision_tree.html',
     'naive_bayes': 'learn/naive_bayes.html',
+    'linear_regression': 'learn/linear_regression.html',
 }
 
 def index(request):

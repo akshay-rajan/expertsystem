@@ -1,0 +1,135 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Linear Regression{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Linear Regression</h1>
+  <div class="chapter-content">
+    <p>
+      <span class="dark">Linear regression</span> is a fundamental statistical method used in machine learning and data analysis to model the relationship between a dependent variable (<span class="red">target</span>) and one or more independent variables (<span class="red">features</span>). It assumes a linear relationship and aims to find the best-fitting line that minimizes the difference between the observed and predicted values.
+    </p>
+
+    <h2 class="chapter-subheading">Types of Linear Regression</h2>
+    <ul>
+      <li><span class="dark">Simple Linear Regression:</span> Involves a single independent variable.
+        $$ 
+        y = \beta_0 + \beta_1 x + \epsilon 
+        $$ 
+      </li>
+      <li><span class="dark">Multiple Linear Regression:</span> Involves two or more independent variables.
+        $$
+        y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_n x_n + \epsilon
+        $$ 
+      </li>
+    </ul>
+
+    <h2 class="chapter-subheading">Assumptions of Linear Regression</h2>
+    <ul>
+      <li><span class="dark">Linearity:</span> The relationship between the independent and dependent variables is linear.</li>
+      <li><span class="dark">Independence:</span> Observations are independent of each other.</li>
+      <li><span class="dark">Homoscedasticity:</span> The variance of the residuals is constant.</li>
+      <li><span class="dark">Normality:</span> The residuals are normally distributed.</li>
+      <li><span class="dark">No Multicollinearity:</span> Independent variables should not be highly correlated.</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Mathematical Formulation</h2>
+    <p>The Ordinary Least Squares (OLS) method minimizes the squared differences between observed and predicted values:</p>
+    $$
+    \text{Cost} = \sum_{i=1}^{m} (y_i - \hat{y}_i)^2
+    $$
+
+    <h2 class="chapter-subheading">Code</h2>
+    <div class="code-block">
+      <pre><code class="language-python">import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Generate synthetic data
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.rand(100, 1)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7)
+
+# Train the model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Plot the results
+plt.scatter(X_test, y_test, color='blue', label='Actual')
+plt.plot(X_test, y_pred, color='red', linewidth=2, label='Predicted')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.title('Linear Regression')
+plt.legend()
+plt.show()</code></pre>
+    </div>
+
+    <h2 class="chapter-subheading">Applications</h2>
+    <ul>
+      <li><span class="dark">Economics:</span> Predicting consumer spending, sales forecasts.</li>
+      <li><span class="dark">Healthcare:</span> Predicting patient outcomes based on health metrics.</li>
+      <li><span class="dark">Finance:</span> Risk assessment and asset returns prediction.</li>
+      <li><span class="dark">Social Sciences:</span> Analyzing relationships between social factors and outcomes.</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Advantages and Limitations</h2>
+    <div class="container mt-4">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advantages</th>
+            <th>Limitations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Simplicity: Easy to understand and interpret.</td>
+            <td>Linearity Assumption: Poor performance if the relationship is not linear.</td>
+          </tr>
+          <tr>
+            <td>Fast: Computationally efficient, even for large datasets.</td>
+            <td>Sensitivity to Outliers: Outliers can significantly affect model fit.</td>
+          </tr>
+          <tr>
+            <td>Well-studied: Robust theoretical foundations.</td>
+            <td>Overfitting: Too many variables may lead to overfitting.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'naive_bayes' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'regression_metrics' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'knn' %}">K Nearest Neighbours</a></li>
+      <li><a href="{% url 'chapter' 'decision_tree' %}">Classification using Decision Trees</a></li>
+      <li><a href="{% url 'chapter' 'naive_bayes' %}">Naive Bayes Classifier</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
