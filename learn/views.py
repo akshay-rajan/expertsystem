@@ -7,6 +7,8 @@ TEMPLATES = {
     'numpy': 'learn/numpy.html',
     'pandas': 'learn/pandas.html',
     'visualization': 'learn/matplotlib.html',
+    'knn': 'learn/knn.html',
+    'classification_metrics': 'learn/classification_metrics.html',
 }
 
 def index(request):

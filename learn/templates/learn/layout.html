@@ -58,7 +58,7 @@
     <div class="left chapters">
       <div class="links">
         {% for chapter in chapters %}
-          <a href="{% url 'chapter' chapter %}" class="chapter-link-a"><div class="chapter-link">{{ chapter.title | capfirst }}</div></a>
+          <a href="{% url 'chapter' chapter %}" class="chapter-link-a"><div class="chapter-link">{{ chapter.title | title }}</div></a>
         {% endfor %}
       </div>
     </div>

@@ -1,0 +1,147 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}K-Nearest Neighbors (KNN){% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">K-Nearest Neighbors (KNN)</h1>
+  <div class="chapter-content">
+    <p>
+      <span class="dark">K-Nearest Neighbors (KNN)</span> is a simple yet effective supervised learning algorithm used for classification and regression tasks. It operates on the principle that similar data points are located close to each other in the feature space.     
+    </p>
+    <h2 class="chapter-subheading">How KNN Works</h2>
+    <div class="mt-4">
+      <ol>
+        <li>
+          <span class="dark">Choose the Number of Neighbors (K):</span> Determine the number of nearest neighbors to consider for predictions.
+        </li>
+        <li>
+          <span class="dark">Calculate Distance:</span> Compute the distance between the test instance and all training instances. A common metric is Euclidean distance.
+            $$
+            d(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}
+            $$
+        </li>
+        <li>
+          <span class="dark">Identify Neighbors:</span> Sort the distances and select the K closest data points from the training set.
+        </li>
+        <li>
+          <span class="dark">Vote for Classification:</span> For classification tasks, the majority class among the neighbors determines the predicted class.
+        </li>
+        <li>
+          <span class="dark">Average for Regression:</span> For regression tasks, the prediction is the average of the target values of the K neighbors.
+        </li>
+      </ol>
+    </div>
+    
+    <h2 class="chapter-subheading">KNN Using the Iris Dataset</h2>
+    <div>
+      <div class="code-block">
+        <pre><code class="language-python"># Import libraries
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+
+# Load Iris dataset
+iris = datasets.load_iris()
+X, y = iris.data, iris.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+# Create and train the model
+classifier = KNeighborsClassifier(n_neighbors=3)
+classifier.fit(X_train, y_train)
+
+# Predict on test data
+y_predict = classifier.predict(X_test)
+
+# Print sample predictions
+for i in range(10):
+    print(f"Predicted: {iris.target_names[y_predict[i]]}, Actual: {iris.target_names[y_test[i]]}")
+        </code></pre>
+      </div>
+    </div>
+    <div class="output-block">
+      <pre><code>Predicted: virginica, Actual: virginica
+Predicted: versicolor, Actual: versicolor
+Predicted: setosa, Actual: setosa
+Predicted: virginica, Actual: virginica
+Predicted: setosa, Actual: setosa
+Predicted: versicolor, Actual: versicolor
+Predicted: versicolor, Actual: versicolor
+Predicted: setosa, Actual: setosa
+Predicted: setosa, Actual: setosa
+Predicted: versicolor, Actual: versicolor</code></pre>
+    </div>
+
+    <h2 class="chapter-subheading mt-4">Model Evaluation</h2>
+    <div class="mt-2">
+      Use <a href="{% url 'chapter' 'classification_metrics' %}">Classification Metrics</a> to evaluate the performance of the KNN model.
+      <div class="code-block">
+        <pre><code class="language-python"># Evaluate model accuracy
+from sklearn.metrics import accuracy_score
+
+accuracy = accuracy_score(y_test, y_predict)
+print(f"Accuracy: {(accuracy * 100):.2f}%")</code></pre>
+      </div>
+      <div class="output-block">
+        <pre><code>Accuracy: 97.78%</code></pre>
+      </div>
+    </div>
+
+    <h2 class="chapter-subheading mt-4">Advantages and Disadvantages</h2>
+    <table class="table table-hover table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Advantages</th>
+          <th>Disadvantages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Simplicity: Easy to understand and implement.</td>
+          <td>Computational Complexity: High costs for large datasets due to distance calculations.</td>
+        </tr>
+        <tr>
+          <td>No Training Phase: Directly stores the dataset for predictions.</td>
+          <td>Storage Requirements: Requires storing the entire dataset in memory.</td>
+        </tr>
+        <tr>
+          <td>Adaptability: Works for both classification and regression tasks.</td>
+          <td>Sensitivity to Noise: Can be affected by noisy data or outliers.</td>
+        </tr>
+        <tr>
+          <td>Flexibility: Can handle multi-class problems and datasets of arbitrary shapes.</td>
+          <td>Choosing K: A small K may lead to overfitting, while a large K may smooth over class boundaries.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="chapter-subheading mt-4">Applications</h2>
+    <ul class="mt-2">
+      <li>Recommendation Systems: Suggesting items based on user preferences.</li>
+      <li>Image Classification: Categorizing images based on visual features.</li>
+      <li>Anomaly Detection: Identifying outliers in data.</li>
+      <li>Pattern Recognition: Recognizing handwriting, speech, etc.</li>
+    </ul>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'algorithms' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'classification_metrics' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
