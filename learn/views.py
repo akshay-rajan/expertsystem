@@ -6,6 +6,7 @@ TEMPLATES = {
     'preprocessing': 'learn/preprocessing.html',
     'numpy': 'learn/numpy.html',
     'pandas': 'learn/pandas.html',
+    'visualization': 'learn/matplotlib.html',
 }
 
 def index(request):
