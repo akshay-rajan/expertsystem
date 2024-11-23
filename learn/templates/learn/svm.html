@@ -1,0 +1,163 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Support Vector Machines{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Support Vector Machines (SVM)</h1>
+  <div class="chapter-content">
+    <p>
+      <span class="dark">Support Vector Machines (SVM)</span> are supervised machine learning models used for classification and regression tasks. SVM is popular for classification problems and works by finding the hyperplane that best separates different classes of data. The hyperplane is chosen to maximize the margin between the two classes.
+    </p>
+
+    <h2 class="chapter-subheading">Key Concepts</h2>
+    <ul>
+      <li>
+        <span class="dark">Support Vectors:</span> Data points closest to the hyperplane. These influence the hyperplane's position and orientation.
+      </li>
+      <li>
+        <span class="dark">Margin:</span> The distance between the hyperplane and the support vectors. SVM maximizes this margin.
+      </li>
+      <li>
+        <span class="dark">Kernel Trick:</span> Enables SVM to handle non-linear boundaries by transforming data into a higher-dimensional space using functions like RBF or Polynomial kernels.
+      </li>
+    </ul>
+
+    <h2 class="chapter-subheading">Mathematical Intuition</h2>
+    <p>
+      The objective of SVM is to find a hyperplane in an \( N \)-dimensional space (where \( N \) is the number of features) that distinctly classifies the data points. The equation for the hyperplane is:
+    </p>
+$$
+w^T x + b = 0
+$$
+    <ul>
+      <li>\( w \): Weight vector</li>
+      <li>\( x \): Feature vector</li>
+      <li>\( b \): Bias term</li>
+    </ul>
+    <p>
+      For a point on the margin:
+    </p>
+    <ul>
+      <li>\( w^T x + b = 1 \) for the positive class</li>
+      <li>\( w^T x + b = -1 \) for the negative class</li>
+    </ul>
+    <p>
+      The margin is computed as the perpendicular distance between these margins and the hyperplane. SVM maximizes this margin for better generalization.
+    </p>
+
+    <h2 class="chapter-subheading">Implementation</h2>
+    <div class="code-block">
+      <pre><code class="language-python">from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report
+
+# Generate synthetic data
+X, y = make_classification(random_state=42, n_samples=1000, n_features=2, n_informative=2, n_redundant=0)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the SVM model
+model = SVC(kernel='linear')
+model.fit(X_train, y_train)
+
+# Test the model
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Classification report
+print(classification_report(y_test, y_pred))</code></pre>
+    </div>
+    <div class="output-block">
+      <pre><code>Accuracy: 0.88
+Classification Report:
+              precision    recall  f1-score   support
+           0       0.88      0.88      0.88       101
+           1       0.88      0.88      0.88        99
+
+    accuracy                           0.88       200
+   macro avg       0.88      0.88      0.88       200
+weighted avg       0.88      0.88      0.88       200</code></pre>
+    </div>
+
+    <h2 class="chapter-subheading">Hyperparameter Tuning</h2>
+    <ul>
+      <li>
+        <span class="dark">C:</span> Regularization parameter controlling the trade-off between maximizing the margin and correctly classifying training points. Smaller \( C \) widens the margin but allows more misclassifications.
+      </li>
+      <li>
+        <span class="dark">Kernel:</span> Determines the decision boundary shape. Common kernels include:
+        <ul>
+          <li><span class="dark">linear:</span> Linear hyperplane</li>
+          <li><span class="dark">poly:</span> Polynomial kernel</li>
+          <li><span class="dark">rbf:</span> Radial Basis Function (Gaussian)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 class="chapter-subheading">Visualization</h2>
+    <p>
+      Visualization using two features:
+    </p>
+    <div class="code-block">
+      <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Create a mesh grid for visualization
+h = 0.02
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+# Plot the decision boundary
+Z = model.decision_function(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis', alpha=0.6)
+plt.contourf(xx, yy, Z, alpha=0.5, levels=[-1, 0, 1], colors='k')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('SVM Decision Boundary')
+plt.show()</code></pre>
+    </div>
+    <div class="img-div">
+        <img src="{% static 'learn/img/svm_decision_boundary.png' %}" alt="SVM Decision Boundary" style="width:500px;">
+        <span class="caption">SVM Decision Boundary</span>
+    </div>
+
+    <h2 class="chapter-subheading">Soft Margin Formulation</h2>
+    <p>
+      Soft margin SVM allows certain misclassifications to ensure a wider margin, helping the model generalize better to unseen data. The \( C \) parameter controls the trade-off between margin width and misclassification.
+    </p>
+
+    <h2 class="chapter-subheading">Errors in SVM</h2>
+    <ul>
+      <li><span class="dark">Classification Error:</span> When a data point is misclassified.</li>
+      <li><span class="dark">Margin Error:</span> When a data point falls within the margin.</li>
+    </ul>
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'kmeans' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'naive_bayes' %}">Naive Bayes</a></li>
+      <li><a href="{% url 'chapter' 'decision_tree' %}">Decision Trees</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}

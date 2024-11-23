@@ -14,6 +14,7 @@ TEMPLATES = {
     'linear_regression': 'learn/linear_regression.html',
     'regression_metrics': 'learn/regression_metrics.html',
     'kmeans': 'learn/kmeans.html',
+    'svm': 'learn/svm.html',
 }
 
 def index(request):
