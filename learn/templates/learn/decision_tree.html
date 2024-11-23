@@ -1,0 +1,146 @@
+{% extends "learn/layout.html" %}
+{% load static %}
+
+{% block title %}Decision Tree{% endblock %}
+
+{% block body %}
+<div>
+  <h1 class="chapter-title">Decision Tree</h1>
+  <div class="chapter-content">
+    <p>
+      A <span class="dark">Decision Tree</span> is a supervised machine learning algorithm used for both classification and regression tasks. It models decisions based on a tree-like structure where <span class="red">each internal node represents a feature</span> (attribute), <span class="red">each branch represents a decision rule</span>, and <span class="red">each leaf node represents an outcome</span> (class label or regression value).
+    </p>
+    <ul>
+      <li><span class="dark">Root Node:</span> : The top node that represents the entire dataset, which is split into two or more homogeneous sets.</li>
+      <li><span class="dark">Internal Nodes:</span> Represent tests on features, leading to further splits.</li>
+      <li><span class="dark">Leaf Nodes:</span>  Terminal nodes that represent the final output (class label in classification or a continuous value in regression).</li>
+    </ul>
+
+    <h2 class="chapter-subheading">How It Works</h2>
+    <p>
+      The algorithm involves the following steps:
+    </p>
+    <ul>
+      <li><span class="dark">Splitting:</span> Divides nodes into subsets based on features and thresholds. Metrics like <span class="dark">Gini Impurity</span> or <span class="dark">Information Gain</span> are used.</li>
+      <li><span class="dark">Decision Rules:</span> Each internal node corresponds to a feature and a threshold value that decides how to split the data. For example, if a feature is "Age" and the threshold is 30, the split will separate instances where "Age <= 30" from those where "Age > 30".
+      </li>
+      <li><span class="dark">Stopping Criteria:</span> Stops splitting based on conditions like maximum depth or minimum samples in a node.</li>
+      <li><span class="dark">Pruning:</span>  After building the tree, pruning may be performed to reduce overfitting. This involves removing nodes that have little importance, which simplifies the model and enhances its generalization to unseen data.</li>
+    </ul>
+
+    <h2 class="chapter-subheading">Code</h2>
+    <div class="code-block">
+      <pre><code class="language-python"># Import libraries
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+dataset = load_iris()
+X, y = dataset.data, dataset.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+# Create and train the model
+classifier = DecisionTreeClassifier()
+classifier.fit(X_train, y_train)
+
+# Make predictions
+y_predict = classifier.predict(X_test)
+
+# Evaluate accuracy
+print("Accuracy:", accuracy_score(y_test, y_predict))
+
+# Visualize the tree
+from sklearn import tree
+tree.plot_tree(classifier)</code></pre>
+    </div>
+
+    <div class="output-block">
+      <pre><code>Accuracy: 0.93</code></pre>
+    </div>
+
+    <div class="img-div">
+      <img src="{% static 'learn/img/decision_tree.png' %}" alt="Decision Tree" style="width:400px;">
+      <span class="caption">Decision Tree Visualization</span>
+    </div>
+
+    <div class="code-block">
+      <pre><code class="language-python"># Scatter plot for actual vs predicted values
+import matplotlib.pyplot as plt
+
+plt.scatter(y_test, y_predict, alpha=0.7, color='blue')
+plt.title('Actual vs Predicted Values')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.grid(True)
+plt.axis('equal')
+plt.show()</code></pre>
+    </div>
+    <div class="img-div">
+      <img src="{% static 'learn/img/decision_tree_scatter.png' %}" alt="Scatter Plot: Actual vs Predicted" style="width:400px;">
+        <span class="caption">Scatter Plot: Actual vs Predicted Values</span>
+    </div>
+
+    <h2 class="chapter-subheading mt-4">Advantages and Disadvantages</h2>
+    <div class="container mt-2">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advantages</th>
+            <th>Disadvantages</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Interpretability: Easy to understand and visualize.</td>
+            <td>Overfitting: Can become complex and overfit if not pruned.</td>
+          </tr>
+          <tr>
+            <td>Non-linear Relationships: Models non-linear relationships effectively.</td>
+            <td>Instability: Small changes in data can result in different splits.</td>
+          </tr>
+          <tr>
+            <td>Feature Importance: Provides insights into the importance of features.</td>
+            <td>Bias: May favor features with more levels, leading to suboptimal splits.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <h2 class="chapter-subheading">Applications</h2>
+    <ul>
+      <li><span class="dark">Finance:</span> Credit scoring, risk assessment.</li>
+      <li><span class="dark">Healthcare:</span> Diagnosing diseases based on patient data.</li>
+      <li><span class="dark">Marketing:</span> Customer segmentation and targeting.</li>
+    </ul>
+
+  </div>
+
+  <div class="content-links d-flex justify-content-between">
+    <a href="{% url 'chapter' 'classification_metrics' %}" class="content-link">
+      <button class="btn btn-dark">
+        Previous
+      </button>
+    </a>
+    <a href="{% url 'chapter' 'naive_bayes' %}" class="content-link">
+      <button class="btn btn-primary">
+        Next
+      </button>
+    </a>
+  </div>
+  <div class="other-links">
+    <div class="hline"></div>
+    <ul>
+      <li><a href="{% url 'chapter' 'knn' %}">K Nearest Neighbours</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+{% endblock %}
