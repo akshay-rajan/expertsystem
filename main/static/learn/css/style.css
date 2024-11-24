@@ -127,6 +127,10 @@ table.confusion-matrix td.incorrect {
   display: none;
 }
 
+mjx-container mjx-math {
+  white-space: normal;
+}
+
 @media screen and (max-width: 768px) {
   .learn-content {
     min-width: 80vw;
