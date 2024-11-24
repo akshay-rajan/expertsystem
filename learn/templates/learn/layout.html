@@ -189,6 +189,12 @@
       imgs.forEach(img => {
         img.classList.add('img-fluid');
       });
+      // Close chapter links on click outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.chapters')) {
+          toggleChapterLinks();
+        }
+      });
     }
   </script>    
   {% block script %}{% endblock %}
