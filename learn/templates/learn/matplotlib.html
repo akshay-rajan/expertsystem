@@ -147,44 +147,34 @@ plt.show()</code></pre>
     <div class="mt-4">
       <span class="dark">Support Vector Machine (SVM):</span> Visualize the decision boundary and support vectors.
       <div class="code-block">
-        <pre><code class="language-python">import numpy as np
+        <pre><code class="language-python"><pre><code class="language-python">import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import datasets
-from sklearn.svm import SVC
 
-# Generate dataset
-X, y = datasets.make_blobs(n_samples=100, centers=2, random_state=6)
-y = 2 * y - 1  # Convert labels to -1, 1 for visualization
+# Select First 2 features as X and Y
+X_vis = X[:, :2] 
 
-# Train an SVM classifier
-svm_model = SVC(kernel='linear')
-svm_model.fit(X, y)
+# Find min and max of both columns
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 
-# Get the coefficients and intercept
-w = svm_model.coef_[0]
-b = svm_model.intercept_[0]
+# Construct a meshgrid - a list of coordinates
+h = 0.01 # Step
+x_coordinates, y_coordinates = np.arange(x_min, x_max, h), np.arange(y_min, y_max, h)
+xx, yy = np.meshgrid(x_coordinates, y_coordinates)
 
 # Decision boundary
-x_values = np.linspace(X[:, 0].min() - 1, X[:, 0].max() + 1, 100)
-decision_boundary = -(w[0] / w[1]) * x_values - b / w[1]
+x_1d, y_1d = xx.ravel(), yy.ravel() # Convert 2D to 1D
+values_1d = np.c_[x_1d, y_1d] # Concatenate
+Z = model.decision_function(values_1d)
+Z = Z.reshape(xx.shape)
 
-# Margins
-margin = 1 / np.sqrt(np.sum(svm_model.coef_ ** 2))
-margin_upper = decision_boundary + margin
-margin_lower = decision_boundary - margin
-
-# Plot
-plt.scatter(X[:, 0], X[:, 1], c=y, cmap='coolwarm', s=30, edgecolors='k', label="Training Points")
-plt.plot(x_values, decision_boundary, 'k-', label='Decision Boundary')
-plt.plot(x_values, margin_upper, 'k--', label='Margin Upper')
-plt.plot(x_values, margin_lower, 'k--', label='Margin Lower')
-plt.scatter(svm_model.support_vectors_[:, 0], svm_model.support_vectors_[:, 1], s=100, facecolors='none', edgecolors='k', label='Support Vectors')
-
-plt.title("SVM Decision Boundary")
-plt.xlabel("Feature 1")
-plt.ylabel("Feature 2")
-plt.legend()
-plt.show()</code></pre>
+plt.scatter(X_vis[:, 0], X_vis[:, 1], c=y, cmap='viridis', alpha=0.7)
+plt.contourf(xx, yy, Z, levels=[-1, 0, 1], colors='c', alpha=0.5)
+plt.contour(xx, yy, Z, levels=[-1, 0, 1], colors='r', alpha=0.5, linestyles=['--', '-', '--'])
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('SVM Decision Boundary')
+plt.show()</code></pre></code></pre>
       </div>
       <div class="img-div">
         <img src="{% static 'learn/img/svm_decision_boundary.png' %}" alt="SVM Decision Boundary" style="width:500px;">
