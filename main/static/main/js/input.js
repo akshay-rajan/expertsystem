@@ -68,7 +68,9 @@ function handleFileUpload(event) {
       populateTargetDropdown(data.columns);
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
-      plotHeatMap(formatCorrelationMatrix(correlationMatrix));      
+      plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+      plotlyHeatMap(data.plot);
+      plotScatter(data.scatter);
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       // Display Train-Test Split Dropdown
@@ -139,6 +141,7 @@ function handleFileSelection(event) {
     const correlationMatrix = data.correlation_matrix;
     plotHeatMap(formatCorrelationMatrix(correlationMatrix));
     plotlyHeatMap(data.plot);
+    plotScatter(data.scatter);
 
     // Display the preloaded dataset name with a tick icon
     const preloadedDiv = document.getElementById('preloaded-div');
@@ -368,6 +371,11 @@ function plotHeatMap(data) {
 }
 function toggleHeatmaps() {
   document.querySelectorAll('.heatmaps').forEach(heatmap => heatmap.classList.toggle('d-none'));
+}
+
+// Scatter Plot
+function plotScatter(data) {
+  Plotly.newPlot('plotly-scatter', JSON.parse(data));
 }
 
 // Format Correlation Matrix for d3.js

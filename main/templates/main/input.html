@@ -143,16 +143,17 @@
       </div>
     </div>
   
-    <div class="d-flex" onclick="toggleHeatmaps()">
-      <div class="right justify-content-center heatmaps" id="canvas-1"></div>  
+    <div class="d-flex">
+      <div class="right justify-content-center heatmaps" id="canvas-1" onclick="toggleHeatmaps()"></div>  
+      <div id="plotly-heatmap" class="right justify-content-center d-none heatmaps"></div>
     </div>
 
   </div>
 
   <div class="container d-flex">
     <div class="d-flex">
-      <div class="left justify-content-center" id="canvas-2">
-        <div id="plotly-heatmap" class="right justify-content-center d-none heatmaps"></div>
+      <div class="justify-content-center" id="canvas-2">
+        <div id="plotly-scatter" class="right justify-content-center scatter"></div>
       </div>  
     </div>
   </div>

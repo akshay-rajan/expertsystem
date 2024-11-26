@@ -23,8 +23,9 @@ from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
-from .utils import get_input, list_available_datasets, construct_line, format_predictions, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters, generate_preview_response, plot_heatmap
+from .utils import get_input, construct_line, format_predictions, regression_evaluation, classification_evaluation
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters, plot_heatmap, plot_scatter
+from .utils import generate_preview_response, list_available_datasets
 from .models import MLModel, DataFile
 
 
@@ -882,6 +883,7 @@ def get_file(request):
                 'columns': columns,
                 'correlation_matrix': correlation_matrix.to_dict(),
                 'plot': plot_heatmap(correlation_matrix),
+                'scatter': plot_scatter(df, columns[0], columns[1]),
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)

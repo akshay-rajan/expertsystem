@@ -210,9 +210,23 @@ def plot_heatmap(correlation_matrix):
     fig = px.imshow(
         correlation_matrix, 
         color_continuous_scale="twilight",
-        labels={
-            "color":"Correlation"
-        },
         range_color=[-1, 1],
+    )
+    fig.update_layout(
+        template="plotly_white",
+        width=450,
+        height=450,
+        coloraxis_showscale=False
+    )
+    return json.dumps(fig, cls=PlotlyJSONEncoder)
+
+def plot_scatter(df, x_label, y_label):
+    """Plot Scatter plot from the session"""
+    fig = px.scatter(
+        df, 
+        x=x_label, 
+        y=y_label, 
+        template='plotly_white',
+        title=f"{y_label} vs {x_label}"
     )
     return json.dumps(fig, cls=PlotlyJSONEncoder)
