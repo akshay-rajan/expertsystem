@@ -209,7 +209,7 @@ def plot_heatmap(correlation_matrix):
     """Plot Correlation Heatmap from the session"""
     fig = px.imshow(
         correlation_matrix, 
-        color_continuous_scale="twilight",
+        color_continuous_scale="RdBu",
         range_color=[-1, 1],
     )
     fig.update_layout(
@@ -229,4 +229,5 @@ def plot_scatter(df, x_label, y_label):
         template='plotly_white',
         title=f"{y_label} vs {x_label}"
     )
+    fig.update_traces(marker=dict(color='rgb(0,150,255)'))
     return json.dumps(fig, cls=PlotlyJSONEncoder)

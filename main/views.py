@@ -876,6 +876,7 @@ def get_file(request):
         if not df.empty:
             columns = df.columns.tolist()            
             correlation_matrix = df.corr()
+            scatter_plot = plot_scatter(df, columns[0], columns[1]) if len(columns) >= 2 else None
 
             return JsonResponse({
                 'filename': filename,
@@ -883,7 +884,7 @@ def get_file(request):
                 'columns': columns,
                 'correlation_matrix': correlation_matrix.to_dict(),
                 'plot': plot_heatmap(correlation_matrix),
-                'scatter': plot_scatter(df, columns[0], columns[1]),
+                'scatter': scatter_plot,
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
