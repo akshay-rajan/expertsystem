@@ -211,11 +211,8 @@ def plot_heatmap(correlation_matrix):
         correlation_matrix, 
         color_continuous_scale="twilight",
         labels={
-            "x":"Features", 
-            "y":"Features", 
             "color":"Correlation"
         },
         range_color=[-1, 1],
     )
-    # fig.show()
     return json.dumps(fig, cls=PlotlyJSONEncoder)
