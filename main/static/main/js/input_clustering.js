@@ -68,6 +68,8 @@ function handleFileUpload(event) {
       // Plot heatmap with correlation matrix
       const correlationMatrix = data.correlation_matrix;
       plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+      plotlyHeatMap(data.plot);
+      plotScatter(data.scatter, data.columns);
 
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
@@ -137,6 +139,8 @@ function handleFileSelection(event) {
     // Plot heatmap with the correlation matrix
     const correlationMatrix = data.correlation_matrix;
     plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+    plotlyHeatMap(data.plot);
+    plotScatter(data.scatter, data.columns);
 
     // Display the preloaded dataset name with a tick icon
     const preloadedDiv = document.getElementById('preloaded-div');
@@ -216,6 +220,10 @@ function displayLoader() {
 }
 
 // ! Heatmap
+function plotlyHeatMap(data) {
+  Plotly.newPlot('plotly-heatmap', JSON.parse(data));
+  activateBuildButton();
+}
 function plotHeatMap(data) {
   // Remove any existing SVG elements
   d3.select("#canvas-1").selectAll("*").remove();
@@ -328,6 +336,72 @@ function plotHeatMap(data) {
 
     activateBuildButton();
 }
+function toggleHeatmaps() {
+  document.querySelectorAll('.heatmaps').forEach(heatmap => heatmap.classList.toggle('d-none'));
+}
+
+// ! Scatter Plot
+function plotScatter(data, columns) {
+  if (columns.length < 2) return;
+  $('#scatter-container').removeClass('d-none');
+  $('#plotly-scatter').html('');
+
+  // Populate X and Y axis dropdowns
+  const xSelect = document.getElementById('x-axis-select');
+  const ySelect = document.getElementById('y-axis-select');
+  xSelect.innerHTML = '';
+  ySelect.innerHTML = '';
+  columns.forEach(column => {
+    const option = document.createElement('option');
+    option.value = column;
+    option.textContent = column;
+    xSelect.appendChild(option.cloneNode(true));
+    ySelect.appendChild(option.cloneNode(true));
+  });
+  // Set default values for X and Y axes
+  xSelect.value = columns[0];
+  ySelect.value = columns[1];
+
+  Plotly.newPlot('plotly-scatter', JSON.parse(data));
+}
+function generateScatter() {
+  // Get user-selected x and y axes
+  const xAxis = document.getElementById('x-axis-select').value;
+  const yAxis = document.getElementById('y-axis-select').value;
+
+  if (!xAxis || !yAxis) {
+    showWarningToast('Please select both X and Y axes.');
+    return;
+  }
+
+  fetch('/get_scatter_plot/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCSRFToken()
+    },
+    body: JSON.stringify({ x_axis: xAxis, y_axis: yAxis })
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      try {
+        $('#plotly-scatter').html('');
+        Plotly.newPlot('plotly-scatter', JSON.parse(data));
+      } catch (err) {
+        console.error('Error rendering scatter plot:', err);
+        showWarningToast('Error fetching the scatter plot!');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching scatter plot:', error);
+      showWarningToast('Error fetching the scatter plot!');
+    });
+}
 
 function formatCorrelationMatrix(matrix) {
   let formattedData = [];
@@ -341,11 +415,6 @@ function formatCorrelationMatrix(matrix) {
     }
   }
   return formattedData;
-}
-
-function activateBuildButton() {
-  $('#build-btn-div1').removeClass('d-none');
-  $('#build-btn-div2').addClass('d-none');
 }
 
 function activateBuildButton() {
