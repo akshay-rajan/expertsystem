@@ -375,6 +375,7 @@ function toggleHeatmaps() {
 
 // ! Scatter Plot
 function plotScatter(data, columns) {
+  if (columns.length < 2) return;
   $('#scatter-container').removeClass('d-none');
   $('#plotly-scatter').html('');
 
@@ -390,6 +391,9 @@ function plotScatter(data, columns) {
     xSelect.appendChild(option.cloneNode(true));
     ySelect.appendChild(option.cloneNode(true));
   });
+  // Set default values for X and Y axes
+  xSelect.value = columns[0];
+  ySelect.value = columns[1];
 
   Plotly.newPlot('plotly-scatter', JSON.parse(data));
 }
@@ -421,10 +425,9 @@ function generateScatter() {
       try {
         $('#plotly-scatter').html('');
         Plotly.newPlot('plotly-scatter', JSON.parse(data));
-        showInfoToast('Scatter plot generated!');
       } catch (err) {
         console.error('Error rendering scatter plot:', err);
-        showError("Error", 'An error occurred while rendering the scatter plot.');
+        showWarningToast('Error fetching the scatter plot!');
       }
     })
     .catch(error => {
@@ -432,7 +435,6 @@ function generateScatter() {
       showWarningToast('Error fetching the scatter plot!');
     });
 }
-
 
 // Format Correlation Matrix for d3.js
 function formatCorrelationMatrix(matrix) {

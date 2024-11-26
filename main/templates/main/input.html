@@ -154,20 +154,24 @@
     <div class="d-flex justify-content-center">
       <div class="justify-content-center" id="canvas-2">
         <div id="plotly-scatter" class="left justify-content-center scatter"></div>
-        <div class="right d-flex justify-content-center scatter-buttons">
-          <label for="x-axis-select">X-Axis:</label>
-          <select id="x-axis-select" class="form-select">
-            <!-- Dynamically populate options from your dataset columns -->
-          </select>
+        <div class="right row d-flex justify-content-center scatter-buttons">
+          <div class="m-2">
+            <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
+            <select id="x-axis-select" class="form-control d-inline">
+              <!-- Dynamically populate options from your dataset columns -->
+            </select>
+          </div>
         
-          <label for="y-axis-select">Y-Axis:</label>
-          <select id="y-axis-select" class="form-select">
-            <!-- Dynamically populate options from your dataset columns -->
-          </select>
-        
-          <button id="generate-scatter-btn" class="btn btn-primary" onclick="generateScatter()">
-            Generate Scatter Plot
-          </button>
+          <div class="m-2">
+            <label for="y-axis-select" class="form-label d-inline">Y-Axis:</label>
+            <select id="y-axis-select" class="form-control d-inline">
+              <!-- Dynamically populate options from your dataset columns -->
+            </select>
+          </div>
+          
+          <div class="m-2 d-flex align-items-end">
+            <button id="generate-scatter-btn" class="btn btn-primary bubbly-button" onclick="generateScatter()">Plot</button>
+          </div>
         </div>
       </div>  
     </div>

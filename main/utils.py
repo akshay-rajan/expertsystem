@@ -229,5 +229,12 @@ def plot_scatter(df, x_label, y_label):
         template='plotly_white',
         title=f"{y_label} vs {x_label}"
     )
-    fig.update_traces(marker=dict(color='rgb(0,150,255)'))
+    # Use different colors for markers
+    fig.update_traces(marker={
+        'size': 10,
+        'line': {'width': 1, 'color': 'DarkSlateGrey'},
+        'color': 'rgb(0,150,255)',
+        'opacity': 0.6
+    })    
+    
     return json.dumps(fig, cls=PlotlyJSONEncoder)
