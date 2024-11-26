@@ -70,7 +70,7 @@ function handleFileUpload(event) {
       const correlationMatrix = data.correlation_matrix;
       plotHeatMap(formatCorrelationMatrix(correlationMatrix));
       plotlyHeatMap(data.plot);
-      plotScatter(data.scatter);
+      plotScatter(data.scatter, data.columns);
       // Append tick icon (removes upload field)
       fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
       // Display Train-Test Split Dropdown
@@ -141,7 +141,7 @@ function handleFileSelection(event) {
     const correlationMatrix = data.correlation_matrix;
     plotHeatMap(formatCorrelationMatrix(correlationMatrix));
     plotlyHeatMap(data.plot);
-    plotScatter(data.scatter);
+    plotScatter(data.scatter, data.columns);
 
     // Display the preloaded dataset name with a tick icon
     const preloadedDiv = document.getElementById('preloaded-div');
@@ -373,10 +373,66 @@ function toggleHeatmaps() {
   document.querySelectorAll('.heatmaps').forEach(heatmap => heatmap.classList.toggle('d-none'));
 }
 
-// Scatter Plot
-function plotScatter(data) {
+// ! Scatter Plot
+function plotScatter(data, columns) {
+  $('#scatter-container').removeClass('d-none');
+  $('#plotly-scatter').html('');
+
+  // Populate X and Y axis dropdowns
+  const xSelect = document.getElementById('x-axis-select');
+  const ySelect = document.getElementById('y-axis-select');
+  xSelect.innerHTML = '';
+  ySelect.innerHTML = '';
+  columns.forEach(column => {
+    const option = document.createElement('option');
+    option.value = column;
+    option.textContent = column;
+    xSelect.appendChild(option.cloneNode(true));
+    ySelect.appendChild(option.cloneNode(true));
+  });
+
   Plotly.newPlot('plotly-scatter', JSON.parse(data));
 }
+function generateScatter() {
+  // Get user-selected x and y axes
+  const xAxis = document.getElementById('x-axis-select').value;
+  const yAxis = document.getElementById('y-axis-select').value;
+
+  if (!xAxis || !yAxis) {
+    showWarningToast('Please select both X and Y axes.');
+    return;
+  }
+
+  fetch('/get_scatter_plot/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCSRFToken()
+    },
+    body: JSON.stringify({ x_axis: xAxis, y_axis: yAxis })
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      try {
+        $('#plotly-scatter').html('');
+        Plotly.newPlot('plotly-scatter', JSON.parse(data));
+        showInfoToast('Scatter plot generated!');
+      } catch (err) {
+        console.error('Error rendering scatter plot:', err);
+        showError("Error", 'An error occurred while rendering the scatter plot.');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching scatter plot:', error);
+      showWarningToast('Error fetching the scatter plot!');
+    });
+}
+
 
 // Format Correlation Matrix for d3.js
 function formatCorrelationMatrix(matrix) {

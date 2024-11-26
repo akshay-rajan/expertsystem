@@ -929,6 +929,31 @@ def get_cluster_plot(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+def get_scatter_plot(request):
+    """Generate a scatter plot with dynamically selected axes."""
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            x_axis, y_axis = data.get('x_axis'), data.get('y_axis')
+
+            # Retrieve the session's stored dataset
+            file_id = request.session.get('file', None)
+            file_model = get_object_or_404(DataFile, file_id=file_id)
+            df = file_model.load_file()
+
+            # Ensure the axes are valid
+            if x_axis not in df.columns or y_axis not in df.columns:
+                return JsonResponse({'error': 'Invalid column names'}, status=400)
+
+            # Generate scatter plot
+            plot_json = plot_scatter(df, x_axis, y_axis)
+
+            return JsonResponse(plot_json, safe=False)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 # ? Preprocessing
 
 def preprocessing(request):
