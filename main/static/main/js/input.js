@@ -138,6 +138,7 @@ function handleFileSelection(event) {
     // Plot heatmap with the correlation matrix
     const correlationMatrix = data.correlation_matrix;
     plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+    plotlyHeatMap(data.plot);
 
     // Display the preloaded dataset name with a tick icon
     const preloadedDiv = document.getElementById('preloaded-div');
@@ -249,6 +250,10 @@ function displayLoader() {
 }
 
 // ! Heatmap
+function plotlyHeatMap(data) {
+  Plotly.newPlot('plotly-heatmap', JSON.parse(data));
+  activateBuildButton();
+}
 function plotHeatMap(data) {
   // Remove any existing SVG elements
   d3.select("#canvas-1").selectAll("*").remove();
@@ -360,6 +365,9 @@ function plotHeatMap(data) {
     .text("Correlation between each pair of features.");
 
     activateBuildButton();
+}
+function toggleHeatmaps() {
+  document.querySelectorAll('.heatmaps').forEach(heatmap => heatmap.classList.toggle('d-none'));
 }
 
 // Format Correlation Matrix for d3.js

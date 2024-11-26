@@ -205,17 +205,17 @@ def plot_clusters(X, labels, centroids, features, x_feature, y_feature):
     # Return the JSON of the plot
     return json.dumps(fig, cls=PlotlyJSONEncoder)
 
-# def plot_heatmap(correlation_matrix):
-#     """Plot Correlation Heatmap from the session"""
-#     fig = px.imshow(
-#         correlation_matrix, 
-#         color_continuous_scale="twilight",
-#         labels={
-#             "x":"Features", 
-#             "y":"Features", 
-#             "color":"Correlation"
-#         },
-#         range_color=[-1, 1],
-#     )
-#     # fig.show()
-#     return json.dumps(fig, cls=PlotlyJSONEncoder)
+def plot_heatmap(correlation_matrix):
+    """Plot Correlation Heatmap from the session"""
+    fig = px.imshow(
+        correlation_matrix, 
+        color_continuous_scale="twilight",
+        labels={
+            "x":"Features", 
+            "y":"Features", 
+            "color":"Correlation"
+        },
+        range_color=[-1, 1],
+    )
+    # fig.show()
+    return json.dumps(fig, cls=PlotlyJSONEncoder)

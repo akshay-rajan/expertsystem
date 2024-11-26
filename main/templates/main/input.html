@@ -143,15 +143,17 @@
       </div>
     </div>
   
-    <div class="d-flex">
-      <div class="right justify-content-center" id="canvas-1"></div>  
+    <div class="d-flex" onclick="toggleHeatmaps()">
+      <div class="right justify-content-center heatmaps" id="canvas-1"></div>  
     </div>
 
   </div>
 
   <div class="container d-flex">
     <div class="d-flex">
-      <div class="left justify-content-center" id="canvas-2"></div>  
+      <div class="left justify-content-center" id="canvas-2">
+        <div id="plotly-heatmap" class="right justify-content-center d-none heatmaps" onclick="toggleHeatmaps()"></div>
+      </div>  
     </div>
   </div>
 </div>
@@ -160,5 +162,6 @@
 {% block script %}
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src={% static "main/js/input.js" %}></script>
 {% endblock %}

@@ -24,7 +24,7 @@ from scipy.cluster.hierarchy import linkage
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 
 from .utils import get_input, list_available_datasets, construct_line, format_predictions, regression_evaluation, classification_evaluation
-from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters, generate_preview_response
+from .utils import plot_feature_importances, plot_decision_tree, plot_dendrogram, plot_clusters, generate_preview_response, plot_heatmap
 from .models import MLModel, DataFile
 
 
@@ -881,6 +881,7 @@ def get_file(request):
                 'file': df.to_dict(),
                 'columns': columns,
                 'correlation_matrix': correlation_matrix.to_dict(),
+                'plot': plot_heatmap(correlation_matrix),
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
