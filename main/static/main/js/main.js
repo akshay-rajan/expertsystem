@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+  $('.loader').addClass('d-none'); 
+});
+
 // Get the CSRF token from the cookie
 function getCSRFToken() {
   const cookies = document.cookie.split(';');

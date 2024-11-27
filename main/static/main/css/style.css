@@ -834,6 +834,29 @@ a:focus {
   text-align: center;
 }
 
+.loader {
+  z-index: 2000;
+  position: fixed; /* Ensure it stays on top even when scrolling */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent scrolling */
+  background-color: #ffffff; /* Optional: Add a background color for the loading screen */
+  display: flex; /* Center the content */
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+}
+.logo img {
+  width: 60px;
+  height: 60px;
+  animation: rotate-logo 0.85s linear infinite;
+}
+@keyframes rotate-logo {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* 
 * Primary: #ffffff
 * Secondary: #0096ff
