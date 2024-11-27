@@ -31,13 +31,13 @@
         <img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top">
       </h1>
     </a>
-    <button class="navbar-toggler mr-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Home</a>
+          <a class="nav-link active" href="{% url 'index' %}">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'learn' %}">Learn</a>
@@ -61,8 +61,8 @@
   
 
   <div class="first d-flex flex-wrap justify-content-center" id="home">
-    <div class="text-align-center m-3">
-      <h1 class="text-white font-weight-bold fade-in" id="main-title">
+    <div class="text-left m-3">
+      <h1 class="text-white fade-in" id="main-title">
         Learn. Build. Evaluate.
       </h1>
       <span class="d-flex justify-content-center text-white">
@@ -211,7 +211,7 @@
             <div class="card-body d-flex flex-column align-items-start">
                 <div class="start">
                     <div class="d-flex">
-                        <img src="{% static 'main/img/classification.png' %}" alt="" class="category-logo mr-2">
+                        <img src="{% static 'main/img/classification.png' %}" alt="" class="category-logo me-2">
                         <div>
                             <h5 class="card-title">Classification</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
@@ -234,7 +234,7 @@
           <div class="card-body d-flex flex-column align-items-start">
             <div class="start">
                 <div class="d-flex">
-                    <img src="{% static 'main/img/regression.png' %}" alt="" class="category-logo mr-2">
+                    <img src="{% static 'main/img/regression.png' %}" alt="" class="category-logo me-2">
                     <div>
                         <h5 class="card-title">Regression</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Supervised Learning</h6>
@@ -259,7 +259,7 @@
             <div class="card-body d-flex flex-column align-items-start">
                 <div class="start">
                     <div class="d-flex">
-                        <img src="{% static 'main/img/clustering.png' %}" alt="" class="category-logo mr-2">
+                        <img src="{% static 'main/img/clustering.png' %}" alt="" class="category-logo me-2">
                         <div>
                             <h5 class="card-title">Clustering</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Unsupervised Learning</h6>
