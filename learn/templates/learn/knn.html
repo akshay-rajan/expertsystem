@@ -91,32 +91,35 @@ print(f"Accuracy: {(accuracy * 100):.2f}%")</code></pre>
     </div>
 
     <h2 class="chapter-subheading mt-4">Advantages and Disadvantages</h2>
-    <table class="table table-hover table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>Advantages</th>
-          <th>Disadvantages</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Simplicity: Easy to understand and implement.</td>
-          <td>Computational Complexity: High costs for large datasets due to distance calculations.</td>
-        </tr>
-        <tr>
-          <td>No Training Phase: Directly stores the dataset for predictions.</td>
-          <td>Storage Requirements: Requires storing the entire dataset in memory.</td>
-        </tr>
-        <tr>
-          <td>Adaptability: Works for both classification and regression tasks.</td>
-          <td>Sensitivity to Noise: Can be affected by noisy data or outliers.</td>
-        </tr>
-        <tr>
-          <td>Flexibility: Can handle multi-class problems and datasets of arbitrary shapes.</td>
-          <td>Choosing K: A small K may lead to overfitting, while a large K may smooth over class boundaries.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+
+      <table class="table table-hover table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>Advantages</th>
+            <th>Disadvantages</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Simplicity: Easy to understand and implement.</td>
+            <td>Computational Complexity: High costs for large datasets due to distance calculations.</td>
+          </tr>
+          <tr>
+            <td>No Training Phase: Directly stores the dataset for predictions.</td>
+            <td>Storage Requirements: Requires storing the entire dataset in memory.</td>
+          </tr>
+          <tr>
+            <td>Adaptability: Works for both classification and regression tasks.</td>
+            <td>Sensitivity to Noise: Can be affected by noisy data or outliers.</td>
+          </tr>
+          <tr>
+            <td>Flexibility: Can handle multi-class problems and datasets of arbitrary shapes.</td>
+            <td>Choosing K: A small K may lead to overfitting, while a large K may smooth over class boundaries.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <h2 class="chapter-subheading mt-4">Applications</h2>
     <ul class="mt-2">

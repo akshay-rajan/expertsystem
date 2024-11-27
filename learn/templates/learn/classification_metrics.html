@@ -81,27 +81,30 @@
     <p>
       A matrix showing counts of true positive (TP), false positive (FP), true negative (TN), and false negative (FN) classifications.
     </p>
-    <table class="table table-bordered confusion-matrix mt-3">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Predicted Positive</th>
-          <th>Predicted Negative</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="dark">Actual Positive</span></td>
-          <td class="correct"><span style="color:green;">True Positive (TP)</span></td>
-          <td class="incorrect"><span style="color:red;">False Negative (FN)</span></td>
-        </tr>
-        <tr>
-          <td><span class="dark">Actual Negative</span></td>
-          <td class="incorrect"><span style="color:red;">False Positive (FP)</span></td>
-          <td class="correct"><span style="color:green;">True Negative (TN)</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+
+      <table class="table table-bordered confusion-matrix mt-3">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Predicted Positive</th>
+            <th>Predicted Negative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="dark">Actual Positive</span></td>
+            <td class="correct"><span style="color:green;">True Positive (TP)</span></td>
+            <td class="incorrect"><span style="color:red;">False Negative (FN)</span></td>
+          </tr>
+          <tr>
+            <td><span class="dark">Actual Negative</span></td>
+            <td class="incorrect"><span style="color:red;">False Positive (FP)</span></td>
+            <td class="correct"><span style="color:green;">True Negative (TN)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p>
       True values are when <code>actual == predicted</code>, and False values occur otherwise.
     </p>
