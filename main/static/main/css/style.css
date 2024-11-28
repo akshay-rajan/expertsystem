@@ -78,8 +78,8 @@ body {
   outline: none!important;
 }
 
-.nav-item.active .nav-link {
-  color: var(--dark-color)!important;
+nav .nav-item.active .nav-link {
+  color: var(--secondary-color)!important;
 }
 
 nav .nav-link {
@@ -426,17 +426,14 @@ nav .nav-link:hover::after {
 .algo {
   text-decoration: none;
   border-radius: 5px;
-}
-.algo li {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--secondary-color) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1)!important;
 }
 .algo:hover {
   text-decoration: none;
-}
-.algo li:hover {
-  text-decoration: none;
   border: 1px solid rgba(0, 150, 255, 0.1);
   box-shadow: 1px 1px 10px rgba(0, 150, 255, 0.3);
+  background-color: #fff !important;
 }
 .algo-description {
   color: rgba(0, 0, 0, 0.7);

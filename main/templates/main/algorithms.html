@@ -5,23 +5,22 @@
 
 {% block body %}
 <div class="fade-in p-2 page">
-  <h1 class='display-3 m-2 title'>{{ type }}</h1>
-  
+  <h1 class="display-3 m-2 title">{{ type }}</h1>
+
   <div class="d-flex flex-wrap">
-    <ul class="list-group m-4" style="flex: 1;">
+    <div class="list-group m-4" style="flex: 1;">
       {% for algorithm in algorithms %}
-      <a href="{% url algorithm.url %}" class="algo">
-        <li class="list-group-item m-1">
-            {{ algorithm.name }}
-          </li>
-        </a>
+      <a href="{% url algorithm.url %}" class="list-group-item list-group-item-action m-1 algo">
+        {{ algorithm.name }}
+      </a>
       {% endfor %}
-    </ul>
+    </div>
     <div class="info m-4" style="flex: 1;">
       <p class="m-2 algo-description"></p>
     </div>
   </div>
-</div> 
+</div>
+
 {% endblock %}
 {% block script %}
 <script>
