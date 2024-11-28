@@ -35,11 +35,11 @@
     </div>
     
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white sticky-top">
-      <a class="navbar-brand" href="{% url 'index' %}">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+      <a class="navbar-brand me-auto" href="{% url 'index' %}">
         <h1 class="display-4"><img src="{% static 'main/img/es_logo_transparent.png' %}" alt="EXPERT SYSTEM" class="d-inline-block align-top"></h1>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -57,11 +57,11 @@
             <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Algorithms
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="{% url 'classification' %}">Classification</a>
               <a class="dropdown-item" href="{% url 'regression' %}">Regression</a>
               <a class="dropdown-item" href="{% url 'clustering' %}">Clustering</a>
-            </div>
+            </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'samples' %}">Sample Datasets</a>
