@@ -842,6 +842,14 @@ a:focus {
   width: 200px;
   height: 200px;
 }
+@media screen and (max-width: 600px) {
+  .about-content {
+    font-size: 16px;
+  }
+  .about-img {
+    display: none;
+  }
+}
 
 /* ! Others */
 .error-404 {

@@ -5,8 +5,7 @@
 
 {% block body %}
 <div class="fade-in page">
-  <h1 class='display-3 title'>About</h1>
-  <div class="d-flex flex-wrap">
+  <div class="d-flex flex-wrap about-container">
     <div class="about-content">
       <p class="m-2">
         <strong>Expert System</strong> is a machine learning playground that allows you to explore and experiment with different datasets and machine learning algorithms. This platform provides a user-friendly interface to train, test, and evaluate machine learning models without writing a single line of code.
@@ -28,7 +27,7 @@
       </p>
     </div>
     <div class="about-img">
-      <img src="{% static 'main/img/es_icon.png' %}" alt="About Image" id="about-logo" />
+      <img src="{% static 'main/img/es_icon.png' %}" alt="About Image" id="about-logo" class="img-fluid" />
     </div>
   </div>
 </div>
