@@ -82,6 +82,24 @@ body {
   color: var(--dark-color)!important;
 }
 
+nav .nav-link {
+  color: #0062cc !important;
+}
+nav .nav-link::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--secondary-color);
+  transition: width 0.3s;
+}
+nav .nav-link:hover::after {
+  width: 100%;
+}
+.nav-link.dropdown-toggle::after {
+  display: none;
+}
+
 /* ! Home */
 #home {
   height: 110vh;
@@ -848,9 +866,9 @@ a:focus {
   align-items: center; /* Vertically center */
 }
 .logo img {
-  width: 60px;
-  height: 60px;
-  animation: rotate-logo 0.85s linear infinite;
+  width: 40px;
+  height: 40px;
+  animation: rotate-logo 0.8s linear infinite;
 }
 @keyframes rotate-logo {
   from { transform: rotate(0deg); }
