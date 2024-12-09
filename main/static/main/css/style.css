@@ -344,7 +344,6 @@ nav .nav-link:hover::after {
   pointer-events: none; /* Allow clicks to pass through */
 }
 
-
 #get-started {
   padding: 15vh!important;
   padding-top: 10px!important;
@@ -518,7 +517,7 @@ nav .nav-link:hover::after {
   text-decoration: none;
   border-radius: 5px;
   color: var(--secondary-color) !important;
-  border: 1px solid rgba(0, 0, 0, 0.1)!important;
+  border: 1px solid rgba(0, 150, 255, 0.2)!important;
 }
 .algo:hover {
   text-decoration: none;

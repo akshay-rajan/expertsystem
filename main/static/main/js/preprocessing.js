@@ -74,9 +74,7 @@ function preview_data(formData) {
       'X-CSRFToken': getCSRFToken(),
     },
   })
-  .then(response => {
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
     if (data.error) {
       showError('Error!', data.error);
@@ -85,9 +83,9 @@ function preview_data(formData) {
       headers = data.headers;
       null_columns = data.null_columns;
       non_numerical_cols = data.non_numerical_cols;
-      generatecolumns(null_columns, featureSelectionDiv, "feature_selection"); // generate columns for missing values     
-      generatecolumns(non_numerical_cols, encoding_selection, "encoding_selection"); // generate columns for encoding
-      generatecolumns(headers, scale_selection, "scaling_selection"); // generate columns for scaling
+      generatecolumns(null_columns, featureSelectionDiv, "feature_selection"); // Generate columns for missing values     
+      generatecolumns(non_numerical_cols, encoding_selection, "encoding_selection"); // Generate columns for encoding
+      generatecolumns(headers, scale_selection, "scaling_selection"); // Generate columns for scaling
       generateTable(text, null_columns); // Append the generated table to the container
     }
   })
@@ -100,27 +98,30 @@ function preview_data(formData) {
 function generateTable(jsonData, null_columns) {
   const container = document.getElementById('csv-preview-container');
 
-  // Clear existing content in the container
+  // Clear existing content
   container.innerHTML = '';
 
+  // Create table
   const table = document.createElement('table');
   table.className = 'table table-bordered table-hover table-striped';
-  const headerRow = document.createElement('tr');
 
   // Create table headers
+  const headerRow = document.createElement('tr');
   Object.keys(jsonData[0]).forEach(key => {
     const th = document.createElement('th');
-    th.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Capitalize first letter
-    // Add the bg-warning class if the key is in null_columns
+    th.innerText = key.charAt(0).toUpperCase() + key.slice(1);
     if (null_columns.includes(key)) {
-      th.classList.add('bg-warning');
+      th.classList.add('bg-warning'); // Highlight null columns
     }
     headerRow.appendChild(th);
   });
 
-  table.appendChild(headerRow);
+  const thead = document.createElement('thead');
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
 
-  // Create table rows
+  // Create table body
+  const tbody = document.createElement('tbody');
   jsonData.forEach(item => {
     const row = document.createElement('tr');
     Object.values(item).forEach(value => {
@@ -128,14 +129,14 @@ function generateTable(jsonData, null_columns) {
       td.innerText = value;
       row.appendChild(td);
     });
-    table.appendChild(row);
+    tbody.appendChild(row);
   });
-  
-  // Append the new table to the container
+  table.appendChild(tbody);
+
+  // Append table to container
   container.appendChild(table);
-  // Show the info button
   $('#data-info').removeClass('d-none');
-}      
+}
         
 // Populate the column for selection 
 function generatecolumns(columns, SelectionDiv, selection) {
@@ -149,18 +150,18 @@ function generatecolumns(columns, SelectionDiv, selection) {
     checkbox.type = "checkbox";
     checkbox.id = column + "_" + selection; // Set the checkbox id to the column name
     checkbox.value = column; // Set the checkbox value to the column name
-    checkbox.className = "form-check-input"; // Add Bootstrap class for styling
-    checkbox.name = selection; //feature selection or encoding selection
+    checkbox.className = "form-check-input"; // Bootstrap 5 class for input
+    checkbox.name = selection; // Feature selection or encoding selection
 
     // Create a label for the checkbox
     const label = document.createElement("label");
     label.htmlFor = column + "_" + selection; // Link the label to the checkbox
     label.textContent = column; // Set the label text to the column name
-    label.className = "form-check-label"; // Add Bootstrap class for styling
+    label.className = "form-check-label"; // Bootstrap 5 class for label
 
     // Create a div to contain the checkbox and label
     const checkboxDiv = document.createElement("div");
-    checkboxDiv.className = "form-check"; // Add Bootstrap class for styling
+    checkboxDiv.className = "form-check"; // Bootstrap 5 class for grouping
     checkboxDiv.appendChild(checkbox);
     checkboxDiv.appendChild(label);
 
@@ -321,10 +322,9 @@ function showSection(sectionId) {
 
 function toggleGuide() {
   Swal.fire({
-    
     html: `
-    <div class="text-left">
-      <h3>Missing Value Techniques</h3>
+    <div class="text-start">
+      <h3 class="mb-3">Missing Value Techniques</h3>
       <p>When dealing with missing values, consider the following techniques:</p>
       <ul>
         <li><strong>Remove Rows:</strong> Delete rows with missing values if they are few and won't bias your analysis.</li>
@@ -332,14 +332,14 @@ function toggleGuide() {
         <li><strong>Most Frequent:</strong> Replace missing values with the most frequent value of the column. It will work for categorical data as well.</li>
       </ul>
       
-      <h3>Encoding Strategies</h3>
+      <h3 class="mt-4 mb-3">Encoding Strategies</h3>
       <p>Choose an encoding method based on the type of data:</p>
       <ul>
         <li><strong>Label Encoding:</strong> Assign a unique integer to each category (suitable for ordinal data).</li>
         <li><strong>One-Hot Encoding:</strong> Create binary columns for each category (suitable for nominal data).</li>
       </ul>
   
-      <h3>Normalization Methods</h3>
+      <h3 class="mt-4 mb-3">Normalization Methods</h3>
       <p>Normalize your data to ensure consistent scaling:</p>
       <ul>
         <li><strong>Normalization: </strong>Scale features to a range of [0, 1]. Useful for algorithms sensitive to scales.</li>
@@ -351,27 +351,27 @@ function toggleGuide() {
     focusConfirm: false,
     showConfirmButton: false,
     customClass: {
-      popup: 'custom-popup', // Adding a custom class for styling
-      htmlContainer: 'custom-html' // If you want to style just the HTML content specifically
+      popup: 'custom-popup', 
+      htmlContainer: 'custom-html'
     },
-    width: '80%', // Adjust width of the alert box (increase the size)
+    width: '80%',
   });
-  
 }
+
 
 // Get data details and display in a table inside a SweetAlert modal
 function toggleInfo() {
   Swal.fire({
     title: 'Data Details',
-    html: `<div id="data-table-container"></div>`,  // The div where the table will be inserted
+    html: `<div id="data-table-container"></div>`, // The div where the table will be inserted
     showCloseButton: true,
     focusConfirm: false,
     confirmButtonText: 'Close',
     customClass: {
-      popup: 'custom-popup',  // Custom class for the popup
-      htmlContainer: 'table-info-container'  // Custom class for HTML content inside popup
+      popup: 'custom-popup', // Custom class for the popup
+      htmlContainer: 'table-info-container' // Custom class for HTML content inside popup
     },
-    width: '80%',  // Adjust width of the alert box (increase the size)
+    width: '80%', // Adjust width of the alert box (increase the size)
   });
 
   fetch('preprocessing/scaling/data_details/', {
@@ -384,8 +384,8 @@ function toggleInfo() {
   .then(response => response.json())
   .then(data => {
     // Build the table for column-wise details
-    let tableHtml = '<table class="table table-bordered table-striped">';
-    tableHtml += '<thead><tr><th>Column Name</th><th>Data Type</th><th>Non-null Count</th><th>Missing Values</th></tr></thead>';
+    let tableHtml = '<table class="table table-bordered table-striped table-hover">'; // Add `table-hover` for better UX
+    tableHtml += '<thead class="table-light"><tr><th>Column Name</th><th>Data Type</th><th>Non-null Count</th><th>Missing Values</th></tr></thead>';
     tableHtml += '<tbody>';
 
     // Loop through columns in the data and create table rows
@@ -408,15 +408,15 @@ function toggleInfo() {
 
     // Append additional information (Shape, Memory Usage, Numeric Summary, and Data Info)
     let additionalInfoHtml = `
-      <h5>Dataset Shape</h5>
-      <ul>
+      <h5 class="mt-4">Dataset Shape</h5>
+      <ul class="list-unstyled">
         <li><strong>Rows:</strong> ${data.shape[0]}</li>
         <li><strong>Columns:</strong> ${data.shape[1]}</li>
       </ul>
       
-      <h5>Memory Usage</h5>
-      <table class="table table-bordered table-striped">
-        <thead>
+      <h5 class="mt-4">Memory Usage</h5>
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="table-light">
           <tr><th>Column Name</th><th>Memory Usage</th></tr>
         </thead>
         <tbody>
@@ -431,9 +431,9 @@ function toggleInfo() {
         </tbody>
       </table>
       
-      <h5>Numeric Summary</h5>
-      <table class="table table-bordered table-striped">
-        <thead>
+      <h5 class="mt-4">Numeric Summary</h5>
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="table-light">
           <tr>
             <th>Column Name</th>
             <th>Count</th>
@@ -459,9 +459,9 @@ function toggleInfo() {
         </tbody>
       </table>
       
-      <h5>Data Info</h5>
+      <h5 class="mt-4">Data Info</h5>
       <div class="data-info-box">
-        <pre>${data.data_info}</pre>
+        <pre class="bg-light p-3 border rounded">${data.data_info}</pre> <!-- Use Bootstrap 5 utilities -->
       </div>
     `;
 
@@ -473,3 +473,4 @@ function toggleInfo() {
     showWarningToast(`An error occurred: ${error}`);
   });
 }
+

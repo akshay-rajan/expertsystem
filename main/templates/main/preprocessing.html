@@ -23,7 +23,7 @@
   
           <!-- Upload dataset section -->
           <div class="mb-4">
-            <div class="form-group preprocessing-dataset-selection">
+            <div class="mb-4 form-group preprocessing-dataset-selection">
               <div class="d-inline dataset-selection-upload selected">
                 <input type="radio" id="option-upload" name="dataset-option" value="upload" checked onchange="handleDatasetOptionChange(event)">
                 <label for="option-upload">Upload Your Dataset</label>
@@ -32,18 +32,17 @@
                 <input type="radio" id="option-preloaded" name="dataset-option" value="choose" onchange="handleDatasetOptionChange(event)">
                 <label for="option-preloaded">Use a Preloaded Dataset</label>
               </div>
-              
             </div>
           
             <!-- Upload Section -->
             <div id="upload-div">
-              <div class="form-group">
+              <div class="mb-3">
                 <input type="file" id="file" name="file" accept=".csv" class="form-control" required onchange="handleChange(event)">
               </div>
             </div>
           
             <!-- Preloaded Datasets Section -->
-            <div class="form-group d-none" id="preloaded-div">
+            <div class="mb-3 form-group d-none" id="preloaded-div">
               <select name="preloaded-dataset" id="preloaded-dataset" class="form-control" onchange="handlePreloadedFileChange(event)">
                 <option value="" selected disabled>Select a Dataset</option>
                 {% for dataset in datasets %}
@@ -131,12 +130,12 @@
       </div>
   
       <!-- Preview Table Section (Middle Column) -->
-      <div class="col-lg-6 col-md-6">
+      <div class="col-lg-6 col-md-6 position-relative">
         <button class="info-button d-none" id="data-info" onclick="toggleInfo()">?</button>
         <div id="csv-preview-container" class="table-responsive" style="overflow:auto; height:500px; width:100%;">
           <!-- JavaScript will render data here as table -->
         </div>
-      </div>
+      </div>      
   
       <!-- Buttons Section (Right Column) -->
       <div class="col-lg-2 d-flex flex-column p-2 align-items-end">
