@@ -254,9 +254,100 @@ nav .nav-link:hover::after {
   }
 }
 
+.learn-ml {
+  padding: 15vh!important;
+  padding-bottom: 0!important;
+  background-color: white!important;
+  min-height: 50vh;
+}
+.learn-ml h5 {
+  font-size: 40px;
+  font-weight: 600;
+}
+.learn-ml > div {
+  border: 0.1px solid rgba(0, 150, 255, 0)!important;
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+.learn-ml .card-text {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.learn-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  text-align: center;
+}
+.learn-grid-container div {
+  background-color: #f0f0f0;
+  opacity: 1;
+  padding: 12px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 10px;
+  z-index: 1; 
+  position: relative;
+}
+
+.learn-ml button {
+  font-size: 18px;
+  font-weight: bold;
+  width: 200px;
+  text-align: center;
+  padding: 4px 0px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 55px;
+  text-decoration: underline;
+  text-align: left;
+  margin-left: 0;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transition: all 0.5s;
+}
+.learn-ml button:disabled {
+  color: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+.learn-ml button:hover {
+  border: none;
+  text-decoration-color: var(--dark-color)!important;
+  margin-left: 15px;
+  color: var(--dark-color)!important;
+}
+.learn-ml button:disabled:hover {
+  border: none;
+  text-decoration: none;
+  color: var(--secondary-color)!important;
+}
+.learn-ml button:focus {
+  outline: none;
+}
+
+.learn-ml .card-right {
+  position: relative;
+  overflow: hidden;
+}
+.learn-ml .card-right::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.9)); /* Adjust colors and stops as needed */
+  z-index: 1; /* Gradient is behind the content */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
 
 #get-started {
   padding: 15vh!important;
+  padding-top: 10px!important;
   padding-bottom: 0!important;
 }
 #get-started > div {

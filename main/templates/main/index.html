@@ -72,7 +72,7 @@
       </span>
       <div class="fade-in-3">
         <div class="d-flex">
-          <a href="#get-started" class="start-btn">Get Started!</a>
+          <a href="#learnml" class="start-btn">Get Started!</a>
         </div>
       </div>
     </div>
@@ -132,22 +132,38 @@
     </div>
   </div>
 
-  <div class="second p-4 pb-0 mb-0" id="get-started">
-
-    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
-      <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
+  <div class="learn-ml" id="learnml">
+    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100  h-100">
+      <div class="card-body mt-0 d-flex flex-column justify-content-start align-items-stretch text-left p-4">
         <h5 class="card-title">Introduction</h5>
-        <p class="card-text">Learn everything about Machine Learning, from preprocessing to deployment.</p>
-        <a href="{% url 'learn' %}">
+        <p class="card-text">New to Machine Learning? Start here.</p>
+        <a href="{% url 'learn' %}" class="mt-auto">
           <button>
             Start Learning →
           </button>
         </a>
       </div>
       <div class="p-4 d-flex justify-content-center align-items-center card-right">
-        <img src="{% static 'main/img/data.png' %}" class="feature-card-img" alt="Learn">
+        <div class="learn-grid-container">
+            <div>Pandas</div>
+            <div>NumPy</div>
+            <div>Matplotlib</div>
+            <div>Classification</div>
+            <div>Encoding</div>
+            <div>SVM</div>
+            <div>Regression</div>
+            <div>Missing Values</div>
+            <div>Decision Tree</div>
+            <div>Clustering</div>
+            <div>Scaling</div>
+            <div>Random Forest</div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="second p-4 pb-0 mb-0" id="get-started">
+
 
     <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
