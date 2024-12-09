@@ -166,19 +166,20 @@ function populateFeatureCheckboxes(columns) {
 
   const featuresDiv = document.getElementById('features');
   featuresDiv.innerHTML = '';
+
   columns.forEach(column => {
     const div = document.createElement('div');
-    div.classList.add('form-check-inline');
+    div.classList.add('form-check', 'd-inline-flex', 'me-2'); // Updated for Bootstrap 5
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('form-check-input');
     checkbox.name = 'features';
-    checkbox.value = column;
-    checkbox.id = `feature-${column}`;
+    checkbox.value = column.trim(); // Trim to avoid unnecessary whitespace issues
+    checkbox.id = `feature-${column.trim()}`;
     const label = document.createElement('label');
     label.className = 'form-check-label';
-    label.htmlFor = `feature-${column}`;
-    label.textContent = column;
+    label.htmlFor = `feature-${column.trim()}`;
+    label.textContent = column.trim();
     div.appendChild(checkbox);
     div.appendChild(label);
     featuresDiv.appendChild(div);
@@ -202,14 +203,13 @@ function populateTargetDropdown(columns) {
 
   columns.forEach(column => {
     const option = document.createElement('option');
-    option.value = column
-      .replace(/\n/g, '')
-      .replace(/\r/g, '');
-    option.textContent = column
-      .replace(/\n/g, '')
-      .replace(/\r/g, '');
+    option.value = column.trim(); // Trim to handle whitespace or newline issues
+    option.textContent = column.trim();
     targetSelect.appendChild(option);
   });
+
+  // Ensure the select dropdown is styled correctly for Bootstrap 5
+  targetSelect.classList.add('form-select'); // Updated class for Bootstrap 5
 }
 
 function validateForm() {
