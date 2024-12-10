@@ -8,7 +8,7 @@
   <h1 class="display-3 m-2 title">{{ type }}</h1>
 
   <div class="d-flex flex-wrap">
-    <div class="list-group m-4" style="flex: 1;">
+    <div class="algorithms list-group m-4" style="flex: 1;">
       {% for algorithm in algorithms %}
       <a href="{% url algorithm.url %}" class="list-group-item list-group-item-action m-1 algo">
         {{ algorithm.name }}
@@ -36,5 +36,21 @@
   For example, clustering customers based on their purchase history, grouping documents based on their content, or segmenting images based on their colors.
   `
     );
+
+  if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true') {
+    return;
+    // localStorage.setItem('algo', 'true');
+    introJs().setOptions({
+      steps: [
+        {
+          intro: 'This page shows a list of algorithms for .',
+        },
+        {
+          element: document.querySelector('.algorithms'),
+          intro: 'Click on an algorithm to learn more about it.',
+        },
+      ],
+    }).start();
+  }
 </script>
 {% endblock %}

@@ -370,33 +370,44 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     function homeTour() {
+      localStorage.setItem('tour', 'true');
       introJs().setOptions({
         steps: [
           {
             element: document.querySelector('.learn-card'),
-            intro: "Learn the basics of machine learning and data science."
+            intro: "Here, you can learn about Machine Learning concepts, with notes and code snippets in Python."
           },
           {
             element: document.querySelector('.preprocessing-card'),
-            intro: "Process your data and prepare it for analysis."
+            intro: "The first step in building a machine learning model is to preprocess the data. This involves cleaning, transforming, and preparing the data for analysis."
           },
           {
             element: document.querySelector('.modelling-card'),
-            intro: "Choose an algorithm and start building your machine learning model."
+            intro: "After preprocessing the data, you can start building machine learning models. This involves selecting an algorithm and training it on your data."
           },
           {
             element: document.querySelector('.category-cards'),
-            intro: "Select a category to view the available algorithms."
+            intro: "These are the categories of algorithms available on the platform. Choose the category that best describes your problem."
+          },
+          {
+            element: document.querySelector('.category-card'),
+            intro: "Let's get started by building a Classification model. Click on 'Go' to proceed."
           }
         ]
       }).start();
     }
     document.addEventListener('DOMContentLoaded', function() {
-      // Start the intro.js tour after 2 seconds
+      // Check if the user has visited the site before
+      if (localStorage.getItem('visited') === 'true') {
+        //return;
+      }
+      localStorage.setItem('visited', 'true');
+      // Start the intro.js tour
       setTimeout(function() {
-        showNotification("Welcome to Expert System!", "Start a tour to learn more about the platform.", "Start Tour", null, homeTour);
-      }, 1500);
+        showNotification("Welcome to Expert System!", "Start a tour to learn how to use the platform.", "Start Tour", null, homeTour);
+      }, 500);
     });    
+
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
       $('.fade-in-2').fadeIn(1000);
