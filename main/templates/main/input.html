@@ -59,14 +59,14 @@
           </button>
           
           <div class="fade-in">
-            <div class="form-group d-none" id="features-div">
-              <label for="target">Select Features</label>
+            <div class="form-group mb-3 d-none" id="features-div">
+              <label for="target" class="form-label">Select Features</label>
               <div class="form-check" id="features">
                 {% comment %} Checkboxes will be here populated by js {% endcomment %}
               </div>
             </div>
-            <div class="form-group d-none" id="target-div">
-              <label for="target">Select Target</label>
+            <div class="form-group mb-3 d-none" id="target-div">
+              <label for="target" class="form-label">Select Target</label>
               <select name="target" id="target" class="form-select">
                 {% comment %} Dropdown will be populated here {% endcomment %}
               </select>
@@ -76,8 +76,8 @@
             <div class="hyperparameters d-none" id="hyperparameter-div">
               {% for key, param in hyperparameters.items %}
                 {% if param.field == "select" %}
-                  <div class="form-group" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}">{{ param.name }}:</label>
+                  <div class="form-group mb-3" id="{{ param.name }}-div">
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}:</label>
                     <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-select dropdown">
                       <option value="" selected disabled>Select</option>
                       {% for option in param.options %}
@@ -86,8 +86,8 @@
                     </select>
                   </div>
                 {% else %}
-                  <div class="form-group" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}">{{ param.name }}:</label>
+                  <div class="form-group mb-3" id="{{ param.name }}-div">
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}:</label>
                     <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control" value="{{ param.default }}">
                   </div>
                 {% endif %}
@@ -96,7 +96,7 @@
             {% endif %}
 
             {% if optional_parameters %}
-            <div class="accordion optional-div optional-parameters d-none mt-4 mb-4" id="optionalAccordion">
+            <div class="accordion optional-div optional-parameters d-none mt-4" id="optionalAccordion">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -107,16 +107,17 @@
                   <div class="accordion-body">
                     {% for param in optional_parameters %}
                       <div class="mb-3" id="{{ param.name }}-div">
-                        <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
                         {% if param.field == "select" %}
+                          <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
                           <select id="{{ param.name }}" name="{{ param.name }}" class="form-select">
                             <option value="" selected disabled>Select</option>
                             {% for option in param.options %}
-                              <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
+                            <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
                             {% endfor %}
                           </select>
                         {% else %}
-                          <input type="{{ param.type }}" class="form-control" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
+                          <label for="{{ param.name }}" class="form-label d-inline">{{ param.name }}</label>
+                          <input type="{{ param.type }}" class="form-control d-inline" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
                         {% endif %}
                       </div>
                     {% endfor %}
@@ -126,7 +127,7 @@
             </div>
             {% endif %}
             
-            <button type="submit" id="build-btn" class="btn btn-primary d-none">
+            <button type="submit" id="build-btn" class="btn btn-primary mt-4 d-none">
               <div class="d-none" id="build-btn-div1">
                 Build
               </div>
@@ -152,7 +153,7 @@
     <div class="d-flex justify-content-center">
       <div class="justify-content-center" id="canvas-2">
         <div id="plotly-scatter" class="left justify-content-center scatter"></div>
-        <div class="right row d-flex justify-content-center scatter-buttons">
+        <div class="right d-flex justify-content-center scatter-buttons">
           <div class="m-2">
             <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
             <select id="x-axis-select" class="form-select d-inline">
