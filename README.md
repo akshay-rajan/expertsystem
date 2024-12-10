@@ -22,8 +22,6 @@ It provides a user-friendly interface where users can:
 
 Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
 
-### Flow
-
 ```mermaid
 flowchart LR
     A(Start) --> B(Preprocessing)
@@ -44,13 +42,13 @@ flowchart LR
 
 ![Static Badge](https://img.shields.io/badge/-Django-darkgreen?style=for-the-badge&logo=django)
 ![Static Badge](https://img.shields.io/badge/-JavaScript-white?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-bootstrap-white?style=for-the-badge&logo=bootstrap)
 ![Static Badge](https://img.shields.io/badge/-d3.js-orange?style=for-the-badge&logo=javascript)
 ![Static Badge](https://img.shields.io/badge/-plotly.js-navy?style=for-the-badge&logo=javascript)
 ![Static Badge](https://img.shields.io/badge/-Scikit_Learn-blue?style=for-the-badge&logo=scikit-learn)
 ![Static Badge](https://img.shields.io/badge/-pandas-purple?style=for-the-badge&logo=pandas)
 ![Static Badge](https://img.shields.io/badge/-numpy-cyan?style=for-the-badge&logo=numpy)
 ![Static Badge](https://img.shields.io/badge/-prism.js-black?style=for-the-badge&logo=javascript)
-![Static Badge](https://img.shields.io/badge/-bootstrap-white?style=for-the-badge&logo=bootstrap)
 
 ### CI/CD Pipeline
 
@@ -107,7 +105,7 @@ The server will start at http://127.0.0.1:8000/ .
 
 > **Akshay R**,
 >**Deepu Joseph**,
->*Semester 3, Masters in Computer Applications*,
+>*Masters in Computer Applications*,
 >*College of Enginnering, Trivandrum*
->(*2023-2025*)
+>(*2023-25*)
 
