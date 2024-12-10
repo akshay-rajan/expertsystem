@@ -558,20 +558,22 @@ a:focus {
   height: 20px;
 }
 .icon.bin {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  margin-bottom: 3px;
+  margin-right: 3px;
 }
 .btn-outline-primary.delete {
-  color: #dc3545 !important;
-  border: 1px solid #dc3545 !important;
+  color: var(--dark-color) !important;
+  border: 0.5px solid var(--dark-color) !important;
   border-radius: 5px;
   padding: 5px 10px;
   font-weight: 550;
 }
 .btn-outline-primary.delete:hover {
-  color: #fff !important;
-  background-color: #dc3545 !important;
+  background-color: #ddd !important;
+  border: 0.5px solid transparent !important;
 }
 
 .custom_nav-container .nav_search-btn {
