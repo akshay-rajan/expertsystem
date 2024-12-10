@@ -474,3 +474,8 @@ function toggleInfo() {
   });
 }
 
+function toggleCategories() {
+  document.getElementById('category-display').classList.toggle('d-none');
+  document.getElementById('training-btn-div').classList.toggle('d-none');
+}
+
