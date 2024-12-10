@@ -963,7 +963,7 @@ a:focus {
 .logo img {
   width: 40px;
   height: 40px;
-  animation: rotate-logo 0.8s linear infinite;
+  animation: rotate-logo 0.5s linear infinite;
 }
 @keyframes rotate-logo {
   from { transform: rotate(0deg); }
