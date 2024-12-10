@@ -19,6 +19,20 @@
           <div class="form-group">
             <div class="d-flex justify-content-between">
               <div class="dataset-div">
+                {% if uploaded_file %}
+                <div class="form-group mt-4 mb-4">
+                  <div>
+                    <span>{{ uploaded_filename }}</span>
+                    <img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">
+                  </div>
+                  <button type="button" class="btn btn-outline-primary delete mt-4" id="clear-btn" onclick="clearFile(event)">
+                    <img src="/static/main/img/bin.png" class="mr-2 icon bin" alt="">Clear
+                  </button>
+                  <button type="button" class="btn btn-primary mt-4" id="uploaded-btn" onclick="handleDataset(event)">
+                    Next
+                  </button>
+                </div>
+                {% else %}
                 <div class="form-group dataset-selection mt-4 mb-4">
                   <div class="d-inline dataset-selection-upload selected">
                     <input type="radio" id="option-upload" name="dataset-option" value="upload" checked onchange="handleDatasetOptionChange(event)">
@@ -33,6 +47,7 @@
                 <div class="form-group" id="upload-div">
                   <input type="file" name="dataset" id="dataset" class="form-control" onchange="handleFileChange(event)" />
                 </div>
+                {% endif %}
                 
                 <div class="form-group d-none" id="preloaded-div">
                   <select name="preloaded-dataset" id="preloaded-dataset" class="form-select" onchange="handlePreloadedFileChange(event)">
@@ -54,9 +69,11 @@
               </div>
             </div>
           </div>
+          {% if not uploaded_file %}
           <button type="button" class="btn btn-primary mt-4" id="upload-btn" disabled onclick="handleDataset(event)">
             Next
           </button>
+          {% endif %}
           
           <div class="fade-in">
             <div class="form-group mb-3 d-none" id="features-div">

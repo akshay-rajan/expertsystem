@@ -121,6 +121,8 @@ def linear_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('regression'),
         'optional_parameters': [
             {'field': 'checkbox', 'name': 'fit_intercept', 'type': 'checkbox', 'default': 'true'},
@@ -165,6 +167,8 @@ def lasso(request):
         })
     
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 0.1},
@@ -213,6 +217,8 @@ def ridge(request):
         })
 
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
@@ -259,6 +265,8 @@ def decision_tree_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('regression'),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
@@ -302,6 +310,8 @@ def random_forest_regression(request):
         })
 
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
@@ -343,8 +353,9 @@ def knn(request):
             'target': target,
             'metrics': metrics,
         })
-    
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'name': 'n_neighbors', 'type': 'number'},
@@ -391,6 +402,8 @@ def logistic_regression(request):
         })
     
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'select', 'name': 'solver', 'type': 'text', 'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'default': 'lbfgs'},
@@ -436,6 +449,8 @@ def naive_bayes(request):
         })
     
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'input', 'name': 'var_smoothing', 'type': 'text', 'default': 1e-9},
@@ -481,6 +496,8 @@ def decision_tree(request):
         })
     
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
@@ -529,6 +546,8 @@ def random_forest(request):
         })
     
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
@@ -572,6 +591,8 @@ def svm(request):
         })
 
     return render(request, 'main/input.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'field': 'select', 'name': 'kernel', 'type': 'text', 'options': ['linear', 'poly', 'rbf', 'sigmoid'], 'default': 'rbf'},
@@ -632,6 +653,8 @@ def kmeans(request):
         })
     
     return render(request, 'main/input_clustering.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('clustering'),
         'hyperparameters': {
             1: {'name': 'n_clusters', 'type': 'number'}
@@ -694,6 +717,8 @@ def hierarchical_clustering(request):
         })
     
     return render(request, 'main/input_clustering.html', {
+        'uploaded_file': request.session.get('file', None) is not None,
+        'uploaded_filename': request.session.get('filename', 'file'),
         'datasets': list_available_datasets('clustering'),
         'optional_parameters': [
             {'name': 'n_clusters', 'type': 'number'},
@@ -781,6 +806,7 @@ def save_file(request):
             file_model = DataFile()
             file_model.save_file(file.name, df)
             request.session['file'] = str(file_model.file_id)
+            request.session['filename'] = file.name
 
             return JsonResponse({'message': 'File uploaded successfully!'})
 
@@ -801,6 +827,7 @@ def save_file(request):
             file_model = DataFile()
             file_model.save_file(dataset_name, df)
             request.session['file'] = str(file_model.file_id)
+            request.session['filename'] = dataset_name
 
             return JsonResponse({'message': 'Preloaded dataset selected successfully!'})
 
@@ -826,6 +853,14 @@ def get_file(request):
                 'scatter': scatter_plot,
             })
         return JsonResponse({'Error': 'No file available'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def clear_file(request):
+    """Clear the stored file in the session"""
+    if request.method == 'POST':
+        request.session.pop('file', None)
+        request.session.pop('filename', None)
+        return JsonResponse({'message': 'File cleared successfully!'})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def get_cluster_plot(request):
@@ -913,6 +948,7 @@ def preprocessing(request):
                 file_model = DataFile()
                 file_model.save_file(uploaded_file.name, data)
                 request.session['file'] = str(file_model.file_id)
+                request.session['filename'] = uploaded_file.name
 
                 # Generate response
                 return JsonResponse(generate_preview_response(data))
@@ -934,6 +970,7 @@ def preprocessing(request):
                 file_model = DataFile()
                 file_model.save_file(preloaded_dataset, data)
                 request.session['file'] = str(file_model.file_id)
+                request.session['filename'] = preloaded_dataset
 
                 # Generate response
                 return JsonResponse(generate_preview_response(data))
@@ -943,7 +980,9 @@ def preprocessing(request):
             except Exception as e:
                 return JsonResponse({'error': f"Error processing preloaded dataset: {e}"}, status=400)
 
-    return render(request, 'main/preprocessing.html', {'datasets': list_available_datasets('preprocessing')})
+    return render(request, 'main/preprocessing.html', {
+        'datasets': list_available_datasets('preprocessing')
+    })
 
 def fill_missing_values(request):
     """Replace missing values with mean / median or drop the rows"""

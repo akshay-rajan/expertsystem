@@ -194,16 +194,20 @@ function showWarningToast(message) {
   }).showToast();
 }
 
-function showError(title, message) {
+function showError(title, message=null, func=null, args=null) {
   Swal.fire({
     title: title,
-    html: message,
+    html: message ? message : 'An error occurred. Please try again.',
     icon: 'error',
     confirmButtonText: 'Close',
     customClass: {
       confirmButton: 'btn btn-primary'
     }
   }).then(() => {
+    if (func) {
+      console.log(...args);
+      args ? func(...args) : func();
+    }
     location.reload();
   });
 }

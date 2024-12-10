@@ -28,6 +28,7 @@ urlpatterns = [
     path('predict', views.predict, name='predict'),
     path('save_file/', views.save_file, name='save_file'),
     path('get_file/', views.get_file, name='get_file'),
+    path('clear_file/', views.clear_file, name='clear_file'),
     path("get_cluster_plot/", views.get_cluster_plot, name="get_cluster_plot"),
     path("get_scatter_plot/", views.get_scatter_plot, name="get_scatter_plot"),
     path('preprocessing', views.preprocessing, name='preprocessing'),

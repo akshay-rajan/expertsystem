@@ -13,8 +13,10 @@ function handleDataset(event) {
 
   if ($('#option-upload').is(':checked')) {
     handleFileUpload(event);
-  } else {
+  } else if ($('#option-preloaded').is(':checked')) {
     handleFileSelection(event);
+  } else {
+    handlePreprocessedDataset(event);
   }
 }
 
@@ -81,8 +83,8 @@ function handleFileUpload(event) {
     .catch(error => {
       // Reactivate file input field
       fileInput.disabled = false;
-      // Alert user and reload page
-      showError('Upload Error!', 'An error occurred while uploading the file. Please try again.');
+      // Alert user, clear file and reload page
+      showError('Upload Error!', 'An error occurred while uploading the file. Please try again with a different dataset.');
       console.error('Could not store file: ', error);
     });
   }
@@ -154,11 +156,52 @@ function handleFileSelection(event) {
   })
   .catch(error => {
     // Handle errors during dataset retrieval
-    showError('Selection Error!', 'An error occurred while retrieving the dataset. Please try again.');
+    showError('Selection Error!', 'An error occurred while retrieving the dataset. Please try again with a different dataset.');
     console.error('Error during dataset retrieval: ', error);
   });
 }
 
+function handlePreprocessedDataset(event) {
+  
+  $('#uploaded-btn').addClass('d-none');
+  $('#clear-btn').addClass('d-none');
+  $('#build-btn').removeClass('d-none');
+
+  event.preventDefault();
+  fetch('/get_file/', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCSRFToken()
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Populate feature and target selection
+    populateFeatureCheckboxes(data.columns);
+    populateTargetDropdown(data.columns);
+
+    // Plot heatmap with the correlation matrix
+    const correlationMatrix = data.correlation_matrix;
+    plotHeatMap(formatCorrelationMatrix(correlationMatrix));
+    plotlyHeatMap(data.plot);
+    plotScatter(data.scatter, data.columns);
+
+    // Display additional configuration options
+    $('#train-test-split').removeClass('d-none');
+    $('#hyperparameter-div').removeClass('d-none');
+    $('.optional-div').removeClass('d-none');
+  })
+  .catch(error => {
+    // Handle errors during dataset retrieval
+    showError('Selection Error!', 'An error occurred while retrieving the dataset. Please try again with a different dataset.');
+    console.error('Error during dataset retrieval: ', error);
+  });
+}
 
 function populateFeatureCheckboxes(columns) {
   const featuresParent = document.getElementById('features-div');
@@ -211,6 +254,33 @@ function populateTargetDropdown(columns) {
   // Ensure the select dropdown is styled correctly for Bootstrap 5
   targetSelect.classList.add('form-select'); // Updated class for Bootstrap 5
 }
+
+function clearFile(event) {
+  event.preventDefault();
+  console.log('Clearing file...');
+  
+  fetch('/clear_file/', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCSRFToken()
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Reload the page after clearing the file
+    location.reload();
+  })
+  .catch(error => {
+    showError('Clear Error!', 'An error occurred while clearing the file. Please try again.');
+    console.error('Error during file clearing: ', error);
+  });
+}
+
 
 function validateForm() {
   const features = document.querySelectorAll('input[name="features"]:checked');
