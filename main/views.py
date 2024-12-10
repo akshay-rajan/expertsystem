@@ -964,11 +964,7 @@ def fill_missing_values(request):
         
         if not missing_value_strategy or not selected_columns:
             return JsonResponse({'error': 'Invalid input, strategy and columns are required'}, status=400)
-        
         else:
-            
-
-    
             # Handle "drop" strategy separately
             if missing_value_strategy == 'drop':
                 data.dropna(subset=selected_columns, inplace=True)
@@ -1022,7 +1018,6 @@ def encoding(request):
             for col in encoding_columns:
                 if data[col].dtype == 'object':  # Ensure column is categorical
                     data[col] = le.fit_transform(data[col])
-
 
         # Update data in the database
         file_model.save_file(file_model.filename, data)

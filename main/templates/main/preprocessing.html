@@ -43,7 +43,7 @@
           
             <!-- Preloaded Datasets Section -->
             <div class="mb-3 form-group d-none" id="preloaded-div">
-              <select name="preloaded-dataset" id="preloaded-dataset" class="form-control" onchange="handlePreloadedFileChange(event)">
+              <select name="preloaded-dataset" id="preloaded-dataset" class="form-select" onchange="handlePreloadedFileChange(event)">
                 <option value="" selected disabled>Select a Dataset</option>
                 {% for dataset in datasets %}
                 <option value="{{ dataset }}">{{ dataset }}</option>
@@ -60,9 +60,9 @@
             <div id="missing_value_section">
               <h4>Missing Value Options</h4>
               <div class="mb-0">
-                  <label for="missing_value_strategy">Missing Value Strategy:</label>
-                  <select id="missing_value_strategy" name="missing_value_strategy" class="form-control">
-                      <option value="None">None</option>
+                  <label for="missing_value_strategy" class="form-label">Missing Value Strategy</label>
+                  <select id="missing_value_strategy" name="missing_value_strategy" class="form-select">
+                      <option value="None" selected disabled>None</option>
                       <option value="mean">Fill with Mean</option>
                       <option value="median">Fill with Median</option>
                       <option value="most_frequent">Most Frequent</option>
@@ -70,11 +70,11 @@
                   </select>
               </div>
               <div class="mb-3">
-                  <label id="colselect"></label>
+                  <label id="colselect" class="form-label"></label>
                   <div id="feature_selection" class="form-check">
                       <!-- Dynamic checkboxes for columns will be here -->
                   </div>
-                  <div class="mt-2">
+                  <div class="mt-3">
                       <button type="button" class="btn btn-primary" id="missing_value_strategybtn">Apply</button>
                   </div>
               </div>
@@ -84,19 +84,19 @@
             <div id="encoding_section" style="display: none;">
               <h4>Encoding Options</h4>
               <div class="mb-0">
-                  <label for="encoding_strategy">Encoding Strategy:</label>
-                  <select id="encoding_strategy" name="encoding_strategy" class="form-control">
-                      <option value="None">None</option>
+                  <label for="encoding_strategy" class="form-label">Encoding Strategy</label>
+                  <select id="encoding_strategy" name="encoding_strategy" class="form-select">
+                      <option value="None" selected disabled>None</option>
                       <option value="onehot">One-Hot Encoding</option>
                       <option value="label">Label Encoding</option>
                   </select>
               </div>
               <div class="mb-3">
-                  <label id="enc_colselect"></label>
+                  <label id="enc_colselect" class="form-label"></label>
                   <div id="encoding_selection" class="form-check">
                       <!-- Dynamic checkboxes for encoding selection will be here -->
                   </div>
-                  <div class="mt-2">
+                  <div class="mt-3">
                       <button type="button" class="btn btn-primary" id="encoding_strategybtn">Apply</button>
                   </div>
               </div>
@@ -105,16 +105,16 @@
             <!-- Section: Scaling -->
             <div id="scaling_section" style="display: none;">
               <h4>Scaling Options</h4>
-              <div class="mb-0">
-                  <label for="scaling_strategy">Scaling Strategy:</label>
+              <div class="mb-3">
+                  <label for="scaling_strategy" class="form-label">Scaling Strategy</label>
                   <select id="scaling_strategy" name="scaling_strategy" class="form-control">
-                      <option value="None">None</option>
+                      <option value="None" selected disabled>None</option>
                       <option value="standard">Standardization</option>
                       <option value="normalize">Normalization</option>
                   </select>
               </div>
               <div class="mb-3">
-                <label id="scale_colselect"></label>
+                <label id="scale_colselect" class="form-label"></label>
                 <div id="scale_selection" class="form-check">
                   <!-- Dynamic checkboxes for scaling selection will be here -->
                 </div>
