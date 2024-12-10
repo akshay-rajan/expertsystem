@@ -121,7 +121,7 @@ def linear_regression(request):
         })
 
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('regression'),
         'optional_parameters': [
             {'field': 'checkbox', 'name': 'fit_intercept', 'type': 'checkbox', 'default': 'true'},
         ]
@@ -165,7 +165,7 @@ def lasso(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 0.1},
         },
@@ -213,7 +213,7 @@ def ridge(request):
         })
 
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'alpha', 'type': 'text', 'default': 1.0},
         },
@@ -259,7 +259,7 @@ def decision_tree_regression(request):
         })
 
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('regression'),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
             {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
@@ -302,7 +302,7 @@ def random_forest_regression(request):
         })
 
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('regression'),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
         },
@@ -345,7 +345,7 @@ def knn(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'name': 'n_neighbors', 'type': 'number'},
         },
@@ -391,7 +391,7 @@ def logistic_regression(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'select', 'name': 'solver', 'type': 'text', 'options': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'], 'default': 'lbfgs'},
             {'field': 'select', 'name': 'penalty', 'type': 'text', 'options': ['l2', 'None', 'elasticnet', 'l1'], 'default': 'l2'},
@@ -436,7 +436,7 @@ def naive_bayes(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'input', 'name': 'var_smoothing', 'type': 'text', 'default': 1e-9},
         ]
@@ -481,7 +481,7 @@ def decision_tree(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'optional_parameters': [
             {'field': 'input', 'name': 'max_depth', 'type': 'number'},
             {'field': 'input', 'name': 'min_samples_split', 'type': 'number', 'default': 2},
@@ -529,7 +529,7 @@ def random_forest(request):
         })
     
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'name': 'n_estimators', 'type': 'number'},
         },
@@ -572,7 +572,7 @@ def svm(request):
         })
 
     return render(request, 'main/input.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('classification'),
         'hyperparameters': {
             1: {'field': 'select', 'name': 'kernel', 'type': 'text', 'options': ['linear', 'poly', 'rbf', 'sigmoid'], 'default': 'rbf'},
             2: {'name': 'C', 'type': 'text', 'default': 1.0},
@@ -632,7 +632,7 @@ def kmeans(request):
         })
     
     return render(request, 'main/input_clustering.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('clustering'),
         'hyperparameters': {
             1: {'name': 'n_clusters', 'type': 'number'}
         }
@@ -694,7 +694,7 @@ def hierarchical_clustering(request):
         })
     
     return render(request, 'main/input_clustering.html', {
-        'datasets': list_available_datasets(),
+        'datasets': list_available_datasets('clustering'),
         'optional_parameters': [
             {'name': 'n_clusters', 'type': 'number'},
             {'field': 'select', 'name': 'linkage_method', 'type': 'text', 'options': ['ward', 'complete', 'average', 'single'], 'default': 'ward'},
@@ -704,70 +704,8 @@ def hierarchical_clustering(request):
 # ? Other Views
 
 def samples(request):
-    datasets = [
-        {
-            "name": "California Housing",
-            "file": "fetch_california_housing.xlsx",
-            "type": "XLSX",
-            "note": "For Regression (Large)"
-        },
-        {
-            "name": "California Housing",
-            "file": "fetch_california_housing.csv",
-            "type": "CSV",
-            "note": "For Regression (Large)"
-        },
-        {
-            "name": "Numerical Data",
-            "file": "numerical_data.xlsx",
-            "type": "XLSX",
-            "note": "For Regression (Large)"
-        },
-        {
-            "name": "Iris",
-            "file": "iris.csv",
-            "type": "CSV",
-            "note": "For Classification (Small)"
-        },
-        {
-            "name": "Mall Customers",
-            "file": "mall_customers.csv",
-            "type": "CSV",
-            "note": "For Clustering (Small)"
-        },
-        {   
-            "name": "Countries and Purchases",
-            "file": "purchases.csv",
-            "type": "CSV",
-            "note": "Uncleaned (Small)"
-        },
-        {
-            "name": "Pima Indians Diabetes",
-            "file": "diabetes.csv",
-            "type": "CSV",
-            "note": "For Classification (Binary)"
-        },
-        {
-            "name": "Big Mart Sales",
-            "file": "big_mart_sales.csv",
-            "type": "CSV",
-            "note": "Uncleaned (Large)"
-        },
-        {
-            "name": "Hospital Charges",
-            "file": "insurance.csv",
-            "type": "CSV",
-            "note": "Uncleaned"
-        },
-        {
-            "name": "Hospital Charges",
-            "file": "insurance_processed.csv",
-            "type": "CSV",
-            "note": "For Regression"            
-        }
-    ]
     return render(request, 'main/samples.html', {
-        'datasets': datasets,
+        'datasets': list_available_datasets(),
     })
 
 def download_model(request):
@@ -793,6 +731,7 @@ def about(request):
     return render(request, 'main/about.html')
 
 # ? API Endpoints
+
 def predict(request):
     """Open an endpoint to predict using a saved model"""
     if request.method == "POST":
@@ -1004,7 +943,7 @@ def preprocessing(request):
             except Exception as e:
                 return JsonResponse({'error': f"Error processing preloaded dataset: {e}"}, status=400)
 
-    return render(request, 'main/preprocessing.html', {'datasets': list_available_datasets()})
+    return render(request, 'main/preprocessing.html', {'datasets': list_available_datasets('preprocessing')})
 
 def fill_missing_values(request):
     """Replace missing values with mean / median or drop the rows"""

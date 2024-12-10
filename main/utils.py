@@ -25,10 +25,86 @@ def get_input(request_post, *args):
     
     return inputs
 
-def list_available_datasets():
-    """List the available datasets in the main/static/main/files directory"""
-    files = os.listdir(os.path.join(settings.BASE_DIR, 'main/static/main/files'))
-    return [file for file in files if file.endswith(('.csv', '.xlsx'))]
+def list_available_datasets(group=None):
+    """List the available datasets to choose from"""
+    datasets = [
+        {
+            "name": "California Housing",
+            "file": "fetch_california_housing.xlsx",
+            "type": "XLSX",
+            "note": "For Regression (Large)",
+            "group": {"regression"}
+        },
+        {
+            "name": "California Housing",
+            "file": "fetch_california_housing.csv",
+            "type": "CSV",
+            "note": "For Regression (Large)",
+            "group": {"regression"}
+        },
+        {
+            "name": "Numerical Data",
+            "file": "numerical_data.xlsx",
+            "type": "XLSX",
+            "note": "For Regression (Large)",
+            "group": {"regression"}
+        },
+        {
+            "name": "Iris",
+            "file": "iris.csv",
+            "type": "CSV",
+            "note": "For Classification (Small)",
+            "group": {"classification", "clustering"}
+        },
+        {
+            "name": "Mall Customers",
+            "file": "mall_customers.csv",
+            "type": "CSV",
+            "note": "For Clustering (Small)",
+            "group": {"clustering"}
+        },
+        {   
+            "name": "Countries and Purchases",
+            "file": "purchases.csv",
+            "type": "CSV",
+            "note": "Uncleaned (Small)",
+            "group": {"preprocessing"}
+        },
+        {
+            "name": "Pima Indians Diabetes",
+            "file": "diabetes.csv",
+            "type": "CSV",
+            "note": "For Classification (Binary)",
+            "group": {"classification"}
+        },
+        {
+            "name": "Big Mart Sales",
+            "file": "big_mart_sales.csv",
+            "type": "CSV",
+            "note": "Uncleaned (Large)",
+            "group": {"preprocessing"}
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance.csv",
+            "type": "CSV",
+            "note": "Uncleaned",
+            "group": {"preprocessing"}
+        },
+        {
+            "name": "Hospital Charges",
+            "file": "insurance_processed.csv",
+            "type": "CSV",
+            "note": "For Regression",
+            "group": {"regression"}
+        }
+    ]
+    # If no group is specified, return all datasets, for 'sample datasets'
+    if group is None:
+        return datasets
+    # Otherwise, filter the datasets based on the group specified, for 'input'
+    files = [dataset['file'] for dataset in datasets if group in dataset['group']]
+    return files
 
 def construct_line(intercept, coefficients, X, target):
     """Given the coefficients and intercept, construct the line equation as a string"""
