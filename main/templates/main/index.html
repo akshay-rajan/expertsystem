@@ -19,7 +19,7 @@
 
   <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" rel="stylesheet">
   <link rel="icon" href="{% static 'main/img/favicon_es.png' %}">
 </head>
 <body>
@@ -72,7 +72,7 @@
       </span>
       <div class="fade-in-3">
         <div class="d-flex">
-          <a href="#learnml" class="start-btn">Get Started!</a>
+          <a href="#learnml" class="start-btn" data-intro="Hello, world!">Get Started!</a>
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@
   </div>
 
   <div class="learn-ml" id="learnml">
-    <div class="m-3 mt-0 mb-0 fade-in-card d-flex flex-row justify-content-between w-100  h-100">
+    <div class="learn-card m-3 mt-0 mb-0 fade-in-card d-flex flex-row justify-content-between w-100  h-100">
       <div class="card-body mt-0 d-flex flex-column justify-content-start align-items-stretch text-left p-4">
         <h5 class="card-title">Introduction</h5>
         <p class="card-text">New to Machine Learning? Start here.</p>
@@ -163,7 +163,7 @@
   </div>
 
   <div class="second p-4 pb-0 mb-0" id="get-started">
-    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+    <div class="preprocessing-card m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
         <h5 class="card-title">Manage Data</h5>
         <p class="card-text">Prepare your data for analysis with cleaning and pre-processing.</p>
@@ -178,7 +178,7 @@
       </div>
     </div>
 
-    <div class="m-3 fade-in-card d-flex flex-row justify-content-between w-100">
+    <div class="modelling-card m-3 fade-in-card d-flex flex-row justify-content-between w-100">
       <div class="card-body mt-auto d-flex flex-column justify-content-end text-left p-4">
         <h5 class="card-title">Modelling</h5>
         <p class="card-text">Pick an algorithm and start building ML Models.</p>
@@ -218,7 +218,7 @@
     </div>
 
     <div class="d-flex justify-content-center align-items-center">
-      <div class="">
+      <div class="category-cards">
         <div class="d-flex justify-content-center flex-wrap">
 
           <div class="card m-2 bg-light category-card" style="width: 18rem;">
@@ -366,7 +366,40 @@
   <script src="https://unpkg.com/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
   <script src="{% static 'main/js/main.js' %}"></script>
   <script src="{% static 'main/js/custom.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Start the intro.js tour after 2 seconds
+      setTimeout(function() {
+        introJs().setOptions({
+          steps: [
+            {
+              intro: "Welcome to Expert System! This is a guided tour to help you get started."
+            },
+            {
+              element: document.querySelector('.start-btn'),
+              intro: "Click here to start building your first machine learning model."
+            },
+            {
+              element: document.querySelector('.learn-card'),
+              intro: "Explore the different topics and algorithms available for learning."
+            },
+            {
+              element: document.querySelector('.preprocessing-card'),
+              intro: "Process your data and prepare it for analysis."
+            },
+            {
+              element: document.querySelector('.modelling-card'),
+              intro: "Choose an algorithm and start building your machine learning model."
+            },
+            {
+              element: document.querySelector('.category-cards'),
+              intro: "Select a category to view the available algorithms."
+            }
+          ]
+        }).start();
+      }, 2000);
+    });
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
       $('.fade-in-2').fadeIn(1000);
