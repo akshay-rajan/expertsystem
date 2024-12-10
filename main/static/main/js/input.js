@@ -174,7 +174,7 @@ function populateFeatureCheckboxes(columns) {
     checkbox.type = 'checkbox';
     checkbox.classList.add('form-check-input');
     checkbox.name = 'features';
-    checkbox.value = column.trim(); // Trim to avoid unnecessary whitespace issues
+    checkbox.value = column.trim(); 
     checkbox.id = `feature-${column.trim()}`;
     const label = document.createElement('label');
     label.className = 'form-check-label';

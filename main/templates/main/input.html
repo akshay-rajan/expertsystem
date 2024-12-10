@@ -77,7 +77,7 @@
               {% for key, param in hyperparameters.items %}
                 {% if param.field == "select" %}
                   <div class="form-group mb-3" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}" class="form-label">{{ param.name }}:</label>
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
                     <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-select dropdown">
                       <option value="" selected disabled>Select</option>
                       {% for option in param.options %}
@@ -87,7 +87,7 @@
                   </div>
                 {% else %}
                   <div class="form-group mb-3" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}" class="form-label">{{ param.name }}:</label>
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
                     <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control" value="{{ param.default }}">
                   </div>
                 {% endif %}

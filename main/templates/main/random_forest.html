@@ -63,8 +63,8 @@
         <div class="right pred-right">
           <form onsubmit="return makePrediction(event)">
             {% for feature in features %}
-            <div class="form-group">
-              <label for="{{ feature }}">{{ feature }}:</label>
+            <div class="form-group mb-3">
+              <label for="{{ feature }}" class="form-label">{{ feature }}</label>
               <input type="text" required class="form-control" id="{{ feature }}" name="{{ feature }}" placeholder="">
             </div>
             {% endfor %}

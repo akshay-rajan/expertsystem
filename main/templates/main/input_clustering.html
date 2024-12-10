@@ -19,7 +19,7 @@
           <div class="form-group">
             <div class="d-flex justify-content-between">
               <div class="dataset-div">
-                <div class="form-group dataset-selection mt-4">
+                <div class="form-group dataset-selection mt-4 mb-4">
                   <div class="d-inline dataset-selection-upload selected">
                     <input type="radio" id="option-upload" name="dataset-option" value="upload" checked onchange="handleDatasetOptionChange(event)">
                     <label for="option-upload">Upload Your Dataset</label>
@@ -31,11 +31,11 @@
                 </div>
                 
                 <div class="form-group" id="upload-div">
-                  <input type="file" name="dataset" id="dataset" class="form-control form-control-file" onchange="handleFileChange(event)" />
+                  <input type="file" name="dataset" id="dataset" class="form-control" onchange="handleFileChange(event)" />
                 </div>
                 
                 <div class="form-group d-none" id="preloaded-div">
-                  <select name="preloaded-dataset" id="preloaded-dataset" class="form-control" onchange="handlePreloadedFileChange(event)">
+                  <select name="preloaded-dataset" id="preloaded-dataset" class="form-select" onchange="handlePreloadedFileChange(event)">
                     <option value="" selected disabled>Select a Dataset</option>
                     {% for dataset in datasets %}
                     <option value="{{ dataset }}">{{ dataset }}</option>
@@ -45,13 +45,13 @@
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-primary" id="upload-btn" disabled onclick="handleDataset(event)">
+          <button type="button" class="btn btn-primary mt-4" id="upload-btn" disabled onclick="handleDataset(event)">
             Next
           </button>
           
           <div class="fade-in">
-            <div class="form-group d-none" id="features-div">
-              <label for="target">Select Features</label>
+            <div class="form-group mb-3 d-none" id="features-div">
+              <label for="target" class="form-label">Select Features</label>
               <div class="form-check" id="features">
                 {% comment %} Checkboxes will be here populated by js {% endcomment %}
               </div>
@@ -61,9 +61,9 @@
             <div class="hyperparameters d-none" id="hyperparameter-div">
               {% for key, param in hyperparameters.items %}
                 {% if param.field == "select" %}
-                  <div class="form-group" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}">{{ param.name }}:</label>
-                    <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control dropdown">
+                  <div class="form-group mb-3" id="{{ param.name }}-div">
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
+                    <select id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-select dropdown">
                       <option value="" selected disabled>Select</option>
                       {% for option in param.options %}
                         <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
@@ -71,9 +71,9 @@
                     </select>
                   </div>
                 {% else %}
-                  <div class="form-group" id="{{ param.name }}-div">
-                    <label for="{{ param.name }}">{{ param.name }}:</label>
-                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter" value="{{ param.default }}">
+                  <div class="form-group mb-3" id="{{ param.name }}-div">
+                    <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
+                    <input type="{{ param.type }}" id="{{ param.name }}" name="{{ param.name }}" class="hyperparameter form-control" value="{{ param.default }}">
                   </div>
                 {% endif %}
               {% endfor %}
@@ -81,39 +81,38 @@
             {% endif %}
 
             {% if optional_parameters %}
-              <div id="accordion" class="optional-div optional-parameters d-none mt-4 mb-4">
-                <div class="card">
-                  <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onClick="event.preventDefault()">
-                        Optional
-                      </button>
-                    </h5>
-                </div>
-                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                  <div class="card-body">
+            <div class="accordion optional-div optional-parameters d-none mt-4" id="optionalAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Optional
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#optionalAccordion">
+                  <div class="accordion-body">
                     {% for param in optional_parameters %}
                       <div class="mb-3" id="{{ param.name }}-div">
-                        <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
                         {% if param.field == "select" %}
-                          <select id="{{ param.name }}" name="{{ param.name }}" class="form-control">
+                          <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
+                          <select id="{{ param.name }}" name="{{ param.name }}" class="form-select">
                             <option value="" selected disabled>Select</option>
-                          {% for option in param.options %}
+                            {% for option in param.options %}
                             <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
-                          {% endfor %}
-                        </select>
-                      {% else %}
-                        <input type="{{ param.type }}" class="form-control" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
-                      {% endif %}
-                        </div>
-                      {% endfor %}
-                    </div>
+                            {% endfor %}
+                          </select>
+                        {% else %}
+                          <label for="{{ param.name }}" class="form-label d-inline">{{ param.name }}</label>
+                          <input type="{{ param.type }}" class="form-control d-inline" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
+                        {% endif %}
+                      </div>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
+            </div>
             {% endif %}
 
-            <button type="submit" id="build-btn" class="btn btn-primary d-none">
+            <button type="submit" id="build-btn" class="btn btn-primary mt-4 d-none">
               <div class="d-none" id="build-btn-div1">
                 Build
               </div>
@@ -138,17 +137,17 @@
     <div class="d-flex justify-content-center">
       <div class="justify-content-center" id="canvas-2">
         <div id="plotly-scatter" class="left justify-content-center scatter"></div>
-        <div class="right row d-flex justify-content-center scatter-buttons">
+        <div class="right d-flex justify-content-center scatter-buttons">
           <div class="m-2">
             <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
-            <select id="x-axis-select" class="form-control d-inline">
+            <select id="x-axis-select" class="form-select d-inline">
               <!-- Dynamically populate options from your dataset columns -->
             </select>
           </div>
         
           <div class="m-2">
             <label for="y-axis-select" class="form-label d-inline">Y-Axis:</label>
-            <select id="y-axis-select" class="form-control d-inline">
+            <select id="y-axis-select" class="form-select d-inline">
               <!-- Dynamically populate options from your dataset columns -->
             </select>
           </div>
