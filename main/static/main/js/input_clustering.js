@@ -72,7 +72,9 @@ function handleFileUpload(event) {
       plotScatter(data.scatter, data.columns);
 
       // Append tick icon (removes upload field)
-      fileInput.parentElement.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      const fileParent = fileInput.parentElement;
+      fileParent.innerHTML = file.name + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+      fileParent.classList.add('mb-3');
 
       // Display additional configuration options
       $('#hyperparameter-div').removeClass('d-none');
@@ -145,6 +147,7 @@ function handleFileSelection(event) {
     // Display the preloaded dataset name with a tick icon
     const preloadedDiv = document.getElementById('preloaded-div');
     preloadedDiv.innerHTML = dataset + '<img src="/static/main/img/tick.svg" class="d-inline ml-2 icon tick" alt="tick">';
+    preloadedDiv.classList.add('mb-3');
 
     // Display additional configuration options
     $('#hyperparameter-div').removeClass('d-none');
@@ -168,19 +171,20 @@ function populateFeatureCheckboxes(columns) {
 
   const featuresDiv = document.getElementById('features');
   featuresDiv.innerHTML = '';
+
   columns.forEach(column => {
     const div = document.createElement('div');
-    div.classList.add('form-check-inline');
+    div.classList.add('form-check', 'd-inline-flex', 'me-2');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('form-check-input');
     checkbox.name = 'features';
-    checkbox.value = column;
-    checkbox.id = `feature-${column}`;
+    checkbox.value = column.trim();
+    checkbox.id = `feature-${column.trim()}`;
     const label = document.createElement('label');
     label.className = 'form-check-label';
-    label.htmlFor = `feature-${column}`;
-    label.textContent = column;
+    label.htmlFor = `feature-${column.trim()}`;
+    label.textContent = column.trim();
     div.appendChild(checkbox);
     div.appendChild(label);
     featuresDiv.appendChild(div);
