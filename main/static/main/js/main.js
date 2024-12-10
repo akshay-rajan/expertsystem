@@ -177,6 +177,23 @@ function initializeRegressionGauge(elementId, originalValue, reversed) {
 }
 
 // ? Toasts and Alerts
+function showNotification(title, message, confirmText="Ok", cancelText="Dismiss", action=null, actionArgs=null) {
+  Swal.fire({
+    title: title,
+    text: message,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+    showCancelButton: cancelText ? true : false,
+    cancelButtonText: cancelText,
+    showCloseButton: true,
+    toast: true,
+    position: 'bottom-right',
+  }).then((result) => {
+    if (result.isConfirmed && action) {
+      actionArgs ? action(...actionArgs) : action();
+    }
+  });
+}
 function showWarningToast(message) {
   Toastify({
     text: message,

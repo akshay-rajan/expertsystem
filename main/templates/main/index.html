@@ -367,39 +367,36 @@
   <script src="{% static 'main/js/main.js' %}"></script>
   <script src="{% static 'main/js/custom.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+    function homeTour() {
+      introJs().setOptions({
+        steps: [
+          {
+            element: document.querySelector('.learn-card'),
+            intro: "Learn the basics of machine learning and data science."
+          },
+          {
+            element: document.querySelector('.preprocessing-card'),
+            intro: "Process your data and prepare it for analysis."
+          },
+          {
+            element: document.querySelector('.modelling-card'),
+            intro: "Choose an algorithm and start building your machine learning model."
+          },
+          {
+            element: document.querySelector('.category-cards'),
+            intro: "Select a category to view the available algorithms."
+          }
+        ]
+      }).start();
+    }
     document.addEventListener('DOMContentLoaded', function() {
       // Start the intro.js tour after 2 seconds
       setTimeout(function() {
-        introJs().setOptions({
-          steps: [
-            {
-              intro: "Welcome to Expert System! This is a guided tour to help you get started."
-            },
-            {
-              element: document.querySelector('.start-btn'),
-              intro: "Click here to start building your first machine learning model."
-            },
-            {
-              element: document.querySelector('.learn-card'),
-              intro: "Explore the different topics and algorithms available for learning."
-            },
-            {
-              element: document.querySelector('.preprocessing-card'),
-              intro: "Process your data and prepare it for analysis."
-            },
-            {
-              element: document.querySelector('.modelling-card'),
-              intro: "Choose an algorithm and start building your machine learning model."
-            },
-            {
-              element: document.querySelector('.category-cards'),
-              intro: "Select a category to view the available algorithms."
-            }
-          ]
-        }).start();
-      }, 2000);
-    });
+        showNotification("Welcome to Expert System!", "Start a tour to learn more about the platform.", "Start Tour", null, homeTour);
+      }, 1500);
+    });    
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
       $('.fade-in-2').fadeIn(1000);
