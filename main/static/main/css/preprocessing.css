@@ -217,3 +217,27 @@ input#file {
     margin-right: 7px;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .preprocessing-dataset-selection {
+    min-width: 100%;
+  }
+  #category-display {
+    width: 90vw;
+    height: auto;
+    min-height: 55vh;
+    font-size: 16px;
+  }
+  #category-display .subtitle {
+    width: 80%;
+  }
+  #category-display a {
+    font-size: 16px;
+  }
+  #category-display .card-text {
+    font-size: 14px;
+  } 
+  #category-display .close-btn {
+    font-size: 30px;
+  }
+}
