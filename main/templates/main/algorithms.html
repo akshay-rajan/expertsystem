@@ -7,7 +7,7 @@
 <div class="fade-in p-2 page">
   <h1 class="display-3 m-2 title">{{ type }}</h1>
 
-  <div class="d-flex flex-wrap">
+  <div class="algo-container">
     <div class="algorithms list-group m-4" style="flex: 1;">
       {% for algorithm in algorithms %}
       <a href="{% url algorithm.url %}" class="list-group-item list-group-item-action m-1 algo {{ algorithm.url }}-algo">

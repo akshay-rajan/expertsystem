@@ -562,6 +562,10 @@ nav .nav-link:hover::after {
 }
 
 /* ! Algorithm */
+.algo-container {
+  display: flex;
+  flex-wrap: wrap;
+}
 .algo {
   text-decoration: none;
   border-radius: 5px;
@@ -577,6 +581,17 @@ nav .nav-link:hover::after {
 .algo-description {
   color: rgba(0, 0, 0, 0.7);
   font-size: 20px;
+}
+@media screen and (max-width: 798px) {
+  .algo-container {
+    display: block;
+  }
+  .algo {
+    width: 100%;
+  }
+  .algo-description {
+    font-size: 16px;
+  }
 }
 
 /* ! Input form */
