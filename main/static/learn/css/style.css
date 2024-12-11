@@ -139,10 +139,19 @@ mjx-container mjx-math {
     padding-right: 20px;
   }
   .chapters {
-    position: absolute;
+    position: fixed;
+    top: 10vh;
+    left: 0;
     z-index: 2;
     margin-top: 0px;
     min-width: 10vw!important;
+  }
+  .chapters button {
+    margin: 5px;
+  }
+
+  .learn-container .links {
+    margin-top: 40px;
   }
   .chapters.open {
     background-color: aliceblue;
@@ -150,6 +159,10 @@ mjx-container mjx-math {
   .chapter-link {
     padding: 5px;
     padding-left: 10px;
+  }
+  .chapter-link.active {
+    background-color: rgb(225, 243, 255);
+    color: var(--secondary-color);
   }
   .chapter-content {
     margin-top: 10px;
@@ -197,6 +210,12 @@ mjx-container mjx-math {
     margin: 2px;
     padding: 5px;
   }
+  .chapter-links-header button {
+    position: fixed;
+    top: 10vh;
+    left: 0;
+    color: var(--primary-color);
+  }
   .toggle-chapter-links {
     position: sticky;
     top: 0;
@@ -208,10 +227,17 @@ mjx-container mjx-math {
     color: var(--secondary-color)!important;
   }
   #chapter-link-open {
-    opacity: 0.5;
+    margin-top: 0px;
+    margin-left: 0px;
+    background-color: transparent;
+    border: 0!important;
     position: sticky!important;
     top: 0;
     right: 0;
+  }
+  #chapter-link-close {
+    background-color: transparent;
+    border: 0!important;
   }
   .img-div.no-of-clusters {
     display: none;

@@ -72,8 +72,16 @@
   <div class="learn-container d-flex">
     <div class="left chapters open">
       <div class="chapter-links-header">
-        <button class="btn btn-sm toggle-chapter-links" id="chapter-link-close" onClick="toggleChapterLinks()">&lt;</button>
-        <button class="btn btn-sm d-none toggle-chapter-links" id="chapter-link-open" onClick="toggleChapterLinks()">&gt;</button>
+        <button class="btn btn-sm toggle-chapter-links" id="chapter-link-close" onClick="toggleChapterLinks()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+          </svg>
+        </button>
+        <button class="d-none toggle-chapter-links" id="chapter-link-open" onClick="toggleChapterLinks()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+          </svg>
+        </button>
       </div>
       <div class="links">
         {% for chapter in chapters %}
