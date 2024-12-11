@@ -44,28 +44,30 @@
 
   <div id="results">
     <h3 class="m-2">Classes and Means of Features</h3>
-    <table class="table table-striped">
-      <thead class="thead-dark">
-          <th>Class</th>
-          {% for feature in features %}
-            <th>{{ feature }}</th>
-          {% endfor %}
-      </thead>
-      <tbody>
-        {% for key, value in results.items %}
-          <tr>
-            <td>{{ key }}</td>
-            {% for val in value %}
-              <td>{{ val }}</td>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+            <th>Class</th>
+            {% for feature in features %}
+              <th>{{ feature }}</th>
             {% endfor %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for key, value in results.items %}
+            <tr>
+              <td>{{ key }}</td>
+              {% for val in value %}
+                <td>{{ val }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="prediction mt-4 mb-4">
-    <div class="container d-flex justify-content-between">
+    <div class="container prediction-container">
       <div class="left pred-left">
         <h3 class="m-2" id="predict-title">Predict</h3>
         <div class="h4 m-2 mr-4">Use this trained model to generate predictions based on the input features you provide.</div>

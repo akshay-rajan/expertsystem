@@ -21,57 +21,56 @@
     </div>
   </div>
   
-  <div class="d-flex">
-
-      <div id="results" class="d-block flex-grow-1 m-3">
-        <table class="table table-bordered table-hover">
-          <thead class="thead">
-            <th>Feature</th>
-            <th>Coefficient</th>
-          </thead>
-          <tbody>
-            {% for feature, coef in coefficients.items %}
-            <tr>
-              <td>{{ feature }}</td>
-              <td>{{ coef | floatformat:4 }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    
-      <div class="evaluation flex-grow-1 m-3">
-        <h3 class="mb-2">Evaluation Metrics</h3>
-        <div class="evaluation-gauges d-flex justify-content-center flex-wrap">
-          <div id="gauge-mae" class="gauge-container">
-            <span class="label">Mean Absolute Error</span>
-          </div>
-          
-          <div id="gauge-mse" class="gauge-container">
-            <span class="label">Mean Squared Error</span>
-          </div>
-          
-          <div id="gauge-rmse" class="gauge-container">
-            <span class="label">Root Mean Squared Error</span>
-          </div>
-          
-          <div id="gauge-r2" class="gauge-container">
-            <span class="label">R<sup>2</sup> Score</span>
-          </div>      
+  <div class="dynamic-flexblock">
+    <div id="results" class="d-block flex-grow-1 m-3">
+      <table class="table table-bordered table-hover">
+        <thead class="thead">
+          <th>Feature</th>
+          <th>Coefficient</th>
+        </thead>
+        <tbody>
+          {% for feature, coef in coefficients.items %}
+          <tr>
+            <td>{{ feature }}</td>
+            <td>{{ coef | floatformat:4 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="evaluation flex-grow-1 m-3">
+      <h3 class="mb-2">Evaluation Metrics</h3>
+      <div class="evaluation-gauges d-flex justify-content-center flex-wrap">
+        <div id="gauge-mae" class="gauge-container">
+          <span class="label">Mean Absolute Error</span>
         </div>
-        <div class="d-flex justify-content-end mt-4 mb-4">
-          <a href="{% url 'download_model' %}" class="link">
-            <button class="btn btn-primary btn-block">
-              Download Trained Model
-            </button>
-          </a>
+        
+        <div id="gauge-mse" class="gauge-container">
+          <span class="label">Mean Squared Error</span>
         </div>
+        
+        <div id="gauge-rmse" class="gauge-container">
+          <span class="label">Root Mean Squared Error</span>
+        </div>
+        
+        <div id="gauge-r2" class="gauge-container">
+          <span class="label">R<sup>2</sup> Score</span>
+        </div>      
       </div>
+      <div class="d-flex justify-content-end mt-4 mb-4">
+        <a href="{% url 'download_model' %}" class="link">
+          <button class="btn btn-primary btn-block">
+            Download Trained Model
+          </button>
+        </a>
+      </div>
+    </div>
   </div>
 
   
   <div class="prediction mt-4 mb-4">
-    <div class="container d-flex justify-content-between">
+    <div class="container prediction-container">
       <div class="left pred-left">
         <h3 class="m-2" id="predict-title">Predict</h3>
         <div class="h4 m-2 mr-4">Use this trained model to generate predictions based on the input features you provide.</div>

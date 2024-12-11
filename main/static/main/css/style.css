@@ -99,6 +99,21 @@ nav .nav-link:hover::after {
 .nav-link.dropdown-toggle::after {
   display: none;
 }
+.dynamic-flexblock {
+  display: flex;
+}
+.dynamic-flexblock2 {
+  display: flex;
+  justify-content: center;
+}
+@media screen and (max-width: 798px) {
+  .dynamic-flexblock {
+    display: block;
+  }
+  .dynamic-flexblock2 {
+    display: block;
+  }  
+}
 
 /* ! Home */
 #home {
@@ -824,7 +839,10 @@ a:focus {
   height: 50px!important;
   border-radius: 15px!important;
 }
-
+.prediction-container {
+  display: flex;
+  justify-content: space-between;
+}
 .custom-btn {
   width: 130px;
   height: 40px;
@@ -1057,6 +1075,39 @@ a:focus {
   100% {
     background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%;
     background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+.cluster-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 798px) {
+  .prediction-container {
+    display: block;
+  }
+  .pred-left {
+    max-width: 100%;
+  }
+  .pred-left .h4 {
+    font-size: 20px;
+  }
+  .pred-right {
+    max-width: 100%;
+    margin-left: 0.5em;
+  }
+  .cluster-buttons {
+    display: block;
+  }
+  #dendrogram-plot {
+    display: none;
+  }
+  .dt-visual {
+    display: none;
+  }
+  .feature-importance-plot {
+    max-width: 95vw !important;
   }
 }
 
