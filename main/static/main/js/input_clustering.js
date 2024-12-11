@@ -300,6 +300,13 @@ function plotHeatMap(data) {
   var margin = {top: 80, right: 25, bottom: 80, left: 100},
       width = 450 - margin.left - margin.right,
       height = 450 - margin.top - margin.bottom;
+  // If the screen width is less than 768px, adjust the width and height
+  if (window.innerWidth < 768) {
+    const deviceWidth = window.innerWidth - 50;
+    width = deviceWidth - margin.left - margin.right;
+    height = deviceWidth - margin.top - margin.bottom;
+  }
+
 
   // Append the svg object to the body of the page
   var svg = d3.select("#canvas-1")

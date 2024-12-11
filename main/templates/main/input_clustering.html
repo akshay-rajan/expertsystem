@@ -10,7 +10,7 @@
   </div>
 </div>
 <div class="fade-in page">
-  <div class="container d-flex">
+  <div class="container input-container">
     <div class="container-2">
       <h1 class='display-3 title'>Input Datasets</h1>
       <div>
@@ -143,7 +143,7 @@
       </div>
     </div>
   
-    <div class="d-flex">
+    <div class="d-flex heatmap-container">
       <div class="right justify-content-center heatmaps" id="canvas-1" onclick="toggleHeatmaps()"></div>
       <div id="plotly-heatmap" class="right justify-content-center d-none heatmaps"></div>
     </div>
@@ -154,7 +154,7 @@
     <div class="d-flex justify-content-center">
       <div class="justify-content-center" id="canvas-2">
         <div id="plotly-scatter" class="left justify-content-center scatter"></div>
-        <div class="right d-flex justify-content-center scatter-buttons">
+        <div class="right scatter-buttons">
           <div class="m-2">
             <label for="x-axis-select" class="form-label d-inline">X-Axis:</label>
             <select id="x-axis-select" class="form-select d-inline">

@@ -598,7 +598,9 @@ nav .nav-link:hover::after {
 .loader {
   height: 70vh;
 }
-
+.input-container {
+  display: flex;
+}
 a,
 a:hover,
 a:focus {
@@ -680,12 +682,38 @@ a:focus {
   margin-right: 5px;
   margin-top: 5px;
 }
+.scatter-buttons {
+  display: flex;
+  justify-content: center;
+}
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 798px) {
+  .input-container {
+    display: block;
+  }
+  .heatmap-container {
+    max-width: 95vw !important;
+  }
+  #scatter-container #canvas-2 {
+    width: 100% !important;
+    max-width: 98vw !important;
+  }
   .navbar-brand img {
     width: 220px;
     height: 35px;
-  }  
+  }
+  .scatter-buttons {
+    display: block;
+  }
+  #plotly-scatter {
+    width: 100%;
+  }
+  #generate-scatter-btn {
+    width: auto;
+  }
+  #x-axis-select, #y-axis-select {
+    width: 100% !important;
+  }
 }
 
 .navbar-brand span {
