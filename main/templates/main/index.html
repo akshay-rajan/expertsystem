@@ -400,7 +400,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Check if the user has visited the site before
       if (localStorage.getItem('visited') === 'true') {
-        //return;
+        return;
       }
       localStorage.setItem('visited', 'true');
       // Start the intro.js tour

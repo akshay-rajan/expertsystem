@@ -38,10 +38,8 @@
     );
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('{{ type }}');
     if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true' && '{{ type }}' == 'Classification') {
-      console.log('>>>>>>>>>>>>>>>>>>>');
-      // localStorage.setItem('algo', 'true');
+      localStorage.setItem('algo', 'true'); // Mark as visited
       introJs().setOptions({
         steps: [
           {
@@ -57,6 +55,10 @@
           },
         ],
       }).start();
+      // Start tour on the KNN algorithm, if the user is navigating to it
+      document.querySelector('.knn-algo').addEventListener('click', function() {
+        localStorage.setItem('knn', 'start');
+      });
     }
   });
 </script>

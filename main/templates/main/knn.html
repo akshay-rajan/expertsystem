@@ -34,7 +34,7 @@
       </div>      
     </div>
     <div class="d-flex justify-content-end mt-4 mb-4">
-      <a href="{% url 'download_model' %}" class="link">
+      <a href="{% url 'download_model' %}" class="link download-model">
         <button class="btn btn-primary btn-block">
           Download Trained Model
         </button>
@@ -130,6 +130,57 @@
     initializeGauge("gauge-precision", {{ metrics.precision }});
     initializeGauge("gauge-recall", {{ metrics.recall }});
     initializeGauge("gauge-f1", {{ metrics.f1 }});
+
+    // intro.js
+    if (localStorage.getItem('knn_results') == 'start') {
+      localStorage.setItem('knn_results', 'visited');
+      introJs().setOptions({
+        steps: [
+          {
+            intro: "Done! You have successfully trained a machine learning model. Let's explore the results!",
+          },
+          {
+            element: document.querySelector('.evaluation'),
+            intro: "Here are the evaluation metrics for the trained model. The accuracy, precision, recall, and F1 score are common metrics used to evaluate classification models.",
+          },
+          {
+            element: document.querySelector('.pred-right'),
+            intro: "You can use this trained model to generate predictions based on the input features you provide. Enter some values for each feature and click 'Predict'.",
+          },
+        ],
+      }).start();
+      document.querySelector('.predict-btn').addEventListener('click', function() {
+        introJs().exit();
+        // Ensure that the prediciton result is displayed before the next step
+        if (document.querySelector('#prediction-result').classList.contains('d-none')) {
+          document.querySelector('.predict-btn').click();
+        }
+        introJs().setOptions({
+          steps: [
+            {
+              element: document.querySelector('#prediction-result'),
+              intro: "Great job! The model has generated the predicted values based on the input features you provided. This is the class in which the data point you entered belongs to.",
+            },
+            {
+              element: document.querySelector('.table-responsive'),
+              intro: "The table below shows the actual and predicted values for some test data. You can compare the predicted values with the actual values to understand the model's performance.",
+            },
+            {
+              element: document.querySelector('.download-model'),
+              intro: "You can download the trained model (as a .pkl file) by clicking the button below. This saved model can be used to make predictions anytime, and it can be deployed in production systems.",
+            },
+            {
+              element: document.querySelector('.view-code-btn'),
+              intro: "Here, you can view a sample Python code snippet that demonstrates how to train a KNN model using the scikit-learn library. You can replace the example dataset with your own data to train a custom model.",
+            },
+            {
+              intro: "That's it! You have completed the tour of the platform. 12 more algorithms are waiting for you to explore. Don't forget to check out the preprocessing and visualization tools as well. Happy learning!",
+            }
+          ],
+        }).start();
+      });
+    }
   });
+
 </script>
 {% endblock %}
