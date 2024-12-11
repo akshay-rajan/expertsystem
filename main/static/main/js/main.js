@@ -21,7 +21,7 @@ async function makePrediction(event) {
   const predictionResult = document.getElementById('prediction-result');
   predictionResult.className = 'alert m-2';
   // Show loading spinner
-  predictionResult.innerHTML = `<div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>`;
+  predictionResult.innerHTML = `<div class="spinner-border text-info" role="status"><span class="visually-hidden">Loading...</span></div>`;
   
   // Read input values from the form and convert them to JSON 
   const formData = new FormData(event.target);
