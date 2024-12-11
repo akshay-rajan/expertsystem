@@ -11,7 +11,7 @@
 </div>
 <div class="fade-in page">
   <div class="container d-flex">
-    <div>
+    <div class="container-2">
       <h1 class='display-3 title'>Input Datasets</h1>
       <div>
         <form id="ml-form" method="post" enctype="multipart/form-data" class="form form-group mt-3" onsubmit="return validateForm()" autocomplete="off">
@@ -34,11 +34,11 @@
                 </div>
                 {% else %}
                 <div class="form-group dataset-selection mt-4 mb-4">
-                  <div class="d-inline dataset-selection-upload selected">
+                  <div class="dataset-selection-upload selected">
                     <input type="radio" id="option-upload" name="dataset-option" value="upload" checked onchange="handleDatasetOptionChange(event)">
                     <label for="option-upload">Upload Your Dataset</label>
                   </div>
-                  <div class="d-inline dataset-selection-preload">
+                  <div class="dataset-selection-preload">
                     <input type="radio" id="option-preloaded" name="dataset-option" value="choose" onchange="handleDatasetOptionChange(event)">
                     <label for="option-preloaded">Use a Preloaded Dataset</label>
                   </div>
