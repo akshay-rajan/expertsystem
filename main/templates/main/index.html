@@ -371,6 +371,7 @@
   <script>
     function homeTour() {
       localStorage.setItem('tour', 'true');
+      console.log('>>>>>>>>>>>>>>>>>>>');
       introJs().setOptions({
         steps: [
           {
@@ -379,7 +380,7 @@
           },
           {
             element: document.querySelector('.preprocessing-card'),
-            intro: "The first step in building a machine learning model is to preprocess the data. This involves cleaning, transforming, and preparing the data for analysis."
+            intro: "The first step in building a machine learning model is to preprocess the data. This involves cleaning, transforming, and preparing the data for analysis. Let's skip this step for now."
           },
           {
             element: document.querySelector('.modelling-card'),
@@ -404,8 +405,8 @@
       localStorage.setItem('visited', 'true');
       // Start the intro.js tour
       setTimeout(function() {
-        showNotification("Welcome to Expert System!", "Start a tour to learn how to use the platform.", "Start Tour", null, homeTour);
-      }, 500);
+        showNotification("Welcome to Expert System!", "Get started by learning how the platform works.", "Start Tour", null, homeTour);
+      }, 1000);
     });    
 
     $(document).ready(function() {

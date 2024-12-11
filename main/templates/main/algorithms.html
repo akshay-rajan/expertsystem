@@ -10,7 +10,7 @@
   <div class="d-flex flex-wrap">
     <div class="algorithms list-group m-4" style="flex: 1;">
       {% for algorithm in algorithms %}
-      <a href="{% url algorithm.url %}" class="list-group-item list-group-item-action m-1 algo">
+      <a href="{% url algorithm.url %}" class="list-group-item list-group-item-action m-1 algo {{ algorithm.url }}-algo">
         {{ algorithm.name }}
       </a>
       {% endfor %}
@@ -37,20 +37,27 @@
   `
     );
 
-  if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true') {
-    return;
-    // localStorage.setItem('algo', 'true');
-    introJs().setOptions({
-      steps: [
-        {
-          intro: 'This page shows a list of algorithms for .',
-        },
-        {
-          element: document.querySelector('.algorithms'),
-          intro: 'Click on an algorithm to learn more about it.',
-        },
-      ],
-    }).start();
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('{{ type }}');
+    if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true' && '{{ type }}' == 'Classification') {
+      console.log('>>>>>>>>>>>>>>>>>>>');
+      // localStorage.setItem('algo', 'true');
+      introJs().setOptions({
+        steps: [
+          {
+            intro: "Classification involves predicting the class or category of something based on its features. Let's start with KNN!",
+          },
+          {
+            element: document.querySelector('.knn-algo'),
+            intro: "K-Nearest Neighbors (KNN) is one of the simplest classification algorithms. It classifies a data point based on the majority class of its k nearest neighbors. For example, you have some fruits and vegetables. If a given item is red, and you have more red fruits than red vegetables, you would classify it as a fruit.",
+          },
+          {
+            element: document.querySelector('.knn-algo'),
+            intro: "Let's build a KNN model!",
+          },
+        ],
+      }).start();
+    }
+  });
 </script>
 {% endblock %}
