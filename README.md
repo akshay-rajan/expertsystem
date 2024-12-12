@@ -1,26 +1,65 @@
-![alt text](./others/screenshot.png)
+# Expert System
 
-Machine Learning is a vast and complex field that requires a lot of dedication and time to master. 
-However, the complexity of ML algorithms and the necessity for programming skills create
-significant barriers for individuals who wish to leverage ML for their projects or research. 
-But what if we could remove this constraint and allow the users to build models without any coding knowledge?
+Expert System is a platform that allows users to do preprocessing, build, train, and test Machine Learning models without any programming languages. Designed to make Machine Learning accessible to everyone, this project provides an interface to handle the entire Machine Learning workflow.
 
-**Expert System** is a platform that allows users to build, train, and test Machine Learning Models without the need for programming languages. 
+## Key Features
 
-It provides a user-friendly interface where users can:
+- **Data Upload:** Easily upload datasets for processing and analysis, or choose from one of the sample datasets available.
+- **Preprocessing:** Perform 
+  - Encoding
+  - Scaling 
+  - Handling Missing Values
+- **Algorithm Selection:** Choose from:
+  <table>
+    <tr>
+      <th>Classification</th>
+      <td>
+        KNN, 
+        Naive Bayes, 
+        Logistic Regression, 
+        SVM, 
+        Decision Tree, 
+        Random Forest
+      </td>
+    </tr>
+    <tr>
+      <th>Regression</th>
+      <td>
+        Linear Regression,
+        Lasso Regression,
+        Ridge Regression,
+        Decision Tree,
+        Random Forest,
+      </td>
+    </tr>
+    <tr>
+      <th>Clustering</th>
+      <td>
+        K-Means,
+        Hierarchical Clustering
+      </td>
+    </tr>
+  </table>
 
-- Upload Data
-- Preprocess data by performing Encoding, Scaling, Handling Missing Values etc.
-- Select a Classification, Regression or Clustering algorithm
-- Select features, target and hyperparameters for the algorithm
-- Build the model
-- Perform predictions using the model
-- View sample code for the training in python
-- Evaluate the model using metrics displayed such as Accuracy, Precision, Recall, F1 Score, MAE, RMSE, r-squared, Inertia, Silhouette Score etc.
-- Visualize the model using cluster plots, dendrogram etc.
-- Download the model as a `.pkl` file.
+- **Customization:** Select features, target variables, and fine-tune hyperparameters.
+- **Model Building:** Train models using selected configurations.
+- **Predictions:** Generate predictions using the trained model.
+- **Evaluation Metrics:**
+  - Accuracy, Precision, Recall, F1 Score (for classification)
+  - MAE, MSE, RMSE, R-Squared (for regression)
+  - Inertia, Silhouette Score (for clustering)
+- **Visualization:** Generate visualizations like heatmaps, scatters, cluster plots and dendrograms.
+- **Sample Code:** View sample Python code for the training process.
+- **Model Download:** Export trained models as `.pkl` files for reuse.
+- **Learn**: Learn about Data Science and Machine Learning concepts using the notes available.
 
-Expert System is designed to make Machine Learning accessible to everyone, regardless of their coding knowledge. 
+
+Expert System is especially aimed at students who want to explore Machine Learning concepts without the complexities of coding.
+
+### [Screenshots](./SCREENSHOTS.md)
+
+
+## Workflow
 
 ```mermaid
 flowchart LR
@@ -38,64 +77,73 @@ flowchart LR
 ```
 
 
-### *Technologies Used*
+## Technologies Used
 
-![Static Badge](https://img.shields.io/badge/-Django-darkgreen?style=for-the-badge&logo=django)
+
+![Static Badge](https://img.shields.io/badge/-Django-darkgreen?style=for-the-badge&logo=django) 
 ![Static Badge](https://img.shields.io/badge/-JavaScript-white?style=for-the-badge&logo=javascript)
 ![Static Badge](https://img.shields.io/badge/-bootstrap-white?style=for-the-badge&logo=bootstrap)
+
 ![Static Badge](https://img.shields.io/badge/-d3.js-orange?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-prism.js-black?style=for-the-badge&logo=javascript)
+![Static Badge](https://img.shields.io/badge/-intro.js-skyblue?style=for-the-badge&logo=javascript)
 ![Static Badge](https://img.shields.io/badge/-plotly.js-navy?style=for-the-badge&logo=javascript)
+
 ![Static Badge](https://img.shields.io/badge/-Scikit_Learn-blue?style=for-the-badge&logo=scikit-learn)
 ![Static Badge](https://img.shields.io/badge/-pandas-purple?style=for-the-badge&logo=pandas)
 ![Static Badge](https://img.shields.io/badge/-numpy-cyan?style=for-the-badge&logo=numpy)
-![Static Badge](https://img.shields.io/badge/-prism.js-black?style=for-the-badge&logo=javascript)
 
-### CI/CD Pipeline
+## Usage
 
-Github Actions is used to automate the developer workflow:
-**Development**, **Testing**, **Build** and **Deployment**.
+1. Clone the project:
+  
+    ```
+    git clone https://github.com/akshay-rajan/expertsystem.git
+    ```
+    
+2. Navigate to the project directory:
 
-![alt](./others/Workflow.png)
+    ```
+    cd expertsystem
+    ```
+3. Create a virutal environment:
 
-[django.yml](.github/workflows/django.yml)
+    ```bash
+    python -m venv myenv
+    ```
 
-<!-- > Github Actions **Listen** to Github **Events**, such as a PR, Contributor addition etc. -->
-<!-- > The Event **Triggers a Workflow**, which contain **Actions**, for example Sorting, Labelling, Assignment to someone etc. -->
-<!-- [django.yml](.github/workflows/django.yml) -->
+4. Activate the virtual environment:
+    - **Linux / MacOS**
+      
+      ```bash
+      source myenv/bin/activate
+      ```
+    
+    - **Windows**
+      
+      ```bash
+      .\myenv\Scripts\activate
+      ```
 
-### *Usage*
+5. Install the requirements:
 
-Clone the project:
-```
-git clone https://github.com/akshay-rajan/expertsystem.git
-```
-Navigate to the project directory:
-```
-cd expertsystem
-```
-Create a virutal environment:
-```bash
-python -m venv myenv
-```
-Activate the virtual environment:
-```bash
-source myenv/bin/activate # Linux/macOS
-.\myenv\Scripts\activate # Windows
-```
-Install the requirements:
-```bash
-pip install -r requirements.txt
-```
-Run the database migrations:
-```bash
-python manage.py migrate
-```
-Start the Django server:
-```bash
-python manage.py runserver
-```
-The server will start at http://127.0.0.1:8000/ .
+    ```bash
+    pip install -r requirements.txt
+    ```
 
+6. Run database migrations:
+
+    ```bash
+    python manage.py migrate
+    ```
+
+7. Start the Django server:
+
+    ```bash
+    python manage.py runserver
+    ```
+    
+The application will be accessible at at http://127.0.0.1:8000/ .
 
 ---
 
