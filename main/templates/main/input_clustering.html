@@ -87,6 +87,11 @@
                       {% endfor %}
                     </select>
                   </div>
+                {% elif param.field == "checkbox" %}
+                  <div class="form-check" id="{{ param.name }}-div">
+                    <input type="checkbox" class="form-check-input" id="{{ param.name }}" name="{{ param.name }}" {% if param.default %}checked{% endif %}>
+                    <label class="form-check-label" for="{{ param.name }}">{{ param.name }}</label>
+                  </div>
                 {% else %}
                   <div class="form-group mb-3" id="{{ param.name }}-div">
                     <label for="{{ param.name }}" class="form-label">{{ param.name }}</label>
@@ -117,6 +122,11 @@
                             <option value="{{ option }}" {% if option == param.default %}selected{% endif %}>{{ option }}</option>
                             {% endfor %}
                           </select>
+                        {% elif param.field == "checkbox" %}
+                          <div class="form-check" id="{{ param.name }}-div">
+                            <input type="checkbox" class="form-check-input" id="{{ param.name }}" name="{{ param.name }}" {% if param.default %}checked{% endif %}>
+                            <label class="form-check-label" for="{{ param.name }}">{{ param.name }}</label>
+                          </div>
                         {% else %}
                           <label for="{{ param.name }}" class="form-label d-inline">{{ param.name }}</label>
                           <input type="{{ param.type }}" class="form-control d-inline" id="{{ param.name }}" name="{{ param.name }}" value="{{ param.default }}" placeholder="Enter {{ param.name }}">
