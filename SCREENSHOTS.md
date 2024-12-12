@@ -1,8 +1,8 @@
 ## 1. Home
 
 <div style="display:flex; flex-wrap: wrap;">
-    <img src="./others/home1.png" alt="alt" style="max-width:500px;">
-    <img src="./others/home2.png" alt="alt" style="max-width:500px;">
+    <img src="./others/home1.png" alt="alt" style="width:500px;">
+    <img src="./others/home2.png" alt="alt" style="width:500px;">
     <img src="./others/home3.png" alt="alt" style="max-width:50%;">
     <img src="./others/home4.png" alt="alt" style="max-width:50%;">
 </div>
