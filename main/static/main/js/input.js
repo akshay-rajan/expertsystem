@@ -501,6 +501,12 @@ function generateScatter() {
       try {
         $('#plotly-scatter').html('');
         Plotly.newPlot('plotly-scatter', JSON.parse(data));
+
+        // Scroll to 100px above the plot
+        window.scrollTo({
+          top: (document.getElementById('plotly-scatter').getBoundingClientRect().top + window.scrollY) - 100,
+          behavior: 'smooth'
+        });
       } catch (err) {
         console.error('Error rendering scatter plot:', err);
         showWarningToast('Error fetching the scatter plot!');
