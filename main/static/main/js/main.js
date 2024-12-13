@@ -54,6 +54,9 @@ async function makePrediction(event) {
     const data = await response.json();
     predictionResult.classList.add('alert-success');
     predictionResult.innerHTML = target + ": " + data.predictions;
+    
+    // If the user is in the platform tour, continue the tour
+    predTour();
   } catch (error) {
     predictionResult.classList.add('alert-danger');
     predictionResult.innerHTML = error.message;
@@ -292,4 +295,33 @@ var animateButton = function(e) {
 var bubblyButtons = document.getElementsByClassName("bubbly-button");
 for (var i = 0; i < bubblyButtons.length; i++) {
   bubblyButtons[i].addEventListener('click', animateButton, false);
+}
+
+// Platform tour continues after making a prediction in KNN
+function predTour() {
+  if (localStorage.getItem('prediction') !== 'start') return;
+  localStorage.setItem('prediction', 'end');
+  introJs().setOptions({
+    steps: [
+      {
+        element: document.querySelector('#prediction-result'),
+        intro: "Great job! The model has generated the predicted values based on the input features you provided. This is the class in which the data point you entered belongs to.",
+      },
+      {
+        element: document.querySelector('.table-responsive'),
+        intro: "The table below shows the actual and predicted values for some test data. You can compare the predicted values with the actual values to understand the model's performance.",
+      },
+      {
+        element: document.querySelector('.download-model'),
+        intro: "You can download the trained model (as a .pkl file) by clicking the button below. This saved model can be used to make predictions anytime, and it can be deployed in production systems.",
+      },
+      {
+        element: document.querySelector('.view-code-btn'),
+        intro: "Here, you can view a sample Python code snippet that demonstrates how to train a KNN model using the scikit-learn library. You can replace the example dataset with your own data to train a custom model.",
+      },
+      {
+        intro: "That's it! You have completed the tour of the platform. 12 more algorithms are waiting for you to explore. Don't forget to check out the preprocessing and visualization tools as well. Happy learning!",
+      }
+    ],
+  }).start();
 }

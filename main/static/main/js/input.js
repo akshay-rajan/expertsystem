@@ -253,6 +253,7 @@ function populateTargetDropdown(columns) {
 
   // Ensure the select dropdown is styled correctly for Bootstrap 5
   targetSelect.classList.add('form-select'); // Updated class for Bootstrap 5
+  tour3();
 }
 
 function clearFile(event) {
@@ -537,4 +538,45 @@ function formatCorrelationMatrix(matrix) {
 function activateBuildButton() {
   $('#build-btn-div1').removeClass('d-none');
   $('#build-btn-div2').addClass('d-none');
+}
+
+// Tour 3: Started after uploading a dataset in KNN, if the user is on the tour
+function tour3() {
+  if (localStorage.getItem('knn_tour3') === 'start') {
+    localStorage.setItem('knn_tour3', 'end');
+    introJs().setOptions({
+      steps: [
+        {
+          intro: "Great! Now you need to select the features and target variable. For the Iris dataset, we have 4 features and 1 target variable.",
+        },
+        {
+          element: document.querySelector('#features-div'),
+          intro: "Select the features of the Iris flower you want to use to predict the species. Let's predict the species based on the sepal length (SepalLengthCm) and sepal width (SepalWidthCm).",
+        },
+        {
+          element: document.querySelector('#target-div'),
+          intro: "For the Iris dataset, it's the 'Species' column that you want to predict. Select 'Species' as the target variable.",
+        },
+        {
+          element: document.querySelector('#n_neighbors'),
+          intro: "A hyperparameter is a parameter whose value is set before the learning process begins. KNN has a hyperparameter called 'n_neighbors', which is the number of neighbors to consider when classifying a data point. Let's set it as 5.",
+        },
+        {
+          element: document.querySelector('#canvas-1'),
+          intro: "This is a heatmap of the Iris dataset. It shows the correlation between each pair of features. The darker the color, the higher the correlation.",
+        },
+        {
+          element: document.querySelector('#canvas-2'),
+          intro: "This is a scatter plot of the Iris dataset. It shows the relationship between a pair of features. You can select the features you want to plot on the X and Y axes to visualize the data.",
+        },
+        {
+          element: document.querySelector('#build-btn'),
+          intro: "Finally, click 'Build' to train the KNN model.",
+        },
+      ],
+    }).start();
+    document.querySelector('#build-btn'),addEventListener('click', function() {
+      localStorage.setItem('knn_results', 'start'); // Set the next tour to start
+    });
+  }
 }

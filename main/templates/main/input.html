@@ -214,11 +214,12 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src={% static "main/js/input.js" %}></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     if (localStorage.getItem('knn') === 'start' && document.querySelector('.dataset-selection')) {
-      localStorage.setItem('knn', 'true'); // Mark as visited
+      localStorage.setItem('knn', 'true');
+      
+      // First tour: Introduction to the dataset selection
       introJs().setOptions({
         steps: [
           {
@@ -228,58 +229,35 @@
             element: document.querySelector('.dataset-selection-preload'),
             intro: "Click here to see available datasets for classification.",
           },
-          {
-            element: document.querySelector('#preloaded-div'),
-            intro: "Go for the 'Iris' dataset. It's a classic!",
-          },
-          {
-            element: document.querySelector('#upload-btn'),
-            intro: "Click 'Next' to proceed.",
-          },
         ],
       }).start();
-      document.querySelector('#upload-btn').addEventListener('click', function() {
-        // End the previous tour
-        introJs().exit();
-        // Start the next tour after the info is populated by js
-        if (document.querySelector('#features-div').classList.contains('d-none')) {
+
+      // Tour 2: Selecting a dataset
+      document.querySelector('.dataset-selection-preload').addEventListener('click', function() {
+        introJs().exit(); // End the previous tour
+        setTimeout(() => {
           introJs().setOptions({
             steps: [
               {
-                intro: "Great! Now you need to select the features and target variable. For the Iris dataset, we have 4 features and 1 target variable.",
+                element: document.querySelector('#preloaded-div'),
+                intro: "Go for the 'Iris' dataset. It contains 150 samples of Iris flowers with 4 features: sepal length, sepal width, petal length, and petal width.",
               },
               {
-                element: document.querySelector('#features-div'),
-                intro: "Select the features of the Iris flower you want to use to predict the species. Let's predict the species based on the sepal length (SepalLengthCm) and sepal width (SepalWidthCm).",
-              },
-              {
-                element: document.querySelector('#target-div'),
-                intro: "For the Iris dataset, it's the 'Species' column that you want to predict. Select 'Species' as the target variable.",
-              },
-              {
-                element: document.querySelector('#n_neighbors'),
-                intro: "A hyperparameter is a parameter whose value is set before the learning process begins. KNN has a hyperparameter called 'n_neighbors', which is the number of neighbors to consider when classifying a data point. Let's set it as 5.",
-              },
-              {
-                element: document.querySelector('#canvas-1'),
-                intro: "This is a heatmap of the Iris dataset. It shows the correlation between each pair of features. The darker the color, the higher the correlation.",
-              },
-              {
-                element: document.querySelector('#canvas-2'),
-                intro: "This is a scatter plot of the Iris dataset. It shows the relationship between a pair of features. You can select the features you want to plot on the X and Y axes to visualize the data.",
-              },
-              {
-                element: document.querySelector('#build-btn'),
-                intro: "Finally, click 'Build' to train the KNN model.",
+                element: document.querySelector('#upload-btn'),
+                intro: "Click 'Next' to proceed.",
               },
             ],
           }).start();
-          document.querySelector('#build-btn'),addEventListener('click', function() {
-            localStorage.setItem('knn_results', 'start');
-          });
-        }
+        }, 500); // Delay the start of the next tour, to ensure the component is rendered
+      });
+
+      document.querySelector('#upload-btn').addEventListener('click', function() {
+        introJs().exit();
+        localStorage.setItem('knn_tour3', 'start');
+        // The tour3 will be called in the input.js file
       });
     }
   });
 </script>
+<script src={% static "main/js/input.js" %}></script>
 {% endblock %}

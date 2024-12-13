@@ -38,7 +38,7 @@
     );
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true' && '{{ type }}' == 'Classification') {
+    if (localStorage.getItem('algo') === 'start' && localStorage.getItem('tour') == 'true' && '{{ type }}' == 'Classification') {
       localStorage.setItem('algo', 'true'); // Mark as visited
       introJs().setOptions({
         steps: [

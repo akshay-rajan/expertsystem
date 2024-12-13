@@ -229,7 +229,7 @@
                     </p>
                 </div>
                 <div class="last mt-auto">
-                    <a href={% url 'classification' %} class="">Go →</a>
+                    <a href={% url 'classification' %} class="" id="classification-link">Go →</a>
                 </div>
             </div>
         </div>
@@ -360,7 +360,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     function homeTour() {
-      localStorage.setItem('tour', 'true');
+      localStorage.setItem('tour', 'true'); // Indicate that the user has started the tour
+      localStorage.setItem('visited', 'true'); // Prevents the notification from showing again
       introJs().setOptions({
         steps: [
           {
@@ -386,12 +387,13 @@
         ]
       }).start();
     }
+    // Show a notification asking the user to start the tour of the platform
     document.addEventListener('DOMContentLoaded', function() {
-      // Check if the user has visited the site before
+      // Check if the user has denied the tour before by closing the notification
       if (localStorage.getItem('visited') === 'true') {
         return;
       }
-      // Start the intro.js tour
+      // Start the notification after 1 second
       setTimeout(function() {
         showNotification({
           title: "Welcome to Expert System!", 
@@ -401,7 +403,15 @@
           onDismiss: () => localStorage.setItem('visited', 'true'),
         });
       }, 1000);
-    });    
+
+      // Initialize Classification Tour if the user is navigating to it
+      document.querySelector('#classification-link').addEventListener('click', function() {
+        if (localStorage.getItem('algo') !== 'true' && localStorage.getItem('tour') == 'true') {
+          localStorage.setItem('algo', 'start');
+        }
+      });
+    });
+
 
     $(document).ready(function() {
       $('.fade-in').fadeIn(500);
