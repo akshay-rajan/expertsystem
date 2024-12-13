@@ -391,10 +391,15 @@
       if (localStorage.getItem('visited') === 'true') {
         return;
       }
-      localStorage.setItem('visited', 'true');
       // Start the intro.js tour
       setTimeout(function() {
-        showNotification("Welcome to Expert System!", "Get started by learning how the platform works.", "Start Tour", null, homeTour);
+        showNotification({
+          title: "Welcome to Expert System!", 
+          message: "Get started by learning how the platform works.", 
+          confirmText: "Start Tour", 
+          onConfirm: homeTour,
+          onDismiss: () => localStorage.setItem('visited', 'true'),
+        });
       }, 1000);
     });    
 

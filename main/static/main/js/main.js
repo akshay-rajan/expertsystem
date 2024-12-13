@@ -177,20 +177,23 @@ function initializeRegressionGauge(elementId, originalValue, reversed) {
 }
 
 // ? Toasts and Alerts
-function showNotification(title, message, confirmText="Ok", cancelText="Dismiss", action=null, actionArgs=null) {
+function showNotification(context) {
+  // { title, message, confirmText, cancelText, onConfirm, onDismiss, actionArgs }
   Swal.fire({
-    title: title,
-    text: message,
-    showCancelButton: true,
-    confirmButtonText: confirmText,
-    showCancelButton: cancelText ? true : false,
-    cancelButtonText: cancelText,
+    title: context.title,
+    text: context.message,
+    confirmButtonText: context.confirmText,
+    showCancelButton: context.cancelText ? true : false,
+    cancelButtonText: context.cancelText,
     showCloseButton: true,
     toast: true,
     position: 'bottom-right',
   }).then((result) => {
-    if (result.isConfirmed && action) {
-      actionArgs ? action(...actionArgs) : action();
+    if (result.isConfirmed && context.onConfirm) {
+      context.actionArgs ? context.onConfirm(...context.actionArgs) : context.onConfirm();
+    }
+    if (result.dismiss && context.onDismiss) {
+      context.onDismiss();
     }
   });
 }
